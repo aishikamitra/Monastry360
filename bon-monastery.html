@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bon Monastery – Monastery360</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
+<style>
+  body { margin:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#faf7f2; color:#333; line-height:1.6; }
+  h1,h2 { font-family:'Georgia', serif; color:#7c2d12; text-align:center; }
+  a { text-decoration:none; color:inherit; }
+
+  .hero { background:url('bon-hero.jpg') center/cover no-repeat; color:white; text-align:center; padding:120px 20px; position:relative; }
+  .hero::after { content:""; position:absolute; inset:0; background:rgba(0,0,0,0.35); }
+  .hero h1, .hero p { position:relative; z-index:1; }
+  .hero h1 { font-size:3rem; margin-bottom:10px; }
+  .hero p { font-size:1.3rem; color:#ffd580; }
+
+  section { max-width:1100px; margin:40px auto; padding:30px; background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08); }
+  section h2 { border-bottom:2px solid #eab308; display:inline-block; margin-bottom:15px; padding-bottom:5px; }
+
+  table { width:100%; border-collapse:collapse; margin-top:15px; font-size:1.05rem; }
+  th, td { border:1px solid #ddd; padding:14px; text-align:left; }
+  th { background:#fef3c7; color:#7c2d12; }
+  tr:nth-child(even) { background:#f9fafb; }
+
+  .mural-img { display:block; width:100%; max-width:800px; height:450px; object-fit:cover; border-radius:8px; margin:20px auto; box-shadow:0 4px 10px rgba(0,0,0,0.15); transition:transform 0.3s; }
+  .mural-img:hover { transform:scale(1.02); }
+  .mural-credit { font-size:0.85rem; color:#555; margin-top:5px; text-align:center; }
+
+  .btn, .back-btn { display:inline-block; margin-top:20px; background:#7c2d12; color:white; padding:12px 24px; border-radius:30px; font-weight:bold; transition:background 0.3s; text-decoration:none; }
+  .btn:hover, .back-btn:hover { background:#b45309; }
+
+  #map, #mapFrame, iframe, audio { width:100%; border-radius:8px; margin-top:15px; }
+  #map, #mapFrame { height:450px; border:2px solid #ccc; }
+  #mapForm { margin:20px 0; text-align:center; }
+  #mapForm input, #mapForm button { padding:8px 12px; font-size:1rem; border-radius:6px; border:1px solid #ccc; }
+  .ol-popup { position:absolute; background:white; padding:5px 10px; border:1px solid black; border-radius:4px; bottom:12px; left:-50px; min-width:120px; }
+  #bookingForm { display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:15px; }
+  #bookingForm input, #bookingForm button { padding:10px; border-radius:6px; border:1px solid #ccc; font-size:1rem; }
+  #bookingForm button { background:#7c2d12; color:white; cursor:pointer; font-weight:bold; transition:background 0.3s; }
+  #bookingForm button:hover { background:#b45309; }
+
+  /* Sidebar Styles */
+  .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: #7c2d12; overflow-x: hidden; transition: 0.3s; padding-top: 60px; }
+  .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.2rem; color: white; display: block; transition: 0.3s; }
+  .sidebar a:hover { background-color: #b45309; }
+  .sidebar .closebtn { position: absolute; top: 20px; right: 25px; font-size: 2rem; }
+  .menu-btn { position: fixed; top: 20px; left: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 1100; background:#7c2d12; border-radius:8px; padding:4px 8px; }
+</style>
+</head>
+<body>
+
+<!-- Menu Button -->
+<span class="menu-btn" onclick="openNav()">&#9776;</span>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="#">Audio Guide</a>
+  <a href="#">Tourism Service</a>
+</div>
+
+<div class="hero">
+  <h1>Bon Monastery</h1>
+  <p>Preserving Bon Culture & Spiritual Heritage</p>
+</div>
+
+<h2>Bon Monastery Virtual Tour</h2>
+<iframe 
+  src="https://www.google.com/maps/embed?pb=!3m2!1sen!2sin!4v1758140600405!5m2!1sen!2sin!6m8!1m7!1sdkYsESariR9g9MkoPfR6_g!2m2!1d27.27878279998142!2d88.33463557954421!3f210.01327184668972!4f4.2202348359572!5f0.7820865974627469" 
+  width="100%" 
+  height="450" 
+  style="border:0;" 
+  allowfullscreen="" 
+  loading="lazy" 
+  referrerpolicy="no-referrer-when-downgrade">
+</iframe>
+
+<section>
+  <h2>Narrated Walkthroughs</h2>
+  <p>Experience guided audio tours highlighting Bon rituals.</p>
+  <audio controls>
+    <source src="audio/bon-tour.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</section>
+
+<section>
+  <h2>Digital Archives – Murals</h2>
+  <p>Murals and sacred artwork of Bon Monastery.</p>
+  <img src="mural_bon1.jpg" alt="Bon Mural 1" class="mural-img">
+  <p class="mural-credit">
+    By <a href="#" target="_blank">Photographer Name</a> – CC BY-SA 4.0
+  </p>
+  <img src="mural_bon2.jpg" alt="Bon Mural 2" class="mural-img">
+  <p class="mural-credit">
+    By <a href="#" target="_blank">Photographer Name</a> – CC0
+  </p>
+</section>
+
+<section>
+  <h2>Cultural Calendar</h2>
+  <p>Major Bon Monastery festivals and rituals:</p>
+  <table>
+    <thead>
+      <tr><th>Season</th><th>Festival / Observance</th><th>When (Tibetan lunar)</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Spring</td><td>Chotrul Düchen</td><td>15th day, 1st lunar month</td><td>Festival of butter lamps, prayers for world peace</td></tr>
+      <tr><td>Summer</td><td>Bonpo Tsechu</td><td>5th lunar month</td><td>Cham dances and rituals unique to Bon tradition</td></tr>
+      <tr><td>Autumn</td><td>Gutor Ceremony</td><td>End of Tibetan year, 12th month</td><td>Purification rites to dispel negativity</td></tr>
+      <tr><td>Winter</td><td>Losar (Bon New Year)</td><td>11th → 12th lunar month</td><td>Ceremonial prayers and sacred dances</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;margin-top:8px;color:#444;text-align:center;"><em>Note:</em> Dates follow the Tibetan lunar calendar, so exact Gregorian dates vary each year.</p>
+</section>
+
+<section>
+  <h2>Nearby Places & Distance</h2>
+  <div id="map"></div>
+  <form id="mapForm">
+    <label for="destination">Enter Destination:</label>
+    <input type="text" id="destination" placeholder="e.g., Rumtek Monastery" required>
+    <button type="submit">Show Route</button>
+  </form>
+  <iframe id="mapFrame" frameborder="0" allowfullscreen></iframe>
+</section>
+
+<section>
+  <h2>Tourist Booking & Participation</h2>
+  <p>Book your visit and see who else is participating.</p>
+
+  <form id="bookingForm">
+    <input type="text" id="touristName" placeholder="Your Name" required>
+    <input type="email" id="touristEmail" placeholder="Your Email" required>
+    <input type="date" id="visitDate" required>
+    <button type="submit" class="btn">Book Now</button>
+  </form>
+
+  <h3>Participants:</h3>
+  <ul id="participantList" style="list-style:none; padding-left:0;"></ul>
+</section>
+
+<div style="text-align:center; margin-bottom:50px;">
+  <a href="monasteries.html" class="btn">Back to Monastery List</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
+<script>
+// Open/Close Sidebar
+function openNav(){ document.getElementById("mySidebar").style.width="250px"; }
+function closeNav(){ document.getElementById("mySidebar").style.width="0"; }
+
+// Map setup
+var map = new ol.Map({
+  target: 'map',
+  layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
+  view: new ol.View({ center: ol.proj.fromLonLat([88.6200,27.3300]), zoom: 12 })
+});
+
+var places = [
+  {name: "Rumtek Dharma Chakra Centre", coords:[88.5614622,27.2886861]},
+  {name: "Enchey Monastery", coords:[88.6191659,27.3359368]},
+  {name: "Namgyal Institute of Tibetology", coords:[88.6136,27.3222]},
+  {name: "Do Drul Chorten Stupa", coords:[88.6169,27.3246]}
+];
+var bon = {name:"Bon Monastery", coords:[88.6200,27.3300]};
+
+var placeFeatures = places.map(p=>new ol.Feature({geometry:new ol.geom.Point(ol.proj.fromLonLat(p.coords)),name:p.name}));
+var bonFeature = new ol.Feature({geometry:new ol.geom.Point(ol.proj.fromLonLat(bon.coords)),name:bon.name});
+
+var blueStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'blue', scale:0.05 }) });
+var redStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'red', scale:0.06 }) });
+
+placeFeatures.forEach(f=>f.setStyle(blueStyle)); bonFeature.setStyle(redStyle);
+
+var vectorSource = new ol.source.Vector({ features: placeFeatures.concat([bonFeature]) });
+map.addLayer(new ol.layer.Vector({ source: vectorSource }));
+
+var overlay = new ol.Overlay({ element: document.createElement('div'), positioning: 'bottom-center', stopEvent: false });
+overlay.getElement().className='ol-popup';
+map.addOverlay(overlay);
+
+map.on('singleclick', function(evt){
+  var feature = map.forEachFeatureAtPixel(evt.pixel,f=>f);
+  if(feature){ overlay.getElement().innerHTML=feature.get('name'); overlay.setPosition(feature.getGeometry().getCoordinates()); overlay.getElement().style.display='block'; }
+  else overlay.getElement().style.display='none';
+});
+
+// Map form
+const form = document.getElementById("mapForm");
+const frame = document.getElementById("mapFrame");
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+  const destination = document.getElementById("destination").value;
+  const origin = "Bon Monastery, Sikkim";
+  frame.src = `https://www.google.com/maps?q=from+${encodeURIComponent(origin)}+to+${encodeURIComponent(destination)}&output=embed`;
+});
+
+// Booking form
+const bookingForm = document.getElementById("bookingForm");
+const participantList = document.getElementById("participantList");
+let participants = JSON.parse(localStorage.getItem("bonParticipants")) || [];
+participants.forEach(addParticipantToList);
+
+bookingForm.addEventListener("submit", function(e) {
+  e.preventDefault();
+  const name = document.getElementById("touristName").value.trim();
+  const email = document.getElementById("touristEmail").value.trim();
+  const date = document.getElementById("visitDate").value;
+  if(name && email && date) {
+    const participant = {name,email,date};
+    participants.push(participant);
+    localStorage.setItem("bonParticipants", JSON.stringify(participants));
+    addParticipantToList(participant);
+    bookingForm.reset();
+    alert("Booking successful!");
+  }
+});
+
+function addParticipantToList(p){
+  const li=document.createElement("li");
+  li.textContent=`${p.name} - ${p.date}`;
+  participantList.appendChild(li);
+}
+</script>
+
+</body>
+</html>

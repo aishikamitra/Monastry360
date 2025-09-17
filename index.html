@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monastery360 – Home</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
+<style>
+  body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    margin: 0; padding: 0; 
+    background: #faf7f2; 
+    text-align: center; 
+    color: #333; 
+  }
+
+  header { 
+    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat; 
+    height: 100vh; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center; 
+    color: white; 
+  }
+
+  header h1 { 
+    font-size: 3rem; 
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.7); 
+  }
+
+  header p { 
+    font-size: 1.3rem; 
+    max-width: 700px; 
+    margin: 10px auto; 
+    text-shadow: 1px 1px 3px rgba(0,0,0,0.6); 
+  }
+
+  .explore-btn { 
+    background: #7c2d12; 
+    color: white; 
+    border: none; 
+    padding: 14px 28px; 
+    font-weight: bold; 
+    border-radius: 30px; 
+    font-size: 1.2rem; 
+    cursor: pointer; 
+    text-decoration: none; 
+    transition: background 0.3s; 
+    display: inline-block; 
+    margin-top: 10px;
+  }
+
+  .explore-btn:hover { background: #b45309; }
+
+  #map { 
+    width: 90%; 
+    height: 600px; 
+    margin: 40px auto; 
+    border: 2px solid #ccc; 
+    border-radius: 12px; 
+    background: white; 
+  }
+
+  .ol-popup {
+    position: absolute;
+    background-color: white;
+    padding: 6px 12px;
+    border: 1px solid #7c2d12;
+    border-radius: 6px;
+    bottom: 12px;
+    left: -50px;
+    min-width: 140px;
+    font-weight: bold;
+    color: #7c2d12;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Sidebar */
+  .sidebar { 
+    height: 100%; 
+    width: 0; 
+    position: fixed; 
+    z-index: 1000; 
+    top: 0; 
+    left: 0; 
+    background-color: #7c2d12; 
+    overflow-x: hidden; 
+    transition: 0.3s; 
+    padding-top: 60px; 
+  }
+
+  .sidebar a { 
+    padding: 12px 24px; 
+    text-decoration: none; 
+    font-size: 1.2rem; 
+    color: white; 
+    display: block; 
+    transition: 0.3s; 
+  }
+
+  .sidebar a:hover { background-color: #b45309; }
+  .sidebar .closebtn { position: absolute; top: 15px; right: 20px; font-size: 2rem; }
+  .hamburger { position: fixed; top: 15px; left: 20px; font-size: 2rem; cursor: pointer; color: white; z-index: 1100; }
+</style>
+</head>
+<body>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
+  <a href="index.html">Home</a>
+  <a href="audio-guide.html">Audio Guide</a>
+  <a href="tourism.html">Tourism Service</a>
+</div>
+
+
+<!-- Hamburger Icon -->
+<div class="hamburger" onclick="openNav()">☰</div>
+
+<header>
+  <h1>Monastery360</h1>
+  <p>Experience the spiritual, cultural, and historical treasures of Sikkim’s monasteries through digital archives, interactive tours, and immersive maps.</p>
+  <a href="monasteries.html" class="explore-btn">Explore Monasteries</a>
+</header>
+
+<div id="map"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
+<script>
+ 
+  var map = new ol.Map({
+    target: 'map',
+    layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
+    view: new ol.View({ center: ol.proj.fromLonLat([88.61, 27.33]), zoom: 9 })
+  });
+
+
+  var monasteries = [
+    
+    {name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861]},
+    {name: "Mamring Monastery", coords: [88.3101201, 27.277364]},
+    {name: "Enchey Monastery", coords: [88.6191659, 27.3359368]},
+    {name: "Burtuk", coords: [88.6158468, 27.3539598]},
+    {name: "Do Drul Chorten", coords: [88.6048366, 27.3128415]},
+    {name: "Decchen Cholling Gumpa-Tamamg Gumpa", coords: [88.608536, 27.338795]},
+    {name: "Bermiok Tokal Monastery", coords: [88.4690827, 27.2287152]},
+    {name: "Tashiding Monastery", coords: [88.2978746, 27.3089308]},
+    {name: "Sinon Monastery", coords: [88.2900301, 27.3423753]},
+    {name: "Kartok Monastery", coords: [88.588005, 27.2407996]},
+    {name: "Sanghak Choeling Monastery", coords: [88.2216867, 27.2977517]},
+    {name: "Pema Choling Monastery", coords: [88.5310593, 27.1757119]},
+    {name: "Pal Karma Zurmang Shedup Chokhor Ling Lingdum Monastery (Ranka Monastery)", coords: [88.5790387, 27.3311957]},
+    {name: "Lingdum Zurmang Kagyu Monastery", coords: [88.5805594, 27.3307583]},
+    {name: "Rinchenpong Monastery", coords: [88.2684733, 27.2354672]},
+    {name: "Rinchen Choling Tamu Monastery/ Gurung Gompha", coords: [88.2708814, 27.2432459]},
+    {name: "Pemayangtse Monastery", coords: [88.2515852, 27.3052201]},
+    {name: "Okhrey Monastery", coords: [88.1019019, 27.149513]},
+    {name: "Khecheopalri Monastery", coords: [88.1882768, 27.349221]},
+    {name: "Hung hri Monastery", coords: [88.2535011, 27.3523006]},
+    {name: "Dubdi Buddhist Monastery - Yuksom", coords: [88.2299922, 27.3665529]},
+    {name: "Dodak Buddhist Monastery", coords: [88.1715435, 27.1718352]},
+    {name: "Tendong Gumpa", coords: [88.4079885, 27.2061039]},
+    {name: "Chang Chu Monastery", coords: [88.4032499, 27.2959417]},
+    {name: "Serdup Choling Monastery", coords: [88.3547474, 27.161498]},
+    {name: "Sharchhog Bayphug", coords: [88.385782, 27.2763652]},
+    {name: "Ralang New Monastery", coords: [88.3352477, 27.3284964]},
+    {name: "Mane Choekhorling Gompa (Ravangla Monastery)", coords: [88.518887, 28.240229]},
+    {name: "Ngadak Thupten Shedup Dhargey Choeling, Monastery", coords: [88.3706278, 27.1732407]},
+    {name: "Norbu Yangdup Choling Monastery", coords: [88.3773796, 27.2345473]},
+    {name: "Phagyal monastery Lingee", coords: [88.4592622, 27.37048]},
+    {name: "Kewzing Monastery", coords: [88.3227697, 27.2842636]},
+    {name: "Doling Monastery", coords: [88.3449117, 27.287967]},
+    {name: "Norbu gang, Coronation throne of Namgyal Dynasty", coords: [88.2173761, 27.3694863]},
+    {name: "Bon Monastery", coords: [88.3343804, 27.278643]},
+    {name: "Chawayng Ani Monastery", coords: [88.5122178, 27.5329718]},
+    {name: "Tholung Monastery", coords: [88.4615734, 27.636972]},
+    {name: "Tingvong Monastery", coords: [88.4767615, 27.5568019]},
+    {name: "Tashi Gyan Palden Monastery", coords: [88.4127344, 27.2866497]},
+    {name: "Ringhem Monastery", coords: [88.5462414, 27.4953153]},
+    {name: "Phodong Monastery", coords: [88.5838205, 27.4128715]},
+    {name: "Phensang Monastery", coords: [88.6101296, 27.420723]},
+    {name: "Lingthem Rikzing Chopel Targelling Monastery", coords: [88.5011052, 27.5230064]},
+    {name: "Lachung Monastery", coords: [88.7487553, 27.6886827]},
+    {name: "Lachen Monastery", coords: [88.5577391, 27.7166667]},
+    {name: "Labrang Monastery", coords: [88.5794589, 27.4180001]},
+    {name: "KABI MONASTERY", coords: [88.6099182, 27.4007368]},
+    {name: "HEE GYATHANG MONASTERY", coords: [88.501073, 27.4758646]},
+    {name: "Simik Monastery", coords: [88.4718882, 27.2873094]},
+    {name: "Rhenock Gumpa, Monastery", coords: [88.6779745, 27.1842602]},
+    {name: "Tsuglakhang Monastery & Temple", coords: [88.6147222, 27.3261111]},
+    {name: "Gonjang Monastery", coords: [88.6132007, 27.3690385]},
+    {name: "Singtam Monastery", coords: [88.5035101, 27.2341097]},
+    {name: "Mintokgang Road", coords: [88.6176397, 27.3332951]},
+    {name: "Pabyuik Monastery", coords: [88.6279545, 27.2993719]},
+    {name: "Old Rumtek Monastery", coords: [88.563264, 27.2846735]}
+  ];
+
+  var features = monasteries.map(function(m) {
+    return new ol.Feature({ geometry: new ol.geom.Point(ol.proj.fromLonLat(m.coords)), name: m.name });
+  });
+
+  var vectorSource = new ol.source.Vector({ features: features });
+
+  var vectorLayer = new ol.layer.Vector({
+    source: vectorSource,
+    style: new ol.style.Style({
+      image: new ol.style.Icon({ src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', scale: 0.05 })
+    })
+  });
+
+  map.addLayer(vectorLayer);
+
+
+  var overlay = new ol.Overlay({ element: document.createElement('div'), positioning: 'bottom-center', stopEvent: false });
+  overlay.getElement().className = 'ol-popup';
+  map.addOverlay(overlay);
+
+  map.on('singleclick', function(evt) {
+    var feature = map.forEachFeatureAtPixel(evt.pixel, function(f) { return f; });
+    if (feature) {
+      var coordinates = feature.getGeometry().getCoordinates();
+      overlay.getElement().innerHTML = feature.get('name');
+      overlay.setPosition(coordinates);
+      overlay.getElement().style.display = 'block';
+    } else {
+      overlay.getElement().style.display = 'none';
+    }
+  });
+
+
+  function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
+  function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+</script>
+
+</body>
+</html>

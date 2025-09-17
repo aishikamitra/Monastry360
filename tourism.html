@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Monastery360 – Tourism Services</title>
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin:0; padding:0;
+    background:#faf7f2;
+    color:#333;
+    text-align:center;
+  }
+  header {
+    background:#7c2d12;
+    color:white;
+    padding:25px 10px;
+  }
+  header h1 { margin:0; font-size:2rem; }
+  .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: #7c2d12; overflow-x: hidden; transition: 0.3s; padding-top: 60px; }
+  .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.2rem; color: white; display: block; transition: 0.3s; }
+  .sidebar a:hover { background-color: #b45309; }
+  .sidebar .closebtn { position: absolute; top: 20px; right: 25px; font-size: 2rem; }
+  .menu-btn { position: fixed; top: 20px; left: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 1100; background:#7c2d12; border-radius:8px; padding:4px 8px; }
+  .agent-list { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px; }
+  .agent-card { background:white; border-radius:12px; padding:20px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.08); text-align:left; transition:transform .2s; }
+  .agent-card:hover { transform: translateY(-5px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
+  .agent-card h3 { margin:0 0 8px; color:#7c2d12; }
+  .agent-card p { margin:4px 0; color:#555; }
+  .back-btn { display:inline-block; margin:20px; background:#7c2d12; color:white; padding:12px 25px; border-radius:30px; text-decoration:none; font-weight:bold; transition: background .3s; }
+  .back-btn:hover { background:#b45309; }
+</style>
+</head>
+<body>
+
+<!-- Menu Button -->
+<span class="menu-btn" onclick="openNav()">&#9776;</span>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="audio-guide.html">Audio Guide</a>
+  <a href="tourism.html">Tourism Service</a>
+</div>
+
+<header>
+  <h1>Tourism Services in Sikkim</h1>
+  <p>Explore local travel agencies to plan your monastery tours and trips in Sikkim.</p>
+</header>
+
+<div class="agent-list">
+  <div class="agent-card">
+    <h3>Sikkim Wanderers</h3>
+    <p><strong>Contact:</strong> +91 98000 12345</p>
+    <p><strong>Email:</strong> info@sikkimwanderers.com</p>
+    <p><strong>Address:</strong> MG Marg, Gangtok, Sikkim</p>
+    <p>Specializes in monastery tours and eco-friendly travel packages.</p>
+  </div>
+
+  <div class="agent-card">
+    <h3>Himalayan Trails</h3>
+    <p><strong>Contact:</strong> +91 94340 67890</p>
+    <p><strong>Email:</strong> contact@himalayantrails.in</p>
+    <p><strong>Address:</strong> Tadong, Gangtok, Sikkim</p>
+    <p>Offers adventure treks, cultural tours, and guided monastery visits.</p>
+  </div>
+
+  <div class="agent-card">
+    <h3>Green Path Tours</h3>
+    <p><strong>Contact:</strong> +91 97332 44556</p>
+    <p><strong>Email:</strong> hello@greenpathtours.com</p>
+    <p><strong>Address:</strong> Namchi Road, Namchi, Sikkim</p>
+    <p>Focused on sustainable tourism and authentic Sikkimese experiences.</p>
+  </div>
+
+  <div class="agent-card">
+    <h3>Monastery Travels</h3>
+    <p><strong>Contact:</strong> +91 89760 99887</p>
+    <p><strong>Email:</strong> bookings@monasterytravels.in</p>
+    <p><strong>Address:</strong> Ranka, Gangtok, Sikkim</p>
+    <p>Specializes exclusively in tours of monasteries across Sikkim.</p>
+  </div>
+</div>
+
+<a href="index.html" class="back-btn">Back to Home</a>
+
+<script>
+function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
+function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+</script>
+
+</body>
+</html>

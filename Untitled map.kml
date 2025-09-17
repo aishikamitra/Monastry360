@@ -1,0 +1,673 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Untitled map</name>
+    <description/>
+    <Style id="icon-1899-0288D1-nodesc-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-nodesc-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>https://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Folder>
+      <name>Untitled layer</name>
+      <Placemark>
+        <name>Rumtek Dharma Chakra Centre</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5614622,27.2886861,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mamring Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3101201,27.277364,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Enchey Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6191659,27.3359368,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Burtuk</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6158468,27.3539598,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Do Drul Chorten</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6048366,27.3128415,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Decchen Cholling Gumpa-Tamamg Gumpa</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.608536,27.338795,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bermiok Tokal Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4690827,27.2287152,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tashiding Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2978746,27.3089308,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sinon Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2900301,27.3423753,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kartok Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.588005,27.2407996,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sanghak Choeling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2216867,27.2977517,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pema Choling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5310593,27.1757119,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pal Karma Zurmang Shedup Chokhor Ling Lingdum Monastery (Ranka Monastery)</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5790387,27.3311957,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lingdum Zurmang Kagyu Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5805594,27.3307583,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rinchenpong Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2684733,27.2354672,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rinchen Choling Tamu Monastery/ Gurung Gompha</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2708814,27.2432459,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pemayangtse Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2515852,27.3052201,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Okhrey Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.1019019,27.149513,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Khecheopalri Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.1882768,27.349221,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Hung hri Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2535011,27.3523006,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dubdi Buddhist Monastery - Yuksom, West Sikkim District, Sikkim, India</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2299922,27.3665529,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Dodak Buddhist Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.1715435,27.1718352,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rinchenpong Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2684733,27.2354672,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tendong Gumpa</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4079885,27.2061039,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Chang Chu Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4032499,27.2959417,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Serdup Choling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3547474,27.161498,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sharchhog Bayphug</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.385782,27.2763652,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ralang New Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3352477,27.3284964,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mane Choekhorling Gompa (Ravangla Monastery)</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.518887,28.240229,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ngadak Thupten Shedup Dhargey Choeling, Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3706278,27.1732407,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Norbu Yangdup Choling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3773796,27.2345473,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tashiding Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2978746,27.3089308,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Phagyal monastery Lingee</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4592622,27.37048,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kewzing Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3227697,27.2842636,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Doling monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3449117,27.287967,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Norbu gang, Coronation throne of Namgyal Dynasty</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2173761,27.3694863,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Bon Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3343804,27.278643,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Chawayng Ani Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5122178,27.5329718,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tholung Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4615734,27.636972,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tingvong Monastry</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4767615,27.5568019,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ngadak Thupten Shedup Dhargey Choeling, Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3706278,27.1732407,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tashiding Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2978746,27.3089308,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Phuntshog Ngayabling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2112913,27.2146633,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ngadak Thupten Shedup Dhargey Choeling, Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3706278,27.1732407,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Tashi Gyan Palden Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4127344,27.2866497,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sanghak Choeling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2216867,27.2977517,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Sanghak Choeling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.2216867,27.2977517,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ringhem Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5462414,27.4953153,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Phodong Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5838205,27.4128715,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Phensang Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6101296,27.420723,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lingthem Rikzing Chopel Targelling Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5011052,27.5230064,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lachung Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.7487553,27.6886827,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Lachen Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5577391,27.7166667,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Labrang Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5794589,27.4180001,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>KABI MONASTERY</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6099182,27.4007368,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>HEE GYATHANG MONASTERY</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.501073,27.4758646,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simik Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4718882,27.2873094,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rhenock Gumpa, Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6779745,27.1842602,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Kartok Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.588005,27.2407996,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name><![CDATA[Tsuglakhang Monastery & Temple]]></name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6147222,27.3261111,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Gonjang Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6132007,27.3690385,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Singtam Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5035101,27.2341097,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Simik Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.4718882,27.2873094,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Mintokgang Road</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6176397,27.3332951,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Rumtek Dharma Chakra Centre</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.5614622,27.2886861,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Ralang New Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.3352477,27.3284964,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Pabyuik Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6279545,27.2993719,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Old Rumtek Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.563264,27.2846735,0
+          </coordinates>
+        </Point>
+      </Placemark>
+      <Placemark>
+        <name>Enchey Monastery</name>
+        <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+        <Point>
+          <coordinates>
+            88.6191659,27.3359368,0
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+  </Document>
+</kml>

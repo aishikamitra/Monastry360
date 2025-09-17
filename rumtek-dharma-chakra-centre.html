@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rumtek Dharma Chakra Centre – Monastery360</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
+<style>
+  :root {
+    --primary-color: #7c2d12;
+    --accent-color: #b45309;
+    --bg-color: #faf7f2;
+    --text-color: #333;
+    --highlight-color: #fef3c7;
+  }
+
+  body {
+    margin:0; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:var(--bg-color);
+    color:var(--text-color); line-height:1.6;
+  }
+
+  h1,h2 { font-family:'Georgia', serif; color:var(--primary-color); text-align:center; }
+  a { text-decoration:none; color:inherit; }
+
+  .hero {
+    background:url('rumtek-hero.jpg') center/cover no-repeat;
+    color:white; text-align:center; padding:120px 20px; position:relative;
+  }
+  .hero::after {
+    content:""; position:absolute; inset:0; background:rgba(0,0,0,0.35);
+  }
+  .hero h1, .hero p { position:relative; z-index:1; }
+  .hero h1 { font-size:3rem; margin-bottom:10px; }
+  .hero p { font-size:1.3rem; color:#ffd580; }
+
+  section {
+    max-width:1100px; margin:40px auto; padding:30px;
+    background:white; border-radius:12px; box-shadow:0 4px 12px rgba(0,0,0,0.08);
+  }
+  section h2 {
+    border-bottom:2px solid #eab308; display:inline-block;
+    margin-bottom:15px; padding-bottom:5px;
+  }
+
+  table {
+    width:100%; border-collapse:collapse; margin-top:15px; font-size:1.05rem;
+  }
+  th, td { border:1px solid #ddd; padding:14px; text-align:left; }
+  th { background:var(--highlight-color); color:var(--primary-color); }
+  tr:nth-child(even) { background:#f9fafb; }
+
+  .mural-img {
+    display:block; width:100%; max-width:800px; height:450px;
+    object-fit:cover; border-radius:8px; margin:20px auto; box-shadow:0 4px 10px rgba(0,0,0,0.15);
+    transition:transform 0.3s;
+  }
+  .mural-img:hover { transform:scale(1.02); }
+  .mural-credit { font-size:0.85rem; color:#555; margin-top:5px; text-align:center; }
+
+  .btn, .back-btn {
+    display:inline-block; margin-top:20px; background:var(--primary-color);
+    color:white; padding:12px 24px; border-radius:30px; font-weight:bold; transition:background 0.3s; text-decoration:none;
+  }
+  .btn:hover, .back-btn:hover { background:var(--accent-color); }
+
+  #map, #mapFrame, iframe, audio {
+    width:100%; border-radius:8px; margin-top:15px;
+  }
+  #map, #mapFrame { height:450px; border:2px solid #ccc; }
+
+  #mapForm, #bookingForm {
+    display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-top:15px;
+  }
+  #mapForm input, #mapForm button, #bookingForm input, #bookingForm button {
+    padding:10px; border-radius:6px; border:1px solid #ccc; font-size:1rem;
+  }
+  #mapForm button, #bookingForm button { background:var(--primary-color); color:white; cursor:pointer; font-weight:bold; transition:background 0.3s; }
+  #mapForm button:hover, #bookingForm button:hover { background:var(--accent-color); }
+
+ 
+  .sidebar {
+    height:100%; width:0; position:fixed; z-index:1000; top:0; left:0;
+    background-color:var(--primary-color); overflow-x:hidden; transition:0.3s; padding-top:60px;
+  }
+  .sidebar a { padding:15px 25px; font-size:1.2rem; color:white; display:block; transition:0.3s; }
+  .sidebar a:hover { background-color:var(--accent-color); }
+  .sidebar .closebtn { position:absolute; top:20px; right:25px; font-size:2rem; }
+
+  .menu-btn { position:fixed; top:20px; left:20px; font-size:2rem; color:white; cursor:pointer; z-index:1100; background:var(--primary-color); border-radius:8px; padding:4px 8px; }
+
+</style>
+</head>
+<body>
+
+<span class="menu-btn" onclick="openNav()">&#9776;</span>
+
+
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="index.html">Home</a>
+  <a href="audio-guide.html">Audio Guide</a>
+  <a href="tourism.html">Tourism Service</a>
+</div>
+
+<div class="hero">
+  <h1>Rumtek Dharma Chakra Centre</h1>
+  <p>Preserving Culture, Rituals & Monastic Heritage</p>
+</div>
+
+<section>
+  <h2>Virtual Tour</h2>
+  <iframe 
+    src="https://www.google.com/maps/embed?pb=!4v1757959543428!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ2t2ZXZVaXdF!2m2!1d27.28884361783851!2d88.56089980788117!3f354.11062601177474!4f0.31806973745601397!5f0.7820865974627469" 
+    height="450" style="border:0;" allowfullscreen="" loading="lazy" title="Rumtek Virtual Tour"></iframe>
+</section>
+
+<section>
+  <h2>Narrated Walkthroughs</h2>
+  <p>Experience guided audio tours available in multiple languages.</p>
+  <audio controls>
+    <source src="audio/rumtek-tour.mp3" type="audio/mpeg">
+    Your browser does not support the audio element.
+  </audio>
+</section>
+
+<section>
+  <h2>Digital Archives – Murals</h2>
+  <p>Beautiful murals from Rumtek Dharma Chakra Centre.</p>
+  <img src="./mural_rumtek.jpg" alt="Rumtek Mural 1" class="mural-img">
+  <p class="mural-credit">
+    By <a href="https://commons.wikimedia.org/wiki/User:Sujay25" target="_blank">Sujay25</a> – <span lang="en">Own work</span>, 
+    <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank">CC BY-SA 4.0</a>, 
+    <a href="https://commons.wikimedia.org/w/index.php?curid=40240408" target="_blank">Link</a>
+  </p>
+  <img src="mural2_rumtek.jpg" alt="Rumtek Mural 2" class="mural-img">
+  <p class="mural-credit">
+    By <a href="https://commons.wikimedia.org/wiki/User:Prof_Ranga_Sai" target="_blank">Prof Ranga Sai</a> – <span lang="en">Own work</span>, 
+    <a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en" target="_blank">CC0</a>, 
+    <a href="https://commons.wikimedia.org/w/index.php?curid=148060611" target="_blank">Link</a>
+  </p>
+</section>
+
+<section>
+  <h2>Cultural Calendar</h2>
+  <p>Discover the heartbeat of Sikkim’s monastery festivals:</p>
+  <table>
+    <thead>
+      <tr><th>Season</th><th>Festival / Observance</th><th>When (Tibetan lunar)</th><th>Notes</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Summer</td><td>Vajrakilaya Drupchen</td><td>5th lunar month (10 days)</td><td>Major ritual at Rumtek; ends with sacred Cham dance</td></tr>
+      <tr><td>Winter</td><td>Kagyed Chams</td><td>~10th–11th lunar month</td><td>Black-hat dances; ritual destruction of evil</td></tr>
+      <tr><td>Winter</td><td>Losoong / Sonam Losar</td><td>End of Tibetan year (11th → 12th month)</td><td>Tibetan New Year; harvest thanksgiving & Cham dances</td></tr>
+      <tr><td>Late Spring</td><td>Saga Dawa Düchen</td><td>Full moon, 4th/5th lunar month</td><td>Buddha’s birth, enlightenment & nirvana</td></tr>
+      <tr><td>Summer</td><td>Drukpa Tseshi</td><td>4th day, 6th lunar month</td><td>Commemorates Buddha’s first teaching</td></tr>
+      <tr><td>Summer</td><td>Guru Rinpoche Tshechu</td><td>~10th day, 6th lunar month</td><td>Birthday of Guru Padmasambhava with Cham dances</td></tr>
+      <tr><td>Autumn</td><td>Pang Lhabsol</td><td>15th day, 7th lunar month</td><td>Unique to Sikkim; honoring Mount Kangchenjunga</td></tr>
+    </tbody>
+  </table>
+  <p style="font-size:13px;margin-top:8px;color:#444;text-align:center;"><em>Note:</em> Dates follow the Tibetan lunar calendar, so exact Gregorian dates vary each year.</p>
+</section>
+
+<section>
+  <h2>Nearby Places & Distance</h2>
+  <div id="map" aria-label="Map showing nearby locations"></div>
+  <form id="mapForm">
+    <label for="destination">Enter Destination:</label>
+    <input type="text" id="destination" placeholder="e.g., Enchey Monastery" required>
+    <button type="submit">Show Route</button>
+  </form>
+  <iframe id="mapFrame" frameborder="0" allowfullscreen title="Route Map"></iframe>
+</section>
+
+<section>
+  <h2>Tourist Booking & Participation</h2>
+  <p>Book your visit and see who else is participating.</p>
+  <form id="bookingForm">
+    <input type="text" id="touristName" placeholder="Your Name" required>
+    <input type="email" id="touristEmail" placeholder="Your Email" required>
+    <input type="date" id="visitDate" required>
+    <button type="submit" class="btn">Book Now</button>
+  </form>
+
+  <h3>Participants:</h3>
+  <ul id="participantList" style="list-style:none; padding-left:0;"></ul>
+</section>
+
+<div style="text-align:center; margin-bottom:50px;">
+  <a href="monasteries.html" class="btn">Back to Monastery List</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
+<script>
+
+  var map = new ol.Map({
+    target: 'map',
+    layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
+    view: new ol.View({ center: ol.proj.fromLonLat([88.5614622, 27.2886861]), zoom: 12 })
+  });
+
+  var places = [
+    {name: "Enchey Monastery", coords: [88.6191659, 27.3359368]},
+    {name: "Namgyal Institute of Tibetology", coords: [88.6136, 27.3222]},
+    {name: "Do Drul Chorten Stupa", coords: [88.6169, 27.3246]},
+    {name: "Banjhakri Falls and Energy Park", coords: [88.5965, 27.3175]},
+    {name: "Tashi Viewpoint", coords: [88.6385, 27.3604]},
+    {name: "Saramsa Garden", coords: [88.5909, 27.3173]},
+    {name: "Martam Village", coords: [88.5, 27.2833]},
+    {name: "Gangtok Ropeway (Cable Car)", coords: [88.6125, 27.3251]},
+    {name: "Flower Exhibition Centre", coords: [88.6131, 27.3273]},
+    {name: "Hanuman Tok", coords: [88.6388, 27.3534]}
+  ];
+
+  var rumtek = {name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861]};
+
+  var blueStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'blue', scale:0.05 }) });
+  var redStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'red', scale:0.06 }) });
+
+  var features = places.map(p => { var f=new ol.Feature({ geometry:new ol.geom.Point(ol.proj.fromLonLat(p.coords)), name:p.name }); f.setStyle(blueStyle); return f; });
+  var rumtekFeature = new ol.Feature({ geometry: new ol.geom.Point(ol.proj.fromLonLat(rumtek.coords)), name: rumtek.name });
+  rumtekFeature.setStyle(redStyle);
+
+  var vectorSource = new ol.source.Vector({ features: features.concat([rumtekFeature]) });
+  map.addLayer(new ol.layer.Vector({ source: vectorSource }));
+
+  var overlay = new ol.Overlay({ element: document.createElement('div'), positioning: 'bottom-center', stopEvent: false });
+  overlay.getElement().className = 'ol-popup';
+  map.addOverlay(overlay);
+
+  map.on('singleclick', function(evt){
+    var feature = map.forEachFeatureAtPixel(evt.pixel, f=>f);
+    if(feature){ overlay.getElement().innerHTML = feature.get('name'); overlay.setPosition(feature.getGeometry().getCoordinates()); overlay.getElement().style.display='block'; }
+    else overlay.getElement().style.display='none';
+  });
+
+
+  const form = document.getElementById("mapForm");
+  const frame = document.getElementById("mapFrame");
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    const destination = document.getElementById("destination").value;
+    const origin = "Rumtek Dharma Chakra Centre, Sikkim";
+    frame.src = `https://www.google.com/maps?q=from+${encodeURIComponent(origin)}+to+${encodeURIComponent(destination)}&output=embed`;
+  });
+
+ 
+  const bookingForm = document.getElementById("bookingForm");
+  const participantList = document.getElementById("participantList");
+  let participants = JSON.parse(localStorage.getItem("participants")) || [];
+  participants.forEach(addParticipantToList);
+
+  bookingForm.addEventListener("submit", function(e){
+    e.preventDefault();
+    const name = document.getElementById("touristName").value.trim();
+    const email = document.getElementById("touristEmail").value.trim();
+    const date = document.getElementById("visitDate").value;
+    if(name && email && date){
+      const participant = {name,email,date};
+      participants.push(participant);
+      localStorage.setItem("participants", JSON.stringify(participants));
+      addParticipantToList(participant);
+      bookingForm.reset();
+      alert("Booking successful!");
+    }
+  });
+
+  function addParticipantToList(p){
+    const li = document.createElement("li");
+    li.textContent = `${p.name} - ${p.date}`;
+    participantList.appendChild(li);
+  }
+
+  
+  function openNav(){ document.getElementById("mySidebar").style.width="250px"; }
+  function closeNav(){ document.getElementById("mySidebar").style.width="0"; }
+
+</script>
+</body>
+</html>

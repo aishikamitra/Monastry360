@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Monastery360 – Monasteries</title>
+<style>
+  body { 
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+    text-align:center; 
+    background:#faf7f2; 
+    margin:0; 
+    padding:20px; 
+    color:#333; 
+  }
+  h1 { 
+    margin:20px 0 10px; 
+    color:#7c2d12; 
+  }
+  #searchBox { 
+    padding:10px; 
+    width:320px; 
+    margin:10px auto 30px; 
+    border-radius:6px; 
+    border:1px solid #ccc; 
+    display:block; 
+  }
+  .monastery-list { 
+    display:flex; 
+    flex-wrap:wrap; 
+    justify-content:center; 
+    gap:18px; 
+    margin-bottom:40px; 
+  }
+  .monastery-card {
+    position: relative;
+    width:260px;
+    height:180px;
+    border-radius:12px;
+    text-decoration:none;
+    display:flex;
+    align-items:flex-end;
+    justify-content:center;
+    font-weight:bold;
+    font-size:1.1rem;
+    color:white;
+    text-align:center;
+    background-size: cover;
+    background-position: center;
+    box-shadow:0 4px 12px rgba(0,0,0,0.08);
+    transition: transform .18s, box-shadow .18s, background .18s;
+    overflow: hidden;
+  }
+  .monastery-card::after {
+    content: "";
+    position: absolute;
+    top:0; left:0; right:0; bottom:0;
+    background: rgba(0,0,0,0.35); 
+    border-radius:12px;
+  }
+  .monastery-card h3 {
+    position: relative; 
+    margin:0 10px 10px 10px;
+    z-index:1;
+    color:white;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+  }
+  .monastery-card:hover {
+    transform:translateY(-6px);
+    box-shadow:0 6px 18px rgba(0,0,0,0.12);
+    background-color:#fef3c7;
+  }
+  .back-btn { 
+    background:#7c2d12; 
+    color:white; 
+    border:none; 
+    padding:12px 25px; 
+    border-radius:30px; 
+    text-decoration:none; 
+    font-weight:bold; 
+    transition:background .3s; 
+  }
+  .back-btn:hover { background:#b45309; }
+  @media (max-width:520px){ 
+    .monastery-card{ width:90%; height:160px; } 
+    #searchBox{ width:90%; } 
+  }
+
+  /* Sidebar Styles */
+  .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: #7c2d12; overflow-x: hidden; transition: 0.3s; padding-top: 60px; }
+  .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.2rem; color: white; display: block; transition: 0.3s; }
+  .sidebar a:hover { background-color: #b45309; }
+  .sidebar .closebtn { position: absolute; top: 20px; right: 25px; font-size: 2rem; }
+
+  .menu-btn { position: fixed; top: 20px; left: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 1100; background:#7c2d12; border-radius:8px; padding:4px 8px; }
+</style>
+</head>
+<body>
+
+<!-- Menu Button -->
+<span class="menu-btn" onclick="openNav()">&#9776;</span>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="index.html">Home</a>
+  <a href="audio-guide.html">Audio Guide</a>
+  <a href="tourism.html">Tourism Service</a>
+</div>
+
+
+<h1>Monasteries of Sikkim</h1>
+<input id="searchBox" placeholder="Search monasteries..." type="search" />
+
+<div class="monastery-list" id="monasteryList" aria-live="polite"></div>
+
+<a href="index.html" class="back-btn">Back to Home</a>
+
+<script>
+const monasteries = [
+  "Amba Mamring Monastery","Burtuk Ugen Pemacholing Monastery","Choten Monastery","Dichen Choling Monastery",
+  "Enchey Monastery","Kathog Dorjeden Monastery","Khatek Pema Choling Monastery","Lingdok Tsangkhar Monastery",
+  "Lingdum Zurmang Monastery","Old Rumtek Monastery","Pabyuik Monastery","Ralong Monastery",
+  "Rumtek Dharma Chakra Centre","Samdong Mintokgang Monastery","Sang Monastery","Tsulakhang Monastery",
+  "Karthok Monastery","Rhenock Monastery","Simik Monastery","Hee Gyathang Monastery","Kabi Monastery",
+  "Lachen Thangu Monastery","Lachung Monastery","Lingthem Gonpa","Phensang Monastery","Phodong Monastery",
+  "Ringyim Monastery","Shagyong Monastery","Singchit Ngadag Monastery","Tholung Monastery","Tingbung Monastery",
+  "Chawayng Ani Monastery","Bon Monastery","Burmiok Norbugang Monastery","Doling Monastery","Kewzing Monastery",
+  "Linge Phagyal Monastery","Malli Tashi Chodarling Monastery","Namthang Norbu Tsho‑Ling Monastery",
+  "Namtse Nga‑Dag Monastery","Rabong Monastery","Sangmo Sharchog Bephug Monastery",
+  "Serdup Choling Monastery","Yangang Gonpa","Namchi Monastery","Tendong Gumpa","Chakung Monastery",
+  "Dodak Tamu Monastery","Dubde Monastery","Hungri Monastery","Khachoedpalri Monastery","Okhery Monastery",
+  "Pemayangtse Monastery","Rinchen Choling Tamu Monastery","Rinchenpung Monastery","Sanga Choeling Monastery",
+  "Silnon Monastery","Sri Badam Monastery","Tashi Samboling Tamang Monastery","Tashiding Monastery","Bermiok Monastery"
+];
+
+const listEl = document.getElementById('monasteryList');
+const searchBox = document.getElementById('searchBox');
+
+function slugify(name){
+  return name.toLowerCase()
+    .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')   
+    .replace(/['’‘`"“”··]/g,'')                         
+    .replace(/[^a-z0-9]+/g,'-')                         
+    .replace(/^-+|-+$/g,'');                            
+}
+
+function render(list){
+  listEl.innerHTML = '';
+  if(list.length === 0){
+    listEl.innerHTML = '<p style="color:#666">No monasteries found.</p>';
+    return;
+  }
+  list.forEach(name => {
+    const file = slugify(name) + '.html';
+    const a = document.createElement('a');
+    a.className = 'monastery-card';
+    a.href = file;
+    const imgSrc = 'images/' + name + '.jpg';
+    a.style.backgroundImage = `url('${imgSrc}')`;
+    a.innerHTML = `<h3>${name}</h3>`;
+    listEl.appendChild(a);
+  });
+}
+
+render(monasteries);
+
+searchBox.addEventListener('input', () => {
+  const q = searchBox.value.trim().toLowerCase();
+  if(!q){ render(monasteries); return; }
+  const filtered = monasteries.filter(n => n.toLowerCase().includes(q));
+  render(filtered);
+});
+
+
+function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
+function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+</script>
+
+</body>
+</html>
