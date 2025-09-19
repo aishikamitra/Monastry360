@@ -3,179 +3,855 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Monastery360 – Monasteries</title>
+<title>Monastery360 – Sacred Monasteries of Sikkim</title>
+<meta name="description" content="Explore the rich heritage of Sikkim's 95+ monasteries. Discover their history, architecture, and spiritual significance through our immersive digital platform.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/modern.css">
+<link rel="stylesheet" href="assets/css/chatbot.css">
 <style>
-  body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    text-align:center; 
-    background:#faf7f2; 
-    margin:0; 
-    padding:20px; 
-    color:#333; 
-  }
-  h1 { 
-    margin:20px 0 10px; 
-    color:#7c2d12; 
-  }
-  #searchBox { 
-    padding:10px; 
-    width:320px; 
-    margin:10px auto 30px; 
-    border-radius:6px; 
-    border:1px solid #ccc; 
-    display:block; 
-  }
-  .monastery-list { 
-    display:flex; 
-    flex-wrap:wrap; 
-    justify-content:center; 
-    gap:18px; 
-    margin-bottom:40px; 
-  }
-  .monastery-card {
+  /* Page-specific styles */
+  .monasteries-hero {
+    background: linear-gradient(135deg, var(--primary-50) 0%, var(--accent-50) 100%);
+    padding: calc(70px + var(--space-20)) var(--space-4) var(--space-20);
+    text-align: center;
     position: relative;
-    width:260px;
-    height:180px;
-    border-radius:12px;
-    text-decoration:none;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    font-weight:bold;
-    font-size:1.1rem;
-    color:white;
-    text-align:center;
-    background-size: cover;
-    background-position: center;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    transition: transform .18s, box-shadow .18s, background .18s;
     overflow: hidden;
   }
-  .monastery-card::after {
-    content: "";
+
+  .monasteries-hero::before {
+    content: '';
     position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.35); 
-    border-radius:12px;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1350&q=80');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: -1;
   }
-  .monastery-card h3 {
-    position: relative; 
-    margin:0 10px 10px 10px;
-    z-index:1;
-    color:white;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
+
+  .search-section {
+    background: white;
+    padding: var(--space-8) 0;
+    border-bottom: 1px solid var(--secondary-200);
+    position: sticky;
+    top: 70px;
+    z-index: var(--z-sticky);
+    backdrop-filter: blur(10px);
   }
+
+  .search-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+  }
+
+  .search-box {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: var(--space-4) var(--space-12) var(--space-4) var(--space-4);
+    border: 2px solid var(--secondary-200);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-base);
+    transition: all var(--transition-fast);
+    background: var(--secondary-50);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--primary-500);
+    background: white;
+    box-shadow: 0 0 0 3px rgba(241, 90, 41, 0.1);
+  }
+
+  .search-icon {
+    position: absolute;
+    right: var(--space-4);
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--secondary-400);
+    font-size: var(--text-lg);
+  }
+
+  .filter-controls {
+    display: flex;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .filter-btn {
+    padding: var(--space-2) var(--space-4);
+    border: 1px solid var(--secondary-300);
+    background: white;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: var(--text-sm);
+  }
+
+  .filter-btn:hover,
+  .filter-btn.active {
+    background: var(--primary-500);
+    color: white;
+    border-color: var(--primary-500);
+  }
+
+  .monasteries-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: var(--space-8);
+    padding: var(--space-12) 0;
+  }
+
+  .monastery-card {
+    background: white;
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--secondary-200);
+    transition: all var(--transition-base);
+    cursor: pointer;
+    height: 400px;
+    display: flex;
+    flex-direction: column;
+  }
+
   .monastery-card:hover {
-    transform:translateY(-6px);
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);
-    background-color:#fef3c7;
-  }
-  .back-btn { 
-    background:#7c2d12; 
-    color:white; 
-    border:none; 
-    padding:12px 25px; 
-    border-radius:30px; 
-    text-decoration:none; 
-    font-weight:bold; 
-    transition:background .3s; 
-  }
-  .back-btn:hover { background:#b45309; }
-  @media (max-width:520px){ 
-    .monastery-card{ width:90%; height:160px; } 
-    #searchBox{ width:90%; } 
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-2xl);
   }
 
-  /* Sidebar Styles */
-  .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: #7c2d12; overflow-x: hidden; transition: 0.3s; padding-top: 60px; }
-  .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.2rem; color: white; display: block; transition: 0.3s; }
-  .sidebar a:hover { background-color: #b45309; }
-  .sidebar .closebtn { position: absolute; top: 20px; right: 25px; font-size: 2rem; }
+  .monastery-image {
+    height: 240px;
+    background-size: cover;
+    background-position: center;
+    position: relative;
+    overflow: hidden;
+  }
 
-  .menu-btn { position: fixed; top: 20px; left: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 1100; background:#7c2d12; border-radius:8px; padding:4px 8px; }
+  .monastery-image::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,0.7) 100%);
+  }
+
+  .monastery-badge {
+    position: absolute;
+    top: var(--space-3);
+    right: var(--space-3);
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(10px);
+    padding: var(--space-1) var(--space-3);
+    border-radius: var(--radius-full);
+    font-size: var(--text-xs);
+    font-weight: 600;
+    color: var(--primary-700);
+  }
+
+  .monastery-content {
+    padding: var(--space-6);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .monastery-title {
+    font-size: var(--text-xl);
+    font-weight: 600;
+    color: var(--secondary-900);
+    margin-bottom: var(--space-2);
+    line-height: 1.3;
+  }
+
+  .monastery-location {
+    color: var(--secondary-600);
+    font-size: var(--text-sm);
+    margin-bottom: var(--space-4);
+    display: flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  .monastery-description {
+    color: var(--secondary-700);
+    font-size: var(--text-sm);
+    line-height: 1.5;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .monastery-actions {
+    display: flex;
+    gap: var(--space-3);
+    margin-top: var(--space-4);
+  }
+
+  .btn-small {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+    border-radius: var(--radius-md);
+  }
+
+  .results-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-8);
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--secondary-200);
+  }
+
+  .results-count {
+    color: var(--secondary-600);
+    font-size: var(--text-sm);
+  }
+
+  .view-toggle {
+    display: flex;
+    border: 1px solid var(--secondary-300);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  .view-btn {
+    padding: var(--space-2) var(--space-3);
+    border: none;
+    background: white;
+    cursor: pointer;
+    transition: all var(--transition-fast);
+    font-size: var(--text-sm);
+  }
+
+  .view-btn.active {
+    background: var(--primary-500);
+    color: white;
+  }
+
+  .list-view .monasteries-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .list-view .monastery-card {
+    flex-direction: row;
+    height: 200px;
+  }
+
+  .list-view .monastery-image {
+    width: 300px;
+    height: 100%;
+    flex-shrink: 0;
+  }
+
+  .loading-state {
+    text-align: center;
+    padding: var(--space-16);
+    color: var(--secondary-500);
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: var(--space-20);
+    color: var(--secondary-600);
+  }
+
+  .empty-state-icon {
+    font-size: var(--text-6xl);
+    margin-bottom: var(--space-4);
+    opacity: 0.5;
+  }
+
+  @media (max-width: 768px) {
+    .monasteries-grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      padding: var(--space-8) 0;
+    }
+
+    .search-container {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .search-box {
+      max-width: none;
+    }
+
+    .filter-controls {
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .monastery-card {
+      height: auto;
+    }
+
+    .monastery-image {
+      height: 200px;
+    }
+
+    .list-view .monastery-card {
+      flex-direction: column;
+      height: auto;
+    }
+
+    .list-view .monastery-image {
+      width: 100%;
+      height: 200px;
+    }
+
+    .results-info {
+      flex-direction: column;
+      gap: var(--space-4);
+      align-items: stretch;
+    }
+  }
+
+  /* Skeleton loading animation */
+  .skeleton {
+    background: linear-gradient(90deg, var(--secondary-200) 25%, var(--secondary-100) 50%, var(--secondary-200) 75%);
+    background-size: 200% 100%;
+    animation: loading 1.5s infinite;
+  }
+
+  @keyframes loading {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+  }
+
+  .skeleton-card {
+    height: 400px;
+    border-radius: var(--radius-xl);
+  }
+
+  /* Intersection observer animations */
+  .monastery-card {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+  }
+
+  .monastery-card.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
 </style>
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <div class="nav-brand">Monastery360</div>
+      <ul class="nav-menu">
+        <li><a href="index.html" class="nav-link">Home</a></li>
+        <li><a href="monasteries.html" class="nav-link">Monasteries</a></li>
+        <li><a href="tourism.html" class="nav-link">Tourism</a></li>
+      </ul>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+        ☰
+      </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="index.html">Home</a>
+      <a href="monasteries.html">Monasteries</a>
+      <a href="tourism.html">Tourism</a>
+    </div>
+  </nav>
 
-<!-- Menu Button -->
-<span class="menu-btn" onclick="openNav()">&#9776;</span>
+  <main id="main">
+    <!-- Hero Section -->
+    <section class="monasteries-hero">
+      <div class="container">
+        <h1 class="fade-in">Sacred Monasteries of Sikkim</h1>
+        <p class="hero-subtitle fade-in">
+          Discover the spiritual heritage of the Himalayas through 95+ ancient monasteries, each telling a unique story of faith, architecture, and cultural significance.
+        </p>
+      </div>
+    </section>
 
-<!-- Sidebar -->
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="index.html">Home</a>
-  <a href="audio-guide.html">Audio Guide</a>
-  <a href="tourism.html">Tourism Service</a>
-</div>
+    <!-- Search Section -->
+    <section class="search-section">
+      <div class="container">
+        <div class="search-container">
+          <div class="search-box">
+            <input 
+              type="text" 
+              id="searchBox" 
+              class="search-input" 
+              placeholder="Search monasteries by name, location, or tradition..."
+              autocomplete="off"
+            >
+            <div class="search-icon">🔍</div>
+          </div>
+          
+          <div class="filter-controls">
+            <button class="filter-btn active" data-tradition="all">All</button>
+            <button class="filter-btn" data-tradition="nyingma">Nyingma</button>
+            <button class="filter-btn" data-tradition="kagyu">Kagyu</button>
+            <button class="filter-btn" data-tradition="gelug">Gelug</button>
+            <button class="filter-btn" data-tradition="sakya">Sakya</button>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- Monasteries Grid -->
+    <section class="section">
+      <div class="container">
+        <div class="results-info">
+          <div class="results-count" id="resultsCount">Showing 95 monasteries</div>
+          <div class="view-toggle">
+            <button class="view-btn active" data-view="grid">Grid</button>
+            <button class="view-btn" data-view="list">List</button>
+          </div>
+        </div>
 
-<h1>Monasteries of Sikkim</h1>
-<input id="searchBox" placeholder="Search monasteries..." type="search" />
+        <div id="monasteryList" class="monasteries-grid">
+          <!-- Monasteries will be loaded here dynamically -->
+        </div>
 
-<div class="monastery-list" id="monasteryList" aria-live="polite"></div>
+        <div id="loadingState" class="loading-state" style="display: none;">
+          <div class="loading"></div>
+          <p>Loading monasteries...</p>
+        </div>
 
-<a href="index.html" class="back-btn">Back to Home</a>
+        <div id="emptyState" class="empty-state" style="display: none;">
+          <div class="empty-state-icon">🏛️</div>
+          <h3>No monasteries found</h3>
+          <p>Try adjusting your search terms or filters.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Chatbot -->
+  <div class="chatbox">
+      <div class="chatbox__support">
+          <div class="chatbox__header">
+              <div class="chatbox__image--header">
+                  <div class="avatar-circle">
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20" fill="url(#avatarGradient)"/>
+                        <path d="M20 12C17.79 12 16 13.79 16 16C16 18.21 17.79 20 20 20C22.21 20 24 18.21 24 16C24 13.79 22.21 12 20 12ZM20 18C18.9 18 18 17.1 18 16C18 14.9 18.9 14 20 14C21.1 14 22 14.9 22 16C22 17.1 21.1 18 20 18Z" fill="white"/>
+                        <path d="M20 22C16.69 22 14 24.69 14 28V30H26V28C26 24.69 23.31 22 20 22ZM16 28C16 25.79 17.79 24 20 24C22.21 24 24 25.79 24 28H16Z" fill="white"/>
+                        <defs>
+                          <linearGradient id="avatarGradient" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" style="stop-color:#6366f1"/>
+                            <stop offset="100%" style="stop-color:#8b5cf6"/>
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                  </div>
+              </div>
+              <div class="chatbox__content--header">
+                  <h4 class="chatbox__heading--header">Monastery Guide</h4>
+                  <p class="chatbox__description--header">Hi! I'm Explora. How can I help you with Sikkim monasteries?</p>
+              </div>
+          </div>
+          <div class="chatbox__messages">
+              <div></div>
+          </div>
+          <div class="chatbox__footer">
+              <input type="text" placeholder="Write a message...">
+              <button class="chatbox__send--footer send__button">Send</button>
+          </div>
+      </div>
+      <div class="chatbox__button">
+          <button aria-label="Open chat">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="chatIconGradient2" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3b82f6"/>
+                    <stop offset="50%" style="stop-color:#6366f1"/>
+                    <stop offset="100%" style="stop-color:#8b5cf6"/>
+                  </linearGradient>
+                </defs>
+                <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="url(#chatIconGradient2)"/>
+                <path d="M7 9H17M7 13H13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+          </button>
+      </div>
+  </div>
 
 <script>
+// Monastery data with enhanced information
 const monasteries = [
-  "Amba Mamring Monastery","Burtuk Ugen Pemacholing Monastery","Choten Monastery","Dichen Choling Monastery",
-  "Enchey Monastery","Kathog Dorjeden Monastery","Khatek Pema Choling Monastery","Lingdok Tsangkhar Monastery",
-  "Lingdum Zurmang Monastery","Old Rumtek Monastery","Pabyuik Monastery","Ralong Monastery",
-  "Rumtek Dharma Chakra Centre","Samdong Mintokgang Monastery","Sang Monastery","Tsulakhang Monastery",
-  "Karthok Monastery","Rhenock Monastery","Simik Monastery","Hee Gyathang Monastery","Kabi Monastery",
-  "Lachen Thangu Monastery","Lachung Monastery","Lingthem Gonpa","Phensang Monastery","Phodong Monastery",
-  "Ringyim Monastery","Shagyong Monastery","Singchit Ngadag Monastery","Tholung Monastery","Tingbung Monastery",
-  "Chawayng Ani Monastery","Bon Monastery","Burmiok Norbugang Monastery","Doling Monastery","Kewzing Monastery",
-  "Linge Phagyal Monastery","Malli Tashi Chodarling Monastery","Namthang Norbu Tsho‑Ling Monastery",
-  "Namtse Nga‑Dag Monastery","Rabong Monastery","Sangmo Sharchog Bephug Monastery",
-  "Serdup Choling Monastery","Yangang Gonpa","Namchi Monastery","Tendong Gumpa","Chakung Monastery",
-  "Dodak Tamu Monastery","Dubde Monastery","Hungri Monastery","Khachoedpalri Monastery","Okhery Monastery",
-  "Pemayangtse Monastery","Rinchen Choling Tamu Monastery","Rinchenpung Monastery","Sanga Choeling Monastery",
-  "Silnon Monastery","Sri Badam Monastery","Tashi Samboling Tamang Monastery","Tashiding Monastery","Bermiok Monastery"
+  {
+    name: "Rumtek Dharma Chakra Centre",
+    location: "Gangtok, East Sikkim",
+    tradition: "kagyu",
+    established: "1966",
+    description: "The largest monastery in Sikkim and seat of the Karmapa. Known for its golden stupa and annual Cham dance festivals.",
+    image: "images/Rumtek Dharma Chakra Centre.jpg",
+    coordinates: [88.5614622, 27.2886861]
+  },
+  {
+    name: "Enchey Monastery",
+    location: "Gangtok, East Sikkim", 
+    tradition: "nyingma",
+    established: "1909",
+    description: "Beautiful hilltop monastery offering panoramic views of Gangtok and the Kanchenjunga range.",
+    image: "images/Enchey Monastery.jpg",
+    coordinates: [88.6191659, 27.3359368]
+  },
+  {
+    name: "Pemayangtse Monastery",
+    location: "Pelling, West Sikkim",
+    tradition: "nyingma", 
+    established: "1705",
+    description: "One of the oldest and most important monasteries in Sikkim, featuring a seven-tiered wooden sculpture.",
+    image: "images/Pemayangtse Monastery.jpg",
+    coordinates: [88.2515852, 27.3052201]
+  },
+  {
+    name: "Tashiding Monastery",
+    location: "Yuksom, West Sikkim",
+    tradition: "nyingma",
+    established: "1717", 
+    description: "Sacred monastery on a hilltop between Rathong and Rangeet rivers, famous for its holy water ceremony.",
+    image: "images/Tashiding Monastery.jpg",
+    coordinates: [88.2978746, 27.3089308]
+  },
+  {
+    name: "Dubdi Monastery",
+    location: "Yuksom, West Sikkim",
+    tradition: "nyingma",
+    established: "1701",
+    description: "The oldest monastery in Sikkim, also known as the 'Hermit's Cell', surrounded by dense forests.",
+    image: "images/Dubdi Buddhist Monastery - Yuksom.jpg", 
+    coordinates: [88.2299922, 27.3665529]
+  },
+  {
+    name: "Phodong Monastery",
+    location: "North Sikkim",
+    tradition: "kagyu",
+    established: "1740",
+    description: "Historic monastery rebuilt in 1977, known for its annual festivals and traditional architecture.",
+    image: "images/Phodong Monastery.jpg",
+    coordinates: [88.5838205, 27.4128715]
+  },
+  {
+    name: "Labrang Monastery", 
+    location: "North Sikkim",
+    tradition: "nyingma",
+    established: "1814",
+    description: "Peaceful monastery with beautiful murals and traditional Tibetan architecture.",
+    image: "images/Labrang Monastery.jpg",
+    coordinates: [88.5794589, 27.4180001]
+  },
+  {
+    name: "Ralong Monastery",
+    location: "South Sikkim", 
+    tradition: "kagyu",
+    established: "1768",
+    description: "Important Kagyu monastery with rich history and beautiful mountain views.",
+    image: "images/Ralong Monastery.jpg",
+    coordinates: [88.3352477, 27.3284964]
+  }
 ];
 
-const listEl = document.getElementById('monasteryList');
-const searchBox = document.getElementById('searchBox');
+// Additional monasteries for demonstration
+const additionalMonasteries = [
+  "Mamring Monastery", "Burtuk", "Do Drul Chorten", "Bermiok Tokal Monastery",
+  "Sinon Monastery", "Kartok Monastery", "Sanghak Choeling Monastery", 
+  "Pema Choling Monastery", "Lingdum Zurmang Kagyu Monastery", "Rinchenpong Monastery",
+  "Okhrey Monastery", "Khecheopalri Monastery", "Hung hri Monastery", 
+  "Dodak Buddhist Monastery", "Tendong Gumpa", "Chang Chu Monastery",
+  "Serdup Choling Monastery", "Bon Monastery", "Chawayng Ani Monastery"
+];
 
-function slugify(name){
-  return name.toLowerCase()
-    .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')   
-    .replace(/['’‘`"“”··]/g,'')                         
-    .replace(/[^a-z0-9]+/g,'-')                         
-    .replace(/^-+|-+$/g,'');                            
+// Generate additional monastery objects
+additionalMonasteries.forEach((name, index) => {
+  const traditions = ['nyingma', 'kagyu', 'gelug', 'sakya'];
+  const locations = ['East Sikkim', 'West Sikkim', 'North Sikkim', 'South Sikkim'];
+  
+  monasteries.push({
+    name: name,
+    location: `${locations[index % locations.length]}`,
+    tradition: traditions[index % traditions.length],
+    established: `${1700 + Math.floor(Math.random() * 300)}`,
+    description: `Historic monastery featuring traditional Tibetan Buddhist architecture and spiritual practices.`,
+    image: `images/${name}.jpg`,
+    coordinates: [88.5 + (Math.random() - 0.5), 27.3 + (Math.random() - 0.5)]
+  });
+});
+
+let filteredMonasteries = [...monasteries];
+let currentView = 'grid';
+
+// DOM elements
+const searchBox = document.getElementById('searchBox');
+const monasteryList = document.getElementById('monasteryList');
+const resultsCount = document.getElementById('resultsCount');
+const loadingState = document.getElementById('loadingState');
+const emptyState = document.getElementById('emptyState');
+
+// Initialize page
+document.addEventListener('DOMContentLoaded', function() {
+  renderMonasteries();
+  setupEventListeners();
+  observeCards();
+});
+
+// Setup event listeners
+function setupEventListeners() {
+  // Search functionality
+  searchBox.addEventListener('input', debounce(handleSearch, 300));
+  
+  // Filter buttons
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.addEventListener('click', handleFilter);
+  });
+  
+  // View toggle
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.addEventListener('click', handleViewToggle);
+  });
+  
+  // Mobile menu
+  window.toggleMobileMenu = function() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenu.classList.toggle('active');
+  };
 }
 
-function render(list){
-  listEl.innerHTML = '';
-  if(list.length === 0){
-    listEl.innerHTML = '<p style="color:#666">No monasteries found.</p>';
-    return;
+// Debounce function for search
+function debounce(func, wait) {
+  let timeout;
+  return function executedFunction(...args) {
+    const later = () => {
+      clearTimeout(timeout);
+      func(...args);
+    };
+    clearTimeout(timeout);
+    timeout = setTimeout(later, wait);
+  };
+}
+
+// Handle search
+function handleSearch() {
+  const query = searchBox.value.toLowerCase().trim();
+  
+  if (!query) {
+    filteredMonasteries = [...monasteries];
+  } else {
+    filteredMonasteries = monasteries.filter(monastery => 
+      monastery.name.toLowerCase().includes(query) ||
+      monastery.location.toLowerCase().includes(query) ||
+      monastery.tradition.toLowerCase().includes(query) ||
+      monastery.description.toLowerCase().includes(query)
+    );
   }
-  list.forEach(name => {
-    const file = slugify(name) + '.html';
-    const a = document.createElement('a');
-    a.className = 'monastery-card';
-    a.href = file;
-    const imgSrc = 'images/' + name + '.jpg';
-    a.style.backgroundImage = `url('${imgSrc}')`;
-    a.innerHTML = `<h3>${name}</h3>`;
-    listEl.appendChild(a);
+  
+  renderMonasteries();
+}
+
+// Handle filter
+function handleFilter(e) {
+  const tradition = e.target.getAttribute('data-tradition');
+  
+  // Update active state
+  document.querySelectorAll('.filter-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  e.target.classList.add('active');
+  
+  // Filter monasteries
+  if (tradition === 'all') {
+    filteredMonasteries = [...monasteries];
+  } else {
+    filteredMonasteries = monasteries.filter(monastery => 
+      monastery.tradition === tradition
+    );
+  }
+  
+  // Apply search if active
+  const query = searchBox.value.toLowerCase().trim();
+  if (query) {
+    filteredMonasteries = filteredMonasteries.filter(monastery => 
+      monastery.name.toLowerCase().includes(query) ||
+      monastery.location.toLowerCase().includes(query) ||
+      monastery.description.toLowerCase().includes(query)
+    );
+  }
+  
+  renderMonasteries();
+}
+
+// Handle view toggle
+function handleViewToggle(e) {
+  const view = e.target.getAttribute('data-view');
+  currentView = view;
+  
+  // Update active state
+  document.querySelectorAll('.view-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  e.target.classList.add('active');
+  
+  // Toggle view class
+  const container = document.querySelector('.section .container');
+  if (view === 'list') {
+    container.classList.add('list-view');
+  } else {
+    container.classList.remove('list-view');
+  }
+}
+
+// Render monasteries
+function renderMonasteries() {
+  showLoadingState();
+  
+  setTimeout(() => {
+    hideLoadingState();
+    
+    if (filteredMonasteries.length === 0) {
+      showEmptyState();
+      return;
+    }
+    
+    hideEmptyState();
+    updateResultsCount();
+    
+    monasteryList.innerHTML = filteredMonasteries.map(monastery => 
+      createMonasteryCard(monastery)
+    ).join('');
+    
+    // Re-observe new cards for animations
+    observeCards();
+  }, 500); // Simulate loading
+}
+
+// Create monastery card HTML
+function createMonasteryCard(monastery) {
+  const traditionColors = {
+    nyingma: '#dc3545',
+    kagyu: '#0d6efd', 
+    gelug: '#fd7e14',
+    sakya: '#6f42c1'
+  };
+  
+  return `
+    <div class="monastery-card" onclick="openMonasteryDetail('${monastery.name}')">
+      <div class="monastery-image" style="background-image: url('${monastery.image}')">
+        <div class="monastery-badge" style="color: ${traditionColors[monastery.tradition]}">
+          ${monastery.tradition.charAt(0).toUpperCase() + monastery.tradition.slice(1)}
+        </div>
+      </div>
+      <div class="monastery-content">
+        <h3 class="monastery-title">${monastery.name}</h3>
+        <div class="monastery-location">
+          📍 ${monastery.location} • Est. ${monastery.established}
+        </div>
+        <p class="monastery-description">${monastery.description}</p>
+        <div class="monastery-actions">
+          <button class="btn btn-primary btn-small">Learn More</button>
+          <button class="btn btn-secondary btn-small">View on Map</button>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+// Utility functions
+function showLoadingState() {
+  loadingState.style.display = 'block';
+  monasteryList.style.display = 'none';
+  emptyState.style.display = 'none';
+}
+
+function hideLoadingState() {
+  loadingState.style.display = 'none';
+  monasteryList.style.display = 'grid';
+}
+
+function showEmptyState() {
+  emptyState.style.display = 'block';
+  monasteryList.style.display = 'none';
+}
+
+function hideEmptyState() {
+  emptyState.style.display = 'none';
+}
+
+function updateResultsCount() {
+  const count = filteredMonasteries.length;
+  resultsCount.textContent = `Showing ${count} ${count === 1 ? 'monastery' : 'monasteries'}`;
+}
+
+// Placeholder for monastery detail function
+function openMonasteryDetail(name) {
+  alert(`Opening details for ${name}. This would typically navigate to a detailed page.`);
+}
+
+// Intersection Observer for card animations
+function observeCards() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry, index) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => {
+          entry.target.classList.add('visible');
+        }, index * 100);
+      }
+    });
+  }, {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  });
+
+  document.querySelectorAll('.monastery-card').forEach(card => {
+    observer.observe(card);
   });
 }
 
-render(monasteries);
+// Fade in animations
+const fadeInObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.1 });
 
-searchBox.addEventListener('input', () => {
-  const q = searchBox.value.trim().toLowerCase();
-  if(!q){ render(monasteries); return; }
-  const filtered = monasteries.filter(n => n.toLowerCase().includes(q));
-  render(filtered);
+document.querySelectorAll('.fade-in').forEach(el => {
+  fadeInObserver.observe(el);
 });
 
-
-function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
-function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+// Navigation background on scroll
+window.addEventListener('scroll', () => {
+  const nav = document.querySelector('.nav');
+  if (window.scrollY > 50) {
+    nav.style.background = 'rgba(255, 255, 255, 0.98)';
+  } else {
+    nav.style.background = 'rgba(255, 255, 255, 0.95)';
+  }
+});
 </script>
+
+<script src="assets/js/performance.js"></script>
+<script>
+var $SCRIPT_ROOT = '';
+</script>
+<script src="assets/js/chatbot.js"></script>
 
 </body>
 </html>
