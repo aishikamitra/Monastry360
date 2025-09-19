@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Bon Monastery – Monastery360</title>
+<title>Dolepchen Boudha Sanskrit Monastery – Monastery360</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
 <style>
   :root {
@@ -23,7 +23,7 @@
   a { text-decoration:none; color:inherit; }
 
   .hero {
-    background:url('images/Bon Monastery.jpg') center/cover no-repeat;
+    background:url('images/Dolepchen Boudha Sanskrit Monastery.jpg') center/cover no-repeat;
     color:white; text-align:center; padding:120px 20px; position:relative;
   }
   .hero::after {
@@ -102,14 +102,14 @@
 </div>
 
 <div class="hero">
-  <h1>Bon Monastery</h1>
+  <h1>Dolepchen Boudha Sanskrit Monastery</h1>
   <p>Preserving Culture, Rituals & Monastic Heritage</p>
 </div>
 
 <section>
-  <h2>About Bon Monastery</h2>
-  <p>Bon Monastery is a sacred Buddhist monastery in Sikkim, preserving ancient traditions and serving as a center for spiritual practice and cultural heritage in the Himalayan region.</p>
-  <img src="images/Bon Monastery.jpg" alt="Bon Monastery" class="monastery-img">
+  <h2>About Dolepchen Boudha Sanskrit Monastery</h2>
+  <p>Dolepchen Boudha Sanskrit Monastery is a sacred Buddhist monastery in Sikkim, preserving ancient traditions and serving as a center for spiritual practice and cultural heritage in the Himalayan region.</p>
+  <img src="images/Dolepchen Boudha Sanskrit Monastery.jpg" alt="Dolepchen Boudha Sanskrit Monastery" class="monastery-img">
   <p class="img-credit">Image courtesy of Monastery360 collection</p>
 </section>
 
@@ -117,14 +117,14 @@
   <h2>Virtual Tour</h2>
   <iframe 
     src="https://www.google.com/maps/embed?pb=!4v1757959543428!6m8!1m7!1sCAoSLEFGMVFpcFBBMWFqS09qNUx0VGFOYzNBZG1GeldOMGRsUy1kUTJKN3NwYWwx!2m2!1d27.3389!2d88.5614!3f354.11!4f0.31!5f0.78" 
-    height="450" style="border:0;" allowfullscreen="" loading="lazy" title="Bon Monastery Virtual Tour"></iframe>
+    height="450" style="border:0;" allowfullscreen="" loading="lazy" title="Dolepchen Boudha Sanskrit Monastery Virtual Tour"></iframe>
 </section>
 
 <section>
   <h2>Narrated Walkthroughs</h2>
   <p>Experience guided audio tours available in multiple languages.</p>
   <audio controls>
-    <source src="audio/bon-monastery-tour.mp3" type="audio/mpeg">
+    <source src="audio/dolepchen-boudha-sanskrit-monastery-tour.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 </section>
@@ -197,7 +197,7 @@
     {"name": "Flower Exhibition Centre", "coords": [88.6131, 27.3273]},
     {"name": "Hanuman Tok", "coords": [88.6388, 27.3534]}
   ];
-  var currentMonastery = {name: "Bon Monastery", coords: [88.5614, 27.3389]};
+  var currentMonastery = {name: "Dolepchen Boudha Sanskrit Monastery", coords: [88.5614, 27.3389]};
 
   var blueStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'blue', scale:0.05 }) });
   var redStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'red', scale:0.06 }) });
@@ -224,13 +224,13 @@
   form.addEventListener("submit", function(e){
     e.preventDefault();
     const destination = document.getElementById("destination").value;
-    const origin = "Bon Monastery, Sikkim";
+    const origin = "Dolepchen Boudha Sanskrit Monastery, Sikkim";
     frame.src = `https://www.google.com/maps?q=from+${encodeURIComponent(origin)}+to+${encodeURIComponent(destination)}&output=embed`;
   });
 
   const bookingForm = document.getElementById("bookingForm");
   const participantList = document.getElementById("participantList");
-  let participants = JSON.parse(localStorage.getItem("participants_bon-monastery")) || [];
+  let participants = JSON.parse(localStorage.getItem("participants_dolepchen-boudha-sanskrit-monastery")) || [];
   participants.forEach(addParticipantToList);
 
   bookingForm.addEventListener("submit", function(e){
@@ -241,10 +241,10 @@
     if(name && email && date){
       const participant = {name,email,date};
       participants.push(participant);
-      localStorage.setItem("participants_bon-monastery", JSON.stringify(participants));
+      localStorage.setItem("participants_dolepchen-boudha-sanskrit-monastery", JSON.stringify(participants));
       addParticipantToList(participant);
       bookingForm.reset();
-      alert("Booking successful for Bon Monastery!");
+      alert("Booking successful for Dolepchen Boudha Sanskrit Monastery!");
     }
   });
 

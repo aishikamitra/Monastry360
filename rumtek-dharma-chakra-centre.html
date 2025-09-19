@@ -23,7 +23,7 @@
   a { text-decoration:none; color:inherit; }
 
   .hero {
-    background:url('rumtek-hero.jpg') center/cover no-repeat;
+    background:url('images/Rumtek Dharma Chakra Centre.jpg') center/cover no-repeat;
     color:white; text-align:center; padding:120px 20px; position:relative;
   }
   .hero::after {
@@ -49,13 +49,13 @@
   th { background:var(--highlight-color); color:var(--primary-color); }
   tr:nth-child(even) { background:#f9fafb; }
 
-  .mural-img {
+  .monastery-img {
     display:block; width:100%; max-width:800px; height:450px;
     object-fit:cover; border-radius:8px; margin:20px auto; box-shadow:0 4px 10px rgba(0,0,0,0.15);
     transition:transform 0.3s;
   }
-  .mural-img:hover { transform:scale(1.02); }
-  .mural-credit { font-size:0.85rem; color:#555; margin-top:5px; text-align:center; }
+  .monastery-img:hover { transform:scale(1.02); }
+  .img-credit { font-size:0.85rem; color:#555; margin-top:5px; text-align:center; }
 
   .btn, .back-btn {
     display:inline-block; margin-top:20px; background:var(--primary-color);
@@ -77,7 +77,6 @@
   #mapForm button, #bookingForm button { background:var(--primary-color); color:white; cursor:pointer; font-weight:bold; transition:background 0.3s; }
   #mapForm button:hover, #bookingForm button:hover { background:var(--accent-color); }
 
- 
   .sidebar {
     height:100%; width:0; position:fixed; z-index:1000; top:0; left:0;
     background-color:var(--primary-color); overflow-x:hidden; transition:0.3s; padding-top:60px;
@@ -94,10 +93,10 @@
 
 <span class="menu-btn" onclick="openNav()">&#9776;</span>
 
-
 <div id="mySidebar" class="sidebar">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="index.html">Home</a>
+  <a href="monasteries.html">All Monasteries</a>
   <a href="audio-guide.html">Audio Guide</a>
   <a href="tourism.html">Tourism Service</a>
 </div>
@@ -108,51 +107,41 @@
 </div>
 
 <section>
+  <h2>About Rumtek Dharma Chakra Centre</h2>
+  <p>The Rumtek Dharma Chakra Centre is one of the most important monasteries in Sikkim and serves as the seat-in-exile of the Karmapa. Founded in the 1960s, it houses precious Buddhist artifacts and serves as a major center for Buddhist learning and practice.</p>
+  <img src="images/Rumtek Dharma Chakra Centre.jpg" alt="Rumtek Dharma Chakra Centre" class="monastery-img">
+  <p class="img-credit">Image courtesy of Monastery360 collection</p>
+</section>
+
+<section>
   <h2>Virtual Tour</h2>
   <iframe 
-    src="https://www.google.com/maps/embed?pb=!4v1757959543428!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ2t2ZXZVaXdF!2m2!1d27.28884361783851!2d88.56089980788117!3f354.11062601177474!4f0.31806973745601397!5f0.7820865974627469" 
-    height="450" style="border:0;" allowfullscreen="" loading="lazy" title="Rumtek Virtual Tour"></iframe>
+    src="https://www.google.com/maps/embed?pb=!4v1757959543428!6m8!1m7!1sCAoSLEFGMVFpcFBBMWFqS09qNUx0VGFOYzNBZG1GeldOMGRsUy1kUTJKN3NwYWwx!2m2!1d27.3389!2d88.5614!3f354.11!4f0.31!5f0.78" 
+    height="450" style="border:0;" allowfullscreen="" loading="lazy" title="Rumtek Dharma Chakra Centre Virtual Tour"></iframe>
 </section>
 
 <section>
   <h2>Narrated Walkthroughs</h2>
   <p>Experience guided audio tours available in multiple languages.</p>
   <audio controls>
-    <source src="audio/rumtek-tour.mp3" type="audio/mpeg">
+    <source src="audio/rumtek-dharma-chakra-centre-tour.mp3" type="audio/mpeg">
     Your browser does not support the audio element.
   </audio>
 </section>
 
 <section>
-  <h2>Digital Archives – Murals</h2>
-  <p>Beautiful murals from Rumtek Dharma Chakra Centre.</p>
-  <img src="./mural_rumtek.jpg" alt="Rumtek Mural 1" class="mural-img">
-  <p class="mural-credit">
-    By <a href="https://commons.wikimedia.org/wiki/User:Sujay25" target="_blank">Sujay25</a> – <span lang="en">Own work</span>, 
-    <a href="https://creativecommons.org/licenses/by-sa/4.0" target="_blank">CC BY-SA 4.0</a>, 
-    <a href="https://commons.wikimedia.org/w/index.php?curid=40240408" target="_blank">Link</a>
-  </p>
-  <img src="mural2_rumtek.jpg" alt="Rumtek Mural 2" class="mural-img">
-  <p class="mural-credit">
-    By <a href="https://commons.wikimedia.org/wiki/User:Prof_Ranga_Sai" target="_blank">Prof Ranga Sai</a> – <span lang="en">Own work</span>, 
-    <a href="http://creativecommons.org/publicdomain/zero/1.0/deed.en" target="_blank">CC0</a>, 
-    <a href="https://commons.wikimedia.org/w/index.php?curid=148060611" target="_blank">Link</a>
-  </p>
-</section>
-
-<section>
   <h2>Cultural Calendar</h2>
-  <p>Discover the heartbeat of Sikkim’s monastery festivals:</p>
+  <p>Discover the heartbeat of Sikkim's monastery festivals:</p>
   <table>
     <thead>
       <tr><th>Season</th><th>Festival / Observance</th><th>When (Tibetan lunar)</th><th>Notes</th></tr>
     </thead>
     <tbody>
-      <tr><td>Summer</td><td>Vajrakilaya Drupchen</td><td>5th lunar month (10 days)</td><td>Major ritual at Rumtek; ends with sacred Cham dance</td></tr>
+      <tr><td>Summer</td><td>Vajrakilaya Drupchen</td><td>5th lunar month (10 days)</td><td>Major ritual; ends with sacred Cham dance</td></tr>
       <tr><td>Winter</td><td>Kagyed Chams</td><td>~10th–11th lunar month</td><td>Black-hat dances; ritual destruction of evil</td></tr>
       <tr><td>Winter</td><td>Losoong / Sonam Losar</td><td>End of Tibetan year (11th → 12th month)</td><td>Tibetan New Year; harvest thanksgiving & Cham dances</td></tr>
-      <tr><td>Late Spring</td><td>Saga Dawa Düchen</td><td>Full moon, 4th/5th lunar month</td><td>Buddha’s birth, enlightenment & nirvana</td></tr>
-      <tr><td>Summer</td><td>Drukpa Tseshi</td><td>4th day, 6th lunar month</td><td>Commemorates Buddha’s first teaching</td></tr>
+      <tr><td>Late Spring</td><td>Saga Dawa Düchen</td><td>Full moon, 4th/5th lunar month</td><td>Buddha's birth, enlightenment & nirvana</td></tr>
+      <tr><td>Summer</td><td>Drukpa Tseshi</td><td>4th day, 6th lunar month</td><td>Commemorates Buddha's first teaching</td></tr>
       <tr><td>Summer</td><td>Guru Rinpoche Tshechu</td><td>~10th day, 6th lunar month</td><td>Birthday of Guru Padmasambhava with Cham dances</td></tr>
       <tr><td>Autumn</td><td>Pang Lhabsol</td><td>15th day, 7th lunar month</td><td>Unique to Sikkim; honoring Mount Kangchenjunga</td></tr>
     </tbody>
@@ -191,7 +180,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
 <script>
-
   var map = new ol.Map({
     target: 'map',
     layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
@@ -199,28 +187,26 @@
   });
 
   var places = [
-    {name: "Enchey Monastery", coords: [88.6191659, 27.3359368]},
-    {name: "Namgyal Institute of Tibetology", coords: [88.6136, 27.3222]},
-    {name: "Do Drul Chorten Stupa", coords: [88.6169, 27.3246]},
-    {name: "Banjhakri Falls and Energy Park", coords: [88.5965, 27.3175]},
-    {name: "Tashi Viewpoint", coords: [88.6385, 27.3604]},
-    {name: "Saramsa Garden", coords: [88.5909, 27.3173]},
-    {name: "Martam Village", coords: [88.5, 27.2833]},
-    {name: "Gangtok Ropeway (Cable Car)", coords: [88.6125, 27.3251]},
-    {name: "Flower Exhibition Centre", coords: [88.6131, 27.3273]},
-    {name: "Hanuman Tok", coords: [88.6388, 27.3534]}
+    {"name": "Enchey Monastery", "coords": [88.6191659, 27.3359368]},
+    {"name": "Namgyal Institute of Tibetology", "coords": [88.6136, 27.3222]},
+    {"name": "Do Drul Chorten Stupa", "coords": [88.6169, 27.3246]},
+    {"name": "Banjhakri Falls and Energy Park", "coords": [88.5965, 27.3175]},
+    {"name": "Tashi Viewpoint", "coords": [88.6385, 27.3604]},
+    {"name": "Saramsa Garden", "coords": [88.5909, 27.3173]},
+    {"name": "Gangtok Ropeway", "coords": [88.6125, 27.3251]},
+    {"name": "Flower Exhibition Centre", "coords": [88.6131, 27.3273]},
+    {"name": "Hanuman Tok", "coords": [88.6388, 27.3534]}
   ];
-
-  var rumtek = {name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861]};
+  var currentMonastery = {name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861]};
 
   var blueStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'blue', scale:0.05 }) });
   var redStyle = new ol.style.Style({ image: new ol.style.Icon({ src:'https://cdn-icons-png.flaticon.com/512/684/684908.png', color:'red', scale:0.06 }) });
 
   var features = places.map(p => { var f=new ol.Feature({ geometry:new ol.geom.Point(ol.proj.fromLonLat(p.coords)), name:p.name }); f.setStyle(blueStyle); return f; });
-  var rumtekFeature = new ol.Feature({ geometry: new ol.geom.Point(ol.proj.fromLonLat(rumtek.coords)), name: rumtek.name });
-  rumtekFeature.setStyle(redStyle);
+  var monasteryFeature = new ol.Feature({ geometry: new ol.geom.Point(ol.proj.fromLonLat(currentMonastery.coords)), name: currentMonastery.name });
+  monasteryFeature.setStyle(redStyle);
 
-  var vectorSource = new ol.source.Vector({ features: features.concat([rumtekFeature]) });
+  var vectorSource = new ol.source.Vector({ features: features.concat([monasteryFeature]) });
   map.addLayer(new ol.layer.Vector({ source: vectorSource }));
 
   var overlay = new ol.Overlay({ element: document.createElement('div'), positioning: 'bottom-center', stopEvent: false });
@@ -233,7 +219,6 @@
     else overlay.getElement().style.display='none';
   });
 
-
   const form = document.getElementById("mapForm");
   const frame = document.getElementById("mapFrame");
   form.addEventListener("submit", function(e){
@@ -243,10 +228,9 @@
     frame.src = `https://www.google.com/maps?q=from+${encodeURIComponent(origin)}+to+${encodeURIComponent(destination)}&output=embed`;
   });
 
- 
   const bookingForm = document.getElementById("bookingForm");
   const participantList = document.getElementById("participantList");
-  let participants = JSON.parse(localStorage.getItem("participants")) || [];
+  let participants = JSON.parse(localStorage.getItem("participants_rumtek-dharma-chakra-centre")) || [];
   participants.forEach(addParticipantToList);
 
   bookingForm.addEventListener("submit", function(e){
@@ -257,10 +241,10 @@
     if(name && email && date){
       const participant = {name,email,date};
       participants.push(participant);
-      localStorage.setItem("participants", JSON.stringify(participants));
+      localStorage.setItem("participants_rumtek-dharma-chakra-centre", JSON.stringify(participants));
       addParticipantToList(participant);
       bookingForm.reset();
-      alert("Booking successful!");
+      alert("Booking successful for Rumtek Dharma Chakra Centre!");
     }
   });
 
@@ -270,10 +254,8 @@
     participantList.appendChild(li);
   }
 
-  
   function openNav(){ document.getElementById("mySidebar").style.width="250px"; }
   function closeNav(){ document.getElementById("mySidebar").style.width="0"; }
-
 </script>
 </body>
 </html>
