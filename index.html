@@ -3,141 +3,361 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monastery360 – Home</title>
+<title>Monastery360 – Discover Sikkim's Sacred Heritage</title>
+<meta name="description" content="Explore the spiritual treasures of Sikkim's monasteries through immersive digital experiences, interactive maps, and rich cultural heritage.">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
+<link rel="stylesheet" href="assets/css/modern.css">
+<link rel="stylesheet" href="assets/css/chatbot.css">
 <style>
-  body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    margin: 0; padding: 0; 
-    background: #faf7f2; 
-    text-align: center; 
-    color: #333; 
-  }
-
-  header { 
-    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat; 
-    height: 100vh; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    color: white; 
-  }
-
-  header h1 { 
-    font-size: 3rem; 
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.7); 
-  }
-
-  header p { 
-    font-size: 1.3rem; 
-    max-width: 700px; 
-    margin: 10px auto; 
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.6); 
-  }
-
-  .explore-btn { 
-    background: #7c2d12; 
-    color: white; 
-    border: none; 
-    padding: 14px 28px; 
-    font-weight: bold; 
-    border-radius: 30px; 
-    font-size: 1.2rem; 
-    cursor: pointer; 
-    text-decoration: none; 
-    transition: background 0.3s; 
-    display: inline-block; 
-    margin-top: 10px;
-  }
-
-  .explore-btn:hover { background: #b45309; }
-
+  /* Custom styles for map and components */
   #map { 
-    width: 90%; 
+    width: 100%; 
     height: 600px; 
-    margin: 40px auto; 
-    border: 2px solid #ccc; 
-    border-radius: 12px; 
-    background: white; 
+    border-radius: var(--radius-xl); 
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    border: 1px solid var(--secondary-200);
   }
 
   .ol-popup {
-    position: absolute;
-    background-color: white;
-    padding: 6px 12px;
-    border: 1px solid #7c2d12;
-    border-radius: 6px;
-    bottom: 12px;
-    left: -50px;
-    min-width: 140px;
-    font-weight: bold;
-    color: #7c2d12;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    background: white;
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--primary-200);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    font-weight: 500;
+    color: var(--primary-700);
+    min-width: 160px;
+    backdrop-filter: blur(10px);
   }
 
-  /* Sidebar */
-  .sidebar { 
-    height: 100%; 
-    width: 0; 
-    position: fixed; 
-    z-index: 1000; 
-    top: 0; 
-    left: 0; 
-    background-color: #7c2d12; 
-    overflow-x: hidden; 
-    transition: 0.3s; 
-    padding-top: 60px; 
+  .features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: var(--space-8);
+    margin-top: var(--space-16);
   }
 
-  .sidebar a { 
-    padding: 12px 24px; 
-    text-decoration: none; 
-    font-size: 1.2rem; 
-    color: white; 
-    display: block; 
-    transition: 0.3s; 
+  .feature-card {
+    text-align: center;
+    padding: var(--space-8);
   }
 
-  .sidebar a:hover { background-color: #b45309; }
-  .sidebar .closebtn { position: absolute; top: 15px; right: 20px; font-size: 2rem; }
-  .hamburger { position: fixed; top: 15px; left: 20px; font-size: 2rem; cursor: pointer; color: white; z-index: 1100; }
+  .feature-icon {
+    width: 64px;
+    height: 64px;
+    margin: 0 auto var(--space-4);
+    border-radius: var(--radius-xl);
+    background: linear-gradient(135deg, var(--primary-100), var(--accent-100));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: var(--text-2xl);
+  }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-6);
+    margin: var(--space-16) 0;
+  }
+
+  .stat-card {
+    text-align: center;
+    padding: var(--space-6);
+    background: white;
+    border-radius: var(--radius-xl);
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--secondary-200);
+    transition: all var(--transition-base);
+  }
+
+  .stat-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .stat-number {
+    font-size: var(--text-4xl);
+    font-weight: 700;
+    color: var(--primary-600);
+    margin-bottom: var(--space-2);
+  }
+
+  .map-section {
+    background: white;
+    border-radius: var(--radius-2xl);
+    padding: var(--space-12);
+    margin: var(--space-20) 0;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--secondary-200);
+  }
+
+  /* Mobile hamburger menu */
+  .mobile-menu-toggle {
+    display: none;
+    background: none;
+    border: none;
+    font-size: var(--text-2xl);
+    color: var(--secondary-700);
+    cursor: pointer;
+  }
+
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: 70px;
+    left: 0;
+    right: 0;
+    background: white;
+    border-bottom: 1px solid var(--secondary-200);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-dropdown);
+  }
+
+  .mobile-menu.active {
+    display: block;
+  }
+
+  .mobile-menu a {
+    display: block;
+    padding: var(--space-4) var(--space-6);
+    color: var(--secondary-700);
+    text-decoration: none;
+    border-bottom: 1px solid var(--secondary-100);
+  }
+
+  .mobile-menu a:hover {
+    background: var(--secondary-50);
+  }
+
+  @media (max-width: 768px) {
+    .mobile-menu-toggle {
+      display: block;
+    }
+    
+    .nav-menu {
+      display: none;
+    }
+
+    .hero-content {
+      padding: 0 var(--space-4);
+    }
+
+    .features-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Scroll animations */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.6s ease-out;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Loading state */
+  .loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--secondary-50);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: var(--z-modal);
+    transition: opacity var(--transition-base);
+  }
+
+  .loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+  }
 </style>
 </head>
 <body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <!-- Loading overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading"></div>
+  </div>
+  
+  <!-- Navigation -->
+  <nav class="nav">
+    <div class="nav-container">
+      <div class="nav-brand">Monastery360</div>
+      <ul class="nav-menu">
+        <li><a href="#home" class="nav-link">Home</a></li>
+        <li><a href="monasteries.html" class="nav-link">Monasteries</a></li>
+        <li><a href="tourism.html" class="nav-link">Tourism</a></li>
+      </ul>
+      <button class="mobile-menu-toggle" aria-label="Toggle menu" onclick="toggleMobileMenu()">
+        ☰
+      </button>
+    </div>
+    
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+      <a href="#home">Home</a>
+      <a href="monasteries.html">Monasteries</a>
+      <a href="tourism.html">Tourism</a>
+    </div>
+  </nav>
 
-<!-- Sidebar -->
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-  <a href="index.html">Home</a>
-  <a href="audio-guide.html">Audio Guide</a>
-  <a href="tourism.html">Tourism Service</a>
-</div>
+  <main id="main">
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+      <div class="hero-content fade-in">
+        <h1 class="hero-title">Monastery360</h1>
+        <p class="hero-subtitle">
+          Discover the spiritual, cultural, and historical treasures of Sikkim's monasteries through immersive digital experiences and interactive exploration.
+        </p>
+        <div class="flex justify-center" style="gap: var(--space-4); margin-top: var(--space-8);">
+          <a href="monasteries.html" class="btn btn-primary">Explore Monasteries</a>
+          <a href="#map-section" class="btn btn-secondary">View Map</a>
+        </div>
+      </div>
+    </section>
 
+    <!-- Stats Section -->
+    <section class="section">
+      <div class="container">
+        <div class="stats-grid fade-in">
+          <div class="stat-card">
+            <div class="stat-number" data-count="95">0</div>
+            <div>Sacred Monasteries</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-count="800">0</div>
+            <div>Years of Heritage</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-count="4">0</div>
+            <div>Buddhist Traditions</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" data-count="360">0</div>
+            <div>Virtual Tours</div>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<!-- Hamburger Icon -->
-<div class="hamburger" onclick="openNav()">☰</div>
+    <!-- Features Section -->
+    <section class="section">
+      <div class="container">
+        <div class="section-title fade-in">
+          <h2>Explore Sacred Heritage</h2>
+          <p>Immerse yourself in the rich Buddhist culture of Sikkim through our comprehensive digital platform.</p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="card feature-card fade-in">
+            <div class="feature-icon">🏛️</div>
+            <h3>Historic Monasteries</h3>
+            <p>Discover 95+ sacred monasteries across Sikkim, each with unique architecture, history, and spiritual significance.</p>
+          </div>
+          
+          <div class="card feature-card fade-in">
+            <div class="feature-icon">🎧</div>
+            <h3>Audio Guides</h3>
+            <p>Listen to expert narrations about monastery history, Buddhist practices, and cultural traditions.</p>
+          </div>
+          
+          <div class="card feature-card fade-in">
+            <div class="feature-icon">🗺️</div>
+            <h3>Interactive Maps</h3>
+            <p>Navigate through Sikkim's monasteries with our detailed interactive maps and location guides.</p>
+          </div>
+        </div>
+      </div>
+    </section>
 
-<header>
-  <h1>Monastery360</h1>
-  <p>Experience the spiritual, cultural, and historical treasures of Sikkim’s monasteries through digital archives, interactive tours, and immersive maps.</p>
-  <a href="monasteries.html" class="explore-btn">Explore Monasteries</a>
-</header>
+    <!-- Map Section -->
+    <section id="map-section" class="section">
+      <div class="container">
+        <div class="map-section fade-in">
+          <div class="section-title">
+            <h2>Monastery Locations</h2>
+            <p>Explore the geographical distribution of Sikkim's monasteries on our interactive map.</p>
+          </div>
+          <div id="map"></div>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<div id="map"></div>
+  <!-- Chatbot -->
+  <div class="chatbox">
+      <div class="chatbox__support">
+          <div class="chatbox__header">
+              <div class="chatbox__image--header">
+                  <div class="avatar-circle">
+                      <svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20" fill="url(#avatarGradient)"/>
+                        <path d="M20 12C17.79 12 16 13.79 16 16C16 18.21 17.79 20 20 20C22.21 20 24 18.21 24 16C24 13.79 22.21 12 20 12ZM20 18C18.9 18 18 17.1 18 16C18 14.9 18.9 14 20 14C21.1 14 22 14.9 22 16C22 17.1 21.1 18 20 18Z" fill="white"/>
+                        <path d="M20 22C16.69 22 14 24.69 14 28V30H26V28C26 24.69 23.31 22 20 22ZM16 28C16 25.79 17.79 24 20 24C22.21 24 24 25.79 24 28H16Z" fill="white"/>
+                        <defs>
+                          <linearGradient id="avatarGradient" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" style="stop-color:#6366f1"/>
+                            <stop offset="100%" style="stop-color:#8b5cf6"/>
+                          </linearGradient>
+                        </defs>
+                      </svg>
+                  </div>
+              </div>
+              <div class="chatbox__content--header">
+                  <h4 class="chatbox__heading--header">Monastery Guide</h4>
+                  <p class="chatbox__description--header">Hi! I'm Explora. How can I help you with Sikkim monasteries?</p>
+              </div>
+          </div>
+          <div class="chatbox__messages">
+              <div></div>
+          </div>
+          <div class="chatbox__footer">
+              <input type="text" placeholder="Write a message...">
+              <button class="chatbox__send--footer send__button">Send</button>
+          </div>
+      </div>
+      <div class="chatbox__button">
+          <button aria-label="Open chat">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="chatIconGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#3b82f6"/>
+                    <stop offset="50%" style="stop-color:#6366f1"/>
+                    <stop offset="100%" style="stop-color:#8b5cf6"/>
+                  </linearGradient>
+                </defs>
+                <path d="M20 2H4C2.9 2 2 2.9 2 4V22L6 18H20C21.1 18 22 17.1 22 16V4C22 2.9 21.1 2 20 2Z" fill="url(#chatIconGradient)"/>
+                <path d="M7 9H17M7 13H13" stroke="white" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+          </button>
+      </div>
+  </div>
 
 <script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
 <script>
- 
+  // Map initialization
   var map = new ol.Map({
     target: 'map',
     layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
     view: new ol.View({ center: ol.proj.fromLonLat([88.61, 27.33]), zoom: 9 })
   });
 
-
   var monasteries = [
-    
     {name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861]},
     {name: "Mamring Monastery", coords: [88.3101201, 27.277364]},
     {name: "Enchey Monastery", coords: [88.6191659, 27.3359368]},
@@ -211,7 +431,6 @@
 
   map.addLayer(vectorLayer);
 
-
   var overlay = new ol.Overlay({ element: document.createElement('div'), positioning: 'bottom-center', stopEvent: false });
   overlay.getElement().className = 'ol-popup';
   map.addOverlay(overlay);
@@ -228,10 +447,102 @@
     }
   });
 
+  // Mobile menu toggle
+  function toggleMobileMenu() {
+    const mobileMenu = document.getElementById('mobileMenu');
+    mobileMenu.classList.toggle('active');
+  }
 
-  function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
-  function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
+  // Smooth scrolling for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+      e.preventDefault();
+      const target = document.querySelector(this.getAttribute('href'));
+      if (target) {
+        target.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      }
+    });
+  });
+
+  // Intersection Observer for animations
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: '0px 0px -50px 0px'
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, observerOptions);
+
+  // Observe all fade-in elements
+  document.querySelectorAll('.fade-in').forEach(el => {
+    observer.observe(el);
+  });
+
+  // Counter animation for stats
+  function animateCounter(element, start, end, duration) {
+    let startTimestamp = null;
+    const step = (timestamp) => {
+      if (!startTimestamp) startTimestamp = timestamp;
+      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+      const current = Math.floor(progress * (end - start) + start);
+      element.textContent = current + (end === 360 ? '°' : '+');
+      if (progress < 1) {
+        window.requestAnimationFrame(step);
+      }
+    };
+    window.requestAnimationFrame(step);
+  }
+
+  // Trigger counter animations when stats section is visible
+  let statsAnimated = false;
+  const statsObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting && !statsAnimated) {
+        statsAnimated = true;
+        document.querySelectorAll('.stat-number[data-count]').forEach(el => {
+          const count = parseInt(el.getAttribute('data-count'));
+          animateCounter(el, 0, count, 2000);
+        });
+      }
+    });
+  }, { threshold: 0.5 });
+
+  const statsSection = document.querySelector('.stats-grid');
+  if (statsSection) {
+    statsObserver.observe(statsSection);
+  }
+
+  // Hide loading overlay after page load
+  window.addEventListener('load', () => {
+    setTimeout(() => {
+      document.getElementById('loadingOverlay').classList.add('hidden');
+    }, 500);
+  });
+
+  // Navigation background on scroll
+  window.addEventListener('scroll', () => {
+    const nav = document.querySelector('.nav');
+    if (window.scrollY > 50) {
+      nav.style.background = 'rgba(255, 255, 255, 0.98)';
+    } else {
+      nav.style.background = 'rgba(255, 255, 255, 0.95)';
+    }
+  });
 </script>
+
+<script src="assets/js/performance.js"></script>
+<script>
+var $SCRIPT_ROOT = '';
+</script>
+<script src="assets/js/chatbot.js"></script>
 
 </body>
 </html>
