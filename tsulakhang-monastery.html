@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Rumtek Dharma Chakra Centre – Monastery360</title>
+<title>Tsulakhang Monastery – Monastery360</title>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -59,7 +59,7 @@
     height: 100vh; position: relative; display: flex; align-items: center;
     justify-content: center; text-align: center; overflow: hidden;
     background: linear-gradient(135deg, rgba(124,45,18,0.8), rgba(180,83,9,0.6)),
-                url('images/Rumtek Dharma Chakra Centre.jpg') center/cover fixed;
+                url('images/Tsulakhang Monastery.jpg') center/cover fixed;
   }
   .hero::before {
     content: ''; position: absolute; inset: 0;
@@ -327,7 +327,7 @@
       <i class="fas fa-temple-buddhist"></i>
       Sacred Heritage Site
     </div>
-    <h1>Rumtek Dharma Chakra Centre</h1>
+    <h1>Tsulakhang Monastery</h1>
     <p>Sacred Heritage • Spiritual Sanctuary • Cultural Treasure</p>
   </div>
 </div>
@@ -336,19 +336,19 @@
 <div class="section">
   <div class="container">
     <div class="section-card scroll-reveal">
-      <h2><i class="fas fa-info-circle"></i> About Rumtek Dharma Chakra Centre</h2>
-      <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">The magnificent Rumtek Dharma Chakra Centre stands as the seat-in-exile of the Karmapa and one of the most significant monasteries in Sikkim. Built in the 1960s following the traditional Tibetan architectural style, it houses precious Buddhist artifacts, ancient manuscripts, and serves as a major center for Buddhist learning and practice. The monastery is renowned for its golden stupas, intricate murals, and the sacred Black Hat ceremony.</p>
+      <h2><i class="fas fa-info-circle"></i> About Tsulakhang Monastery</h2>
+      <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">Tsulakhang Monastery is a sacred Buddhist monastery nestled in the pristine Himalayan landscape of Sikkim. This ancient center of spiritual learning preserves centuries-old traditions, houses precious religious artifacts, and serves as a beacon of peace and enlightenment. The monastery offers visitors a glimpse into the rich Buddhist heritage of the region through its architecture, rituals, and timeless teachings.</p>
       
       <div class="image-gallery">
-        <img src="images/Rumtek Dharma Chakra Centre.jpg" 
-             alt="Rumtek Dharma Chakra Centre" 
+        <img src="images/Tsulakhang Monastery.jpg" 
+             alt="Tsulakhang Monastery" 
              class="monastery-img"
              onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
         <div class="img-fallback" style="display: none;">
           <i class="fas fa-temple-buddhist"></i>
         </div>
         <div class="img-overlay">
-          <h3>Rumtek Dharma Chakra Centre</h3>
+          <h3>Tsulakhang Monastery</h3>
           <p>Sacred Buddhist Heritage</p>
         </div>
       </div>
@@ -389,10 +389,10 @@
       <p>Experience the monastery through immersive virtual reality technology.</p>
       <div style="border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg);">
         <iframe 
-          src="https://www.google.com/maps/embed?pb=!4v1757959543428!6m8!1m7!1sCAoSF0NJSE0wb2dLRUlDQWdJQ2t2ZXZVaXdF!2m2!1d27.28884361783851!2d88.56089980788117!3f354.11062601177474!4f0.31806973745601397!5f0.7820865974627469" 
+          src="https://www.google.com/maps/embed?pb=!4v9499725775!6m8!1m7!1sCAoSLEFGMVFpcFBBMWFqS09qNUx0VGFOYzNBZG1GeldOMGRsUy1kUTJKN3NwYWwx!2m2!1d88.6147222!2d27.3261111!3f354.11!4f0.31!5f0.78" 
           height="450" style="border:0; width: 100%;" 
           allowfullscreen loading="lazy" 
-          title="Rumtek Dharma Chakra Centre Virtual Tour">
+          title="Tsulakhang Monastery Virtual Tour">
         </iframe>
       </div>
     </div>
@@ -407,7 +407,7 @@
       <p>Discover the rich history and spiritual significance through expert narration.</p>
       <div class="audio-player">
         <audio controls>
-          <source src="audio/rumtek-dharma-chakra-centre-tour.mp3" type="audio/mpeg">
+          <source src="audio/tsulakhang-monastery-tour.mp3" type="audio/mpeg">
           Your browser does not support the audio element.
         </audio>
         <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
@@ -566,7 +566,7 @@ var map = new ol.Map({
     })
   ],
   view: new ol.View({
-    center: ol.proj.fromLonLat([88.5614622, 27.2886861]),
+    center: ol.proj.fromLonLat([88.6147222, 27.3261111]),
     zoom: 13
   })
 });
@@ -588,15 +588,15 @@ function toggleSatellite() {
 
 function resetMapView() {
   map.getView().animate({
-    center: ol.proj.fromLonLat([88.5614622, 27.2886861]),
+    center: ol.proj.fromLonLat([88.6147222, 27.3261111]),
     zoom: 13,
     duration: 1000
   });
 }
 
 // Enhanced nearby places with realistic coordinates
-var nearbyPlaces = [{"name": "Tourist Information Center", "coords": [27.306730851221115, 88.5769593414255]}, {"name": "Local Market", "coords": [27.277531207930174, 88.56267011045742]}, {"name": "Heritage Museum", "coords": [27.286821163543507, 88.55482184528483]}, {"name": "Scenic Viewpoint", "coords": [27.30378882293085, 88.57767894862847]}, {"name": "Cultural Center", "coords": [27.282368269473125, 88.58095131395112]}, {"name": "Guest House", "coords": [27.29400977838148, 88.57557593648605]}, {"name": "Traditional Restaurant", "coords": [27.285482218225976, 88.57202498207845]}, {"name": "Handicraft Shop", "coords": [27.298893926181403, 88.54881647425954]}];
-var currentMonastery = {name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861]};
+var nearbyPlaces = [{"name": "Tourist Information Center", "coords": [27.320177915413648, 88.63015503358257]}, {"name": "Local Market", "coords": [27.311715158862462, 88.6184659136797]}, {"name": "Heritage Museum", "coords": [27.309944247353467, 88.60352796034877]}, {"name": "Scenic Viewpoint", "coords": [27.32502956296042, 88.59900215296211]}, {"name": "Cultural Center", "coords": [27.333793073411254, 88.63456462052402]}, {"name": "Guest House", "coords": [27.326612602153684, 88.62592509654263]}, {"name": "Traditional Restaurant", "coords": [27.322240042628422, 88.62722421319894]}, {"name": "Handicraft Shop", "coords": [27.313678113917312, 88.62705801623899]}];
+var currentMonastery = {name: "Tsulakhang Monastery", coords: [88.6147222, 27.3261111]};
 
 // Create styles
 var placeStyle = new ol.style.Style({
@@ -676,7 +676,7 @@ map.on('singleclick', function(evt) {
 document.getElementById('mapForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const destination = document.getElementById('destination').value;
-  const origin = "Rumtek Dharma Chakra Centre, Sikkim";
+  const origin = "Tsulakhang Monastery, Sikkim";
   const frame = document.getElementById('mapFrame');
   frame.src = `https://www.google.com/maps?q=from+${encodeURIComponent(origin)}+to+${encodeURIComponent(destination)}&output=embed`;
   frame.style.display = 'block';
@@ -686,7 +686,7 @@ document.getElementById('mapForm').addEventListener('submit', function(e) {
 // Enhanced booking system
 const bookingForm = document.getElementById('bookingForm');
 const participantList = document.getElementById('participantList');
-const storageKey = 'participants_rumtek-dharma-chakra-centre';
+const storageKey = 'participants_tsulakhang-monastery';
 let participants = JSON.parse(localStorage.getItem(storageKey)) || [];
 
 function renderParticipants() {
@@ -765,7 +765,7 @@ sidebar.querySelectorAll('a:not(.closebtn)').forEach(link => {
     link.style.borderLeftColor = 'transparent';
   });
 });
-
+</script>
 <!-- Integrated Monastery Chatbot Widget -->
 <div id="monasteryBot" class="monastery-chatbot">
   <!-- Chatbot Toggle Button -->
