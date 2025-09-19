@@ -1,711 +1,281 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monastery360 – Tourism Services</title>
-<style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    margin:0; padding:0;
-    background:#faf7f2;
-    color:#333;
-    text-align:center;
-  }
-  header {
-    background:#7c2d12;
-    color:white;
-    padding:25px 10px;
-  }
-  header h1 { margin:0; font-size:2rem; }
-  .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: #7c2d12; overflow-x: hidden; transition: 0.3s; padding-top: 60px; }
-  .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.2rem; color: white; display: block; transition: 0.3s; }
-  .sidebar a:hover { background-color: #b45309; }
-  .sidebar .closebtn { position: absolute; top: 20px; right: 25px; font-size: 2rem; }
-  .menu-btn { position: fixed; top: 20px; left: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 1100; background:#7c2d12; border-radius:8px; padding:4px 8px; }
-  .agent-list { display:flex; flex-wrap:wrap; justify-content:center; gap:20px; padding:20px; }
-  .agent-card { background:white; border-radius:12px; padding:20px; width:280px; box-shadow:0 4px 12px rgba(0,0,0,0.08); text-align:left; transition:transform .2s; }
-  .agent-card:hover { transform: translateY(-5px); box-shadow:0 6px 16px rgba(0,0,0,0.12); }
-  .agent-card h3 { margin:0 0 8px; color:#7c2d12; }
-  .agent-card p { margin:4px 0; color:#555; }
-  .back-btn { display:inline-block; margin:20px; background:#7c2d12; color:white; padding:12px 25px; border-radius:30px; text-decoration:none; font-weight:bold; transition: background .3s; }
-  .back-btn:hover { background:#b45309; }
-</style>
-</head>
-<body>
-
-<!-- Menu Button -->
-<span class="menu-btn" onclick="openNav()">&#9776;</span>
-
-<!-- Sidebar -->
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="audio-guide.html">Audio Guide</a>
-  <a href="tourism.html">Tourism Service</a>
-</div>
-
-<header>
-  <h1>Tourism Services in Sikkim</h1>
-  <p>Explore local travel agencies to plan your monastery tours and trips in Sikkim.</p>
-</header>
-
-<div class="agent-list">
-  <div class="agent-card">
-    <h3>Sikkim Wanderers</h3>
-    <p><strong>Contact:</strong> +91 98000 12345</p>
-    <p><strong>Email:</strong> info@sikkimwanderers.com</p>
-    <p><strong>Address:</strong> MG Marg, Gangtok, Sikkim</p>
-    <p>Specializes in monastery tours and eco-friendly travel packages.</p>
-  </div>
-
-  <div class="agent-card">
-    <h3>Himalayan Trails</h3>
-    <p><strong>Contact:</strong> +91 94340 67890</p>
-    <p><strong>Email:</strong> contact@himalayantrails.in</p>
-    <p><strong>Address:</strong> Tadong, Gangtok, Sikkim</p>
-    <p>Offers adventure treks, cultural tours, and guided monastery visits.</p>
-  </div>
-
-  <div class="agent-card">
-    <h3>Green Path Tours</h3>
-    <p><strong>Contact:</strong> +91 97332 44556</p>
-    <p><strong>Email:</strong> hello@greenpathtours.com</p>
-    <p><strong>Address:</strong> Namchi Road, Namchi, Sikkim</p>
-    <p>Focused on sustainable tourism and authentic Sikkimese experiences.</p>
-  </div>
-
-  <div class="agent-card">
-    <h3>Monastery Travels</h3>
-    <p><strong>Contact:</strong> +91 89760 99887</p>
-    <p><strong>Email:</strong> bookings@monasterytravels.in</p>
-    <p><strong>Address:</strong> Ranka, Gangtok, Sikkim</p>
-    <p>Specializes exclusively in tours of monasteries across Sikkim.</p>
-  </div>
-</div>
-
-<a href="index.html" class="back-btn">Back to Home</a>
-
-<script>
-function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
-function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
-</script>
-
-<!-- Integrated Monastery Chatbot Widget -->
-<div id="monasteryBot" class="monastery-chatbot">
-  <!-- Chatbot Toggle Button -->
-  <div class="chatbot-toggle" id="chatbotToggle">
-    <i class="fas fa-temple-buddhist"></i>
-    <div class="toggle-tooltip">Ask about monasteries</div>
-  </div>
-
-  <!-- Chatbot Window -->
-  <div class="chatbot-window" id="chatbotWindow">
-    <!-- Header -->
-    <div class="chatbot-header">
-      <div class="header-content">
-        <div class="bot-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="header-text">
-          <h4>Monastery Guide</h4>
-          <p>Ask me about Sikkim's sacred monasteries</p>
-        </div>
-        <button class="close-btn" id="closeChatbot">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Messages Area -->
-    <div class="chatbot-messages" id="chatbotMessages">
-      <div class="message bot-message welcome-message">
-        <div class="message-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="message-content">
-          <p>🙏 Namaste! I'm your monastery guide. Ask me about any monastery in Sikkim - their history, location, festivals, or visiting tips!</p>
-          <div class="quick-suggestions">
-            <button class="suggestion-btn" onclick="sendSuggestion('Tell me about Rumtek Monastery')">Rumtek Monastery</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('What are the major festivals?')">Festival Info</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('Best time to visit monasteries')">Best Time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Typing Indicator -->
-    <div class="typing-indicator" id="typingIndicator" style="display: none;">
-      <div class="message bot-message">
-        <div class="message-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="message-content">
-          <div class="typing-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Input Area -->
-    <div class="chatbot-input">
-      <div class="input-container">
-        <input type="text" id="chatbotInput" placeholder="Ask about monasteries..." maxlength="500">
-        <button id="sendMessage" class="send-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </div>
-      <div class="input-footer">
-        <small>Powered by AI • Monastery360</small>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-/* Monastery Chatbot Styles */
-.monastery-chatbot {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 10000;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-/* Toggle Button */
-.chatbot-toggle {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  animation: pulse 2s infinite;
-}
-
-.chatbot-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(124, 45, 18, 0.4);
-}
-
-.chatbot-toggle i {
-  color: white;
-  font-size: 1.5rem;
-}
-
-.toggle-tooltip {
-  position: absolute;
-  right: 70px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-}
-
-.chatbot-toggle:hover .toggle-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3); }
-  50% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.5), 0 0 0 10px rgba(124, 45, 18, 0.1); }
-  100% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3); }
-}
-
-/* Chatbot Window */
-.chatbot-window {
-  position: absolute;
-  bottom: 80px;
-  right: 0;
-  width: 380px;
-  height: 600px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  transform: translateY(20px) scale(0.95);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chatbot-window.active {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Header */
-.chatbot-header {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  padding: 1.5rem;
-  color: white;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.bot-avatar {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
-
-.header-text h4 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.header-text p {
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.9;
-}
-
-.close-btn {
-  margin-left: auto;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: background 0.3s ease;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Messages */
-.chatbot-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.message {
-  display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
-}
-
-.message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  flex-shrink: 0;
-}
-
-.bot-message .message-avatar {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  color: white;
-}
-
-.user-message {
-  flex-direction: row-reverse;
-}
-
-.user-message .message-avatar {
-  background: #f3f4f6;
-  color: #6b7280;
-}
-
-.message-content {
-  background: #f8fafc;
-  padding: 0.75rem 1rem;
-  border-radius: 18px;
-  max-width: 75%;
-  word-wrap: break-word;
-}
-
-.user-message .message-content {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  color: white;
-}
-
-.message-content p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Quick Suggestions */
-.quick-suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.suggestion-btn {
-  background: rgba(124, 45, 18, 0.1);
-  border: 1px solid rgba(124, 45, 18, 0.2);
-  color: #7c2d12;
-  padding: 0.5rem 0.75rem;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.suggestion-btn:hover {
-  background: rgba(124, 45, 18, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Typing Indicator */
-.typing-dots {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.typing-dots span {
-  width: 8px;
-  height: 8px;
-  background: #7c2d12;
-  border-radius: 50%;
-  animation: typing 1.4s infinite;
-}
-
-.typing-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typing {
-  0%, 60%, 100% { opacity: 0.3; }
-  30% { opacity: 1; }
-}
-
-/* Input Area */
-.chatbot-input {
-  border-top: 1px solid #e5e7eb;
-  background: white;
-}
-
-.input-container {
-  display: flex;
-  padding: 1rem;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.chatbot-input input {
-  flex: 1;
-  border: 2px solid #e5e7eb;
-  border-radius: 25px;
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.chatbot-input input:focus {
-  border-color: #7c2d12;
-  box-shadow: 0 0 0 3px rgba(124, 45, 18, 0.1);
-}
-
-.send-btn {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.send-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(124, 45, 18, 0.3);
-}
-
-.send-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.input-footer {
-  padding: 0.5rem 1rem;
-  text-align: center;
-  border-top: 1px solid #f3f4f6;
-}
-
-.input-footer small {
-  color: #9ca3af;
-  font-size: 0.75rem;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .monastery-chatbot {
-    bottom: 1rem;
-    right: 1rem;
-  }
-  
-  .chatbot-window {
-    width: calc(100vw - 2rem);
-    height: 70vh;
-    max-width: 350px;
-  }
-  
-  .toggle-tooltip {
-    display: none;
-  }
-}
-
-/* Scrollbar Styling */
-.chatbot-messages::-webkit-scrollbar {
-  width: 4px;
-}
-
-.chatbot-messages::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 2px;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb:hover {
-  background: #999;
-}
-</style>
-
-<script>
-class MonasteryChatbot {
-  constructor() {
-    this.isOpen = false;
-    this.messages = [];
-    this.apiEndpoint = 'http://127.0.0.1:5000/predict'; // Flask chatbot endpoint
-    
-    this.initializeElements();
-    this.attachEventListeners();
-    this.initializeChat();
-  }
-
-  initializeElements() {
-    this.toggle = document.getElementById('chatbotToggle');
-    this.window = document.getElementById('chatbotWindow');
-    this.closeBtn = document.getElementById('closeChatbot');
-    this.messagesContainer = document.getElementById('chatbotMessages');
-    this.input = document.getElementById('chatbotInput');
-    this.sendBtn = document.getElementById('sendMessage');
-    this.typingIndicator = document.getElementById('typingIndicator');
-  }
-
-  attachEventListeners() {
-    this.toggle.addEventListener('click', () => this.toggleChat());
-    this.closeBtn.addEventListener('click', () => this.closeChat());
-    this.sendBtn.addEventListener('click', () => this.handleSend());
-    
-    this.input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        this.handleSend();
-      }
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (this.isOpen && !this.window.contains(e.target) && !this.toggle.contains(e.target)) {
-        this.closeChat();
-      }
-    });
-  }
-
-  toggleChat() {
-    if (this.isOpen) {
-      this.closeChat();
-    } else {
-      this.openChat();
-    }
-  }
-
-  openChat() {
-    this.isOpen = true;
-    this.window.classList.add('active');
-    this.input.focus();
-    
-    // Track analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'chatbot_opened', {
-        event_category: 'engagement',
-        event_label: 'monastery_chatbot'
-      });
-    }
-  }
-
-  closeChat() {
-    this.isOpen = false;
-    this.window.classList.remove('active');
-  }
-
-  async handleSend() {
-    const message = this.input.value.trim();
-    if (!message) return;
-
-    // Add user message
-    this.addMessage(message, 'user');
-    this.input.value = '';
-    this.sendBtn.disabled = true;
-
-    // Show typing indicator
-    this.showTyping();
-
-    try {
-      // Send to Flask chatbot API
-      const response = await this.sendToAPI(message);
-      this.hideTyping();
-      this.addMessage(response, 'bot');
-    } catch (error) {
-      this.hideTyping();
-      this.addMessage('Sorry, I\'m having trouble connecting. Please try again later or visit our monastery pages directly.', 'bot');
-      console.error('Chatbot API Error:', error);
-    }
-
-    this.sendBtn.disabled = false;
-  }
-
-  async sendToAPI(message) {
-    try {
-      const response = await fetch(this.apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trusted Travel Partners – Monastery360</title>
+  <meta name="description" content="Connect with vetted travel partners in Sikkim for curated monastery tours, guides, and immersive experiences." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p5Q3Ydg0N6Y4ZCkxzgv2Fne5+5ZTCDJMmzNw2K6Jqq/RSB+BeIV/pY5Pja/qvpDMAYA9Yg3EjF6lI1xgXkJYtQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+          },
         },
-        body: JSON.stringify({ message: message })
-      });
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+</head>
+<body class="font-sans antialiased text-slate-900">
+  <header class="fixed inset-x-0 top-0 z-50">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="mt-6 flex items-center justify-between rounded-full bg-white/70 px-5 py-3 shadow-lg shadow-brand-soft backdrop-blur-xl">
+        <a href="index.html" class="flex items-center gap-2 text-lg font-semibold text-slate-900">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 via-brand-400 to-brand-300 text-slate-900 shadow-inner">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </span>
+          <span class="font-display text-xl tracking-tight">Monastery360</span>
+        </a>
+        <nav class="hidden items-center gap-8 text-sm font-medium text-slate-800 lg:flex">
+          <a href="index.html#journeys" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Journeys</a>
+          <a href="index.html#map" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Interactive Map</a>
+          <a href="monasteries.html" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Monasteries</a>
+          <a href="audio-guide.html" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Audio Guide</a>
+          <a href="tourism.html" class="rounded-full bg-orange-100 px-4 py-1.5 text-orange-800 font-bold shadow-md">Travel Services</a>
+        </nav>
+        <div class="hidden items-center gap-3 lg:flex">
+          <a href="monasteries.html" class="rounded-full border-2 border-orange-300 px-5 py-2 text-sm font-semibold text-orange-800 transition hover:border-orange-500 hover:bg-orange-50 hover:scale-105">Browse atlas</a>
+          <a href="#partners" class="rounded-full bg-gradient-to-br from-orange-600 to-orange-500 px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl hover:scale-105">Meet partners</a>
+        </div>
+        <button type="button" aria-label="Toggle navigation" data-nav-toggle class="flex h-11 w-11 items-center justify-center rounded-full border border-white/60 bg-white/90 text-slate-900 shadow-lg lg:hidden">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <div class="fixed inset-0 z-40 bg-slate-900/70 backdrop-blur" data-nav-panel data-open="false">
+      <div class="absolute inset-x-6 top-24 rounded-3xl bg-white/95 p-6 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-slate-200 pb-4">
+          <span class="font-display text-lg text-slate-900">Navigate Monastery360</span>
+          <button type="button" data-nav-close class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-700">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <nav class="mt-4 grid gap-3 text-base font-medium text-slate-700">
+          <a href="index.html#journeys" class="rounded-2xl bg-slate-100/60 px-4 py-3">Journeys & Stories</a>
+          <a href="index.html#map" class="rounded-2xl bg-slate-100/60 px-4 py-3">Interactive Map</a>
+          <a href="monasteries.html" class="rounded-2xl bg-slate-100/60 px-4 py-3">Monastery Directory</a>
+          <a href="audio-guide.html" class="rounded-2xl bg-slate-100/60 px-4 py-3">Audio Companion</a>
+          <a href="tourism.html" class="rounded-2xl bg-brand-100/70 px-4 py-3 text-brand-800">Trusted Travel Partners</a>
+        </nav>
+        <div class="mt-6 rounded-2xl bg-gradient-to-br from-brand-600 via-brand-500 to-brand-400 px-5 py-6 text-white">
+          <h3 class="font-display text-xl">Need a curated route?</h3>
+          <p class="mt-1 text-sm text-white/90">Ask our AI concierge or speak with a local expert to design a personal monastery trail.</p>
+          <div class="mt-4 flex gap-3">
+            <a href="#partners" class="flex-1 rounded-full bg-white/15 px-4 py-2 text-center text-sm font-semibold text-white backdrop-blur" data-nav-close>View partners</a>
+            <a href="#chat" class="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg" data-nav-close><i class="fa-solid fa-message"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
+  <main class="pt-32">
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 hero-overlay" style="background-image: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=80'); background-size: cover; background-position: center;"></div>
+      <div class="relative z-10 mx-auto flex max-w-4xl flex-col items-center gap-6 px-6 py-24 text-center text-white">
+        <div class="rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.45em] text-white/80">Trusted Network</div>
+        <h1 class="font-display text-4xl leading-tight sm:text-5xl">Partner with hosts who honour Sikkim's sacred heritage</h1>
+        <p class="max-w-2xl text-base text-white/85">Every partner listed below is vetted for cultural sensitivity, sustainability, and deep knowledge of monastery traditions.</p>
+      </div>
+    </section>
 
-      const data = await response.json();
-      return data.answer;
-    } catch (error) {
-      // Fallback responses if API is not available
-      return this.getFallbackResponse(message);
-    }
-  }
+    <section id="partners" class="mx-auto max-w-6xl px-6 py-24">
+      <div class="glass-panel p-8">
+        <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="font-display text-3xl text-slate-900">Strategic travel partners</h2>
+            <p class="mt-2 max-w-2xl text-sm text-slate-600">Reach out directly to craft bespoke monastery itineraries, arrange permits, and coordinate guides grounded in local wisdom.</p>
+          </div>
+          <a href="mailto:hello@monastery360.com" class="rounded-full border border-brand-200 px-5 py-2 text-sm font-semibold text-brand-800 transition hover:border-brand-400 hover:bg-brand-50">Become a partner</a>
+        </div>
+        <div class="mt-10 grid gap-6 md:grid-cols-2">
+          <article class="rounded-3xl bg-white/90 p-6 shadow-lg shadow-brand-soft">
+            <div class="flex items-center gap-3 text-brand-600">
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-100"><i class="fa-solid fa-mountain-sun"></i></span>
+              <h3 class="font-display text-xl text-slate-900">Sikkim Wanderers</h3>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">Specialists in monastery immersions, slow travel, and eco-conscious stays.</p>
+            <ul class="mt-4 space-y-2 text-sm text-slate-500">
+              <li><i class="fa-solid fa-phone mr-2 text-brand-500"></i>+91 98000 12345</li>
+              <li><i class="fa-solid fa-envelope mr-2 text-brand-500"></i>info@sikkimwanderers.com</li>
+              <li><i class="fa-solid fa-location-dot mr-2 text-brand-500"></i>MG Marg, Gangtok</li>
+            </ul>
+          </article>
+          <article class="rounded-3xl bg-white/90 p-6 shadow-lg shadow-brand-soft">
+            <div class="flex items-center gap-3 text-brand-600">
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-100"><i class="fa-solid fa-hiking"></i></span>
+              <h3 class="font-display text-xl text-slate-900">Himalayan Trails</h3>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">Adventure treks combined with monastery visits and cultural storytelling.</p>
+            <ul class="mt-4 space-y-2 text-sm text-slate-500">
+              <li><i class="fa-solid fa-phone mr-2 text-brand-500"></i>+91 94340 67890</li>
+              <li><i class="fa-solid fa-envelope mr-2 text-brand-500"></i>contact@himalayantrails.in</li>
+              <li><i class="fa-solid fa-location-dot mr-2 text-brand-500"></i>Tadong, Gangtok</li>
+            </ul>
+          </article>
+          <article class="rounded-3xl bg-white/90 p-6 shadow-lg shadow-brand-soft">
+            <div class="flex items-center gap-3 text-brand-600">
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-100"><i class="fa-solid fa-seedling"></i></span>
+              <h3 class="font-display text-xl text-slate-900">Green Path Tours</h3>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">Sustainable travel experiences with monastery homestays and farm-to-table food.</p>
+            <ul class="mt-4 space-y-2 text-sm text-slate-500">
+              <li><i class="fa-solid fa-phone mr-2 text-brand-500"></i>+91 97332 44556</li>
+              <li><i class="fa-solid fa-envelope mr-2 text-brand-500"></i>hello@greenpathtours.com</li>
+              <li><i class="fa-solid fa-location-dot mr-2 text-brand-500"></i>Namchi Road, Namchi</li>
+            </ul>
+          </article>
+          <article class="rounded-3xl bg-white/90 p-6 shadow-lg shadow-brand-soft">
+            <div class="flex items-center gap-3 text-brand-600">
+              <span class="flex h-11 w-11 items-center justify-center rounded-full bg-brand-100"><i class="fa-solid fa-route"></i></span>
+              <h3 class="font-display text-xl text-slate-900">Monastery Travels</h3>
+            </div>
+            <p class="mt-3 text-sm text-slate-600">Dedicated monastery circuits with bilingual guides and ritual facilitators.</p>
+            <ul class="mt-4 space-y-2 text-sm text-slate-500">
+              <li><i class="fa-solid fa-phone mr-2 text-brand-500"></i>+91 89760 99887</li>
+              <li><i class="fa-solid fa-envelope mr-2 text-brand-500"></i>bookings@monasterytravels.in</li>
+              <li><i class="fa-solid fa-location-dot mr-2 text-brand-500"></i>Ranka, Gangtok</li>
+            </ul>
+          </article>
+        </div>
+      </div>
 
-  getFallbackResponse(message) {
-    const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('rumtek')) {
-      return '🏛️ Rumtek Monastery is one of the most important monasteries in Sikkim! It serves as the seat of the Karmapa and houses precious Buddhist artifacts. Visit our Rumtek page for virtual tours and detailed information.';
-    } else if (lowerMessage.includes('enchey')) {
-      return '🙏 Enchey Monastery is a beautiful 200-year-old monastery above Gangtok, famous for its annual Cham dance festival. Check out our Enchey page for more details!';
-    } else if (lowerMessage.includes('festival') || lowerMessage.includes('cham')) {
-      return '🎭 Sikkim monasteries host amazing festivals like Losar (New Year), Saga Dawa, and spectacular Cham masked dances. Each monastery page has a cultural calendar with festival dates!';
-    } else if (lowerMessage.includes('visit') || lowerMessage.includes('time')) {
-      return '🌸 The best time to visit monasteries is March-May (spring flowers) and October-December (clear mountain views & festivals). Each monastery page has specific visiting information!';
-    } else {
-      return '🙏 I can help you learn about Sikkim\'s monasteries! Try asking about specific monasteries like Rumtek, Enchey, or Pemayangtse, or ask about festivals, visiting times, and locations.';
-    }
-  }
+      <div class="mt-12 grid gap-6 lg:grid-cols-2">
+        <div class="glass-panel p-8">
+          <h2 class="font-display text-2xl text-slate-900">What sets partners apart</h2>
+          <ul class="mt-6 space-y-4 text-sm text-slate-600">
+            <li class="flex gap-3">
+              <span class="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-600"><i class="fa-solid fa-certificate"></i></span>
+              <span>Monastery etiquette certification & cultural briefings for every guide.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-600"><i class="fa-solid fa-earth-asia"></i></span>
+              <span>Community-first itineraries supporting local artisans, homestays, and conservation.</span>
+            </li>
+            <li class="flex gap-3">
+              <span class="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-600"><i class="fa-solid fa-user-shield"></i></span>
+              <span>Verified safety protocols, permits, and transport logistics for remote routes.</span>
+            </li>
+          </ul>
+        </div>
+        <div class="glass-panel p-8">
+          <h2 class="font-display text-2xl text-slate-900">Create your itinerary with us</h2>
+          <p class="mt-2 text-sm text-slate-600">Tell us about your travel style and we will connect you to the right partner within 24 hours.</p>
+          <form class="mt-6 space-y-4">
+            <input type="text" placeholder="Full name" required class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+            <input type="email" placeholder="Email address" required class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+            <textarea placeholder="Describe your ideal monastery journey" rows="4" class="w-full rounded-2xl border border-slate-200 bg-white px-4 py-3 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100"></textarea>
+            <button type="submit" class="w-full rounded-full bg-gradient-to-br from-brand-600 to-brand-500 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-brand-soft transition hover:-translate-y-0.5">Share my vision</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
 
-  addMessage(content, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}-message`;
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
-    avatar.innerHTML = type === 'bot' ? '<i class="fas fa-temple-buddhist"></i>' : '<i class="fas fa-user"></i>';
-    
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.innerHTML = `<p>${content}</p>`;
-    
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(messageContent);
-    
-    // Insert before typing indicator or at the end
-    if (this.typingIndicator.style.display === 'none') {
-      this.messagesContainer.appendChild(messageDiv);
-    } else {
-      this.messagesContainer.insertBefore(messageDiv, this.typingIndicator);
-    }
-    
-    this.scrollToBottom();
-  }
+  <footer class="bg-slate-950 py-12 text-white">
+    <div class="mx-auto flex max-w-6xl flex-col gap-10 px-6 md:flex-row md:justify-between">
+      <div>
+        <div class="flex items-center gap-3 text-lg font-semibold">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </span>
+          <span class="font-display text-2xl">Monastery360</span>
+        </div>
+        <p class="mt-4 max-w-md text-sm text-white/70">A digital pilgrimage companion preserving Himalayan wisdom while empowering travellers and local custodians.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-8 text-sm">
+        <div>
+          <p class="font-semibold uppercase tracking-[0.3em] text-white/50">Explore</p>
+          <ul class="mt-3 space-y-2 text-white/70">
+            <li><a href="monasteries.html" class="hover:text-white">Monastery atlas</a></li>
+            <li><a href="index.html#map" class="hover:text-white">Interactive map</a></li>
+            <li><a href="audio-guide.html" class="hover:text-white">Audio guide</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold uppercase tracking-[0.3em] text-white/50">Connect</p>
+          <ul class="mt-3 space-y-2 text-white/70">
+            <li><a href="#chat" class="hover:text-white">AI concierge</a></li>
+            <li><a href="mailto:hello@monastery360.com" class="hover:text-white">hello@monastery360.com</a></li>
+            <li class="text-white/60">© <span data-year></span> Monastery360</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
 
-  showTyping() {
-    this.typingIndicator.style.display = 'block';
-    this.scrollToBottom();
-  }
+  <div id="chat" data-monastery-chatbot class="monastery-chatbot fixed bottom-6 right-6 z-[60]">
+    <div data-chatbot-window data-open="false" class="mt-4 w-[22rem] overflow-hidden rounded-3xl bg-white/95 shadow-2xl backdrop-blur">
+      <div class="bg-gradient-to-br from-brand-600 to-brand-500 px-5 py-4 text-white">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </div>
+          <div>
+            <h3 class="font-display text-lg leading-tight">Explora</h3>
+            <p class="text-xs uppercase tracking-[0.35em] text-white/70">Monastery guide</p>
+          </div>
+          <button type="button" data-chatbot-close class="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="flex max-h-[28rem] min-h-[24rem] flex-col bg-white/90">
+        <div data-chatbot-messages class="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+          <div class="flex gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900/80 text-white">
+              <i class="fa-solid fa-temple-buddhist"></i>
+            </div>
+            <div class="max-w-[75%] rounded-2xl rounded-bl-sm bg-white/90 px-4 py-3 text-sm text-slate-700 shadow">
+              Hello! Need help selecting a travel partner or designing a responsible monastery itinerary? I'm here to assist.
+            </div>
+          </div>
+        </div>
+        <div data-chatbot-typing class="hidden items-center gap-2 px-5 text-sm text-slate-400">
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400"></span>
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400" style="animation-delay: 0.1s"></span>
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400" style="animation-delay: 0.2s"></span>
+        </div>
+        <div class="border-t border-slate-200 bg-white/95 px-5 py-3">
+          <div class="flex flex-wrap gap-2 pb-3">
+            <button type="button" data-chatbot-suggestion data-value="Recommend a travel partner for a family monastery tour" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">Family tour partner</button>
+            <button type="button" data-chatbot-suggestion data-value="How can I make my trip more sustainable?" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">Sustainable travel</button>
+            <button type="button" data-chatbot-suggestion data-value="What permits are required for North Sikkim monasteries?" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">Permits</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <input data-chatbot-input type="text" placeholder="Ask Explora..." class="flex-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+            <button data-chatbot-send type="button" class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-500 text-white shadow-lg">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-  hideTyping() {
-    this.typingIndicator.style.display = 'none';
-  }
-
-  scrollToBottom() {
-    setTimeout(() => {
-      this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-    }, 100);
-  }
-
-  initializeChat() {
-    // Chat is initialized with welcome message in HTML
-    this.scrollToBottom();
-  }
-}
-
-// Quick suggestion function
-function sendSuggestion(text) {
-  const chatbot = window.monasteryChatbot;
-  if (chatbot) {
-    chatbot.input.value = text;
-    chatbot.handleSend();
-  }
-}
-
-// Initialize chatbot when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  window.monasteryChatbot = new MonasteryChatbot();
-});
-</script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/universal-chatbot.js"></script>
 </body>
 </html>

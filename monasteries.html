@@ -1,798 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Monastery360 – Monasteries</title>
-<style>
-  body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    text-align:center; 
-    background:#faf7f2; 
-    margin:0; 
-    padding:20px; 
-    color:#333; 
-  }
-  h1 { 
-    margin:20px 0 10px; 
-    color:#7c2d12; 
-  }
-  #searchBox { 
-    padding:10px; 
-    width:320px; 
-    margin:10px auto 30px; 
-    border-radius:6px; 
-    border:1px solid #ccc; 
-    display:block; 
-  }
-  .monastery-list { 
-    display:flex; 
-    flex-wrap:wrap; 
-    justify-content:center; 
-    gap:18px; 
-    margin-bottom:40px; 
-  }
-  .monastery-card {
-    position: relative;
-    width:260px;
-    height:180px;
-    border-radius:12px;
-    text-decoration:none;
-    display:flex;
-    align-items:flex-end;
-    justify-content:center;
-    font-weight:bold;
-    font-size:1.1rem;
-    color:white;
-    text-align:center;
-    background-size: cover;
-    background-position: center;
-    box-shadow:0 4px 12px rgba(0,0,0,0.08);
-    transition: transform .18s, box-shadow .18s, background .18s;
-    overflow: hidden;
-  }
-  .monastery-card::after {
-    content: "";
-    position: absolute;
-    top:0; left:0; right:0; bottom:0;
-    background: rgba(0,0,0,0.35); 
-    border-radius:12px;
-  }
-  .monastery-card h3 {
-    position: relative; 
-    margin:0 10px 10px 10px;
-    z-index:1;
-    color:white;
-    text-shadow: 0 2px 4px rgba(0,0,0,0.6);
-  }
-  .monastery-card:hover {
-    transform:translateY(-6px);
-    box-shadow:0 6px 18px rgba(0,0,0,0.12);
-    background-color:#fef3c7;
-  }
-  .back-btn { 
-    background:#7c2d12; 
-    color:white; 
-    border:none; 
-    padding:12px 25px; 
-    border-radius:30px; 
-    text-decoration:none; 
-    font-weight:bold; 
-    transition:background .3s; 
-  }
-  .back-btn:hover { background:#b45309; }
-  @media (max-width:520px){ 
-    .monastery-card{ width:90%; height:160px; } 
-    #searchBox{ width:90%; } 
-  }
-
-  /* Sidebar Styles */
-  .sidebar { height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0; background-color: #7c2d12; overflow-x: hidden; transition: 0.3s; padding-top: 60px; }
-  .sidebar a { padding: 15px 25px; text-decoration: none; font-size: 1.2rem; color: white; display: block; transition: 0.3s; }
-  .sidebar a:hover { background-color: #b45309; }
-  .sidebar .closebtn { position: absolute; top: 20px; right: 25px; font-size: 2rem; }
-
-  .menu-btn { position: fixed; top: 20px; left: 20px; font-size: 2rem; color: white; cursor: pointer; z-index: 1100; background:#7c2d12; border-radius:8px; padding:4px 8px; }
-</style>
-</head>
-<body>
-
-<!-- Menu Button -->
-<span class="menu-btn" onclick="openNav()">&#9776;</span>
-
-<!-- Sidebar -->
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="index.html">Home</a>
-  <a href="audio-guide.html">Audio Guide</a>
-  <a href="tourism.html">Tourism Service</a>
-</div>
-
-
-<h1>Monasteries of Sikkim</h1>
-<input id="searchBox" placeholder="Search monasteries..." type="search" />
-
-<div class="monastery-list" id="monasteryList" aria-live="polite"></div>
-
-<a href="index.html" class="back-btn">Back to Home</a>
-
-<script>
-const monasteries = [
-  "Amba Mamring Monastery","Burtuk Ugen Pemacholing Monastery","Choten Monastery","Dichen Choling Monastery",
-  "Enchey Monastery","Kathog Dorjeden Monastery","Khatek Pema Choling Monastery","Lingdok Tsangkhar Monastery",
-  "Lingdum Zurmang Monastery","Old Rumtek Monastery","Pabyuik Monastery","Ralong Monastery",
-  "Rumtek Dharma Chakra Centre","Samdong Mintokgang Monastery","Sang Monastery","Tsulakhang Monastery",
-  "Karthok Monastery","Rhenock Monastery","Simik Monastery","Hee Gyathang Monastery","Kabi Monastery",
-  "Lachen Thangu Monastery","Lachung Monastery","Lingthem Gonpa","Phensang Monastery","Phodong Monastery",
-  "Ringyim Monastery","Shagyong Monastery","Singchit Ngadag Monastery","Tholung Monastery","Tingbung Monastery",
-  "Chawayng Ani Monastery","Bon Monastery","Burmiok Norbugang Monastery","Doling Monastery","Kewzing Monastery",
-  "Linge Phagyal Monastery","Malli Tashi Chodarling Monastery","Namthang Norbu Tsho‑Ling Monastery",
-  "Namtse Nga‑Dag Monastery","Rabong Monastery","Sangmo Sharchog Bephug Monastery",
-  "Serdup Choling Monastery","Yangang Gonpa","Namchi Monastery","Tendong Gumpa","Chakung Monastery",
-  "Dodak Tamu Monastery","Dubde Monastery","Hungri Monastery","Khachoedpalri Monastery","Okhery Monastery",
-  "Pemayangtse Monastery","Rinchen Choling Tamu Monastery","Rinchenpung Monastery","Sanga Choeling Monastery",
-  "Silnon Monastery","Sri Badam Monastery","Tashi Samboling Tamang Monastery","Tashiding Monastery","Bermiok Monastery"
-];
-
-const listEl = document.getElementById('monasteryList');
-const searchBox = document.getElementById('searchBox');
-
-function slugify(name){
-  return name.toLowerCase()
-    .normalize('NFKD').replace(/[\u0300-\u036f]/g,'')   
-    .replace(/['’‘`"“”··]/g,'')                         
-    .replace(/[^a-z0-9]+/g,'-')                         
-    .replace(/^-+|-+$/g,'');                            
-}
-
-function render(list){
-  listEl.innerHTML = '';
-  if(list.length === 0){
-    listEl.innerHTML = '<p style="color:#666">No monasteries found.</p>';
-    return;
-  }
-  list.forEach(name => {
-    const file = slugify(name) + '.html';
-    const a = document.createElement('a');
-    a.className = 'monastery-card';
-    a.href = file;
-    const imgSrc = 'images/' + name + '.jpg';
-    a.style.backgroundImage = `url('${imgSrc}')`;
-    a.innerHTML = `<h3>${name}</h3>`;
-    listEl.appendChild(a);
-  });
-}
-
-render(monasteries);
-
-searchBox.addEventListener('input', () => {
-  const q = searchBox.value.trim().toLowerCase();
-  if(!q){ render(monasteries); return; }
-  const filtered = monasteries.filter(n => n.toLowerCase().includes(q));
-  render(filtered);
-});
-
-
-function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
-function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
-</script>
-
-<!-- Integrated Monastery Chatbot Widget -->
-<div id="monasteryBot" class="monastery-chatbot">
-  <!-- Chatbot Toggle Button -->
-  <div class="chatbot-toggle" id="chatbotToggle">
-    <i class="fas fa-temple-buddhist"></i>
-    <div class="toggle-tooltip">Ask about monasteries</div>
-  </div>
-
-  <!-- Chatbot Window -->
-  <div class="chatbot-window" id="chatbotWindow">
-    <!-- Header -->
-    <div class="chatbot-header">
-      <div class="header-content">
-        <div class="bot-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="header-text">
-          <h4>Monastery Guide</h4>
-          <p>Ask me about Sikkim's sacred monasteries</p>
-        </div>
-        <button class="close-btn" id="closeChatbot">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Messages Area -->
-    <div class="chatbot-messages" id="chatbotMessages">
-      <div class="message bot-message welcome-message">
-        <div class="message-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="message-content">
-          <p>🙏 Namaste! I'm your monastery guide. Ask me about any monastery in Sikkim - their history, location, festivals, or visiting tips!</p>
-          <div class="quick-suggestions">
-            <button class="suggestion-btn" onclick="sendSuggestion('Tell me about Rumtek Monastery')">Rumtek Monastery</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('What are the major festivals?')">Festival Info</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('Best time to visit monasteries')">Best Time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Typing Indicator -->
-    <div class="typing-indicator" id="typingIndicator" style="display: none;">
-      <div class="message bot-message">
-        <div class="message-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="message-content">
-          <div class="typing-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Input Area -->
-    <div class="chatbot-input">
-      <div class="input-container">
-        <input type="text" id="chatbotInput" placeholder="Ask about monasteries..." maxlength="500">
-        <button id="sendMessage" class="send-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </div>
-      <div class="input-footer">
-        <small>Powered by AI • Monastery360</small>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-/* Monastery Chatbot Styles */
-.monastery-chatbot {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 10000;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-/* Toggle Button */
-.chatbot-toggle {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  animation: pulse 2s infinite;
-}
-
-.chatbot-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(124, 45, 18, 0.4);
-}
-
-.chatbot-toggle i {
-  color: white;
-  font-size: 1.5rem;
-}
-
-.toggle-tooltip {
-  position: absolute;
-  right: 70px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-}
-
-.chatbot-toggle:hover .toggle-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3); }
-  50% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.5), 0 0 0 10px rgba(124, 45, 18, 0.1); }
-  100% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3); }
-}
-
-/* Chatbot Window */
-.chatbot-window {
-  position: absolute;
-  bottom: 80px;
-  right: 0;
-  width: 380px;
-  height: 600px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  transform: translateY(20px) scale(0.95);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chatbot-window.active {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Header */
-.chatbot-header {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  padding: 1.5rem;
-  color: white;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.bot-avatar {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
-
-.header-text h4 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.header-text p {
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.9;
-}
-
-.close-btn {
-  margin-left: auto;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: background 0.3s ease;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Messages */
-.chatbot-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.message {
-  display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
-}
-
-.message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  flex-shrink: 0;
-}
-
-.bot-message .message-avatar {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  color: white;
-}
-
-.user-message {
-  flex-direction: row-reverse;
-}
-
-.user-message .message-avatar {
-  background: #f3f4f6;
-  color: #6b7280;
-}
-
-.message-content {
-  background: #f8fafc;
-  padding: 0.75rem 1rem;
-  border-radius: 18px;
-  max-width: 75%;
-  word-wrap: break-word;
-}
-
-.user-message .message-content {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  color: white;
-}
-
-.message-content p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Quick Suggestions */
-.quick-suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.suggestion-btn {
-  background: rgba(124, 45, 18, 0.1);
-  border: 1px solid rgba(124, 45, 18, 0.2);
-  color: #7c2d12;
-  padding: 0.5rem 0.75rem;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.suggestion-btn:hover {
-  background: rgba(124, 45, 18, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Typing Indicator */
-.typing-dots {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.typing-dots span {
-  width: 8px;
-  height: 8px;
-  background: #7c2d12;
-  border-radius: 50%;
-  animation: typing 1.4s infinite;
-}
-
-.typing-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typing {
-  0%, 60%, 100% { opacity: 0.3; }
-  30% { opacity: 1; }
-}
-
-/* Input Area */
-.chatbot-input {
-  border-top: 1px solid #e5e7eb;
-  background: white;
-}
-
-.input-container {
-  display: flex;
-  padding: 1rem;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.chatbot-input input {
-  flex: 1;
-  border: 2px solid #e5e7eb;
-  border-radius: 25px;
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.chatbot-input input:focus {
-  border-color: #7c2d12;
-  box-shadow: 0 0 0 3px rgba(124, 45, 18, 0.1);
-}
-
-.send-btn {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.send-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(124, 45, 18, 0.3);
-}
-
-.send-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.input-footer {
-  padding: 0.5rem 1rem;
-  text-align: center;
-  border-top: 1px solid #f3f4f6;
-}
-
-.input-footer small {
-  color: #9ca3af;
-  font-size: 0.75rem;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .monastery-chatbot {
-    bottom: 1rem;
-    right: 1rem;
-  }
-  
-  .chatbot-window {
-    width: calc(100vw - 2rem);
-    height: 70vh;
-    max-width: 350px;
-  }
-  
-  .toggle-tooltip {
-    display: none;
-  }
-}
-
-/* Scrollbar Styling */
-.chatbot-messages::-webkit-scrollbar {
-  width: 4px;
-}
-
-.chatbot-messages::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 2px;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb:hover {
-  background: #999;
-}
-</style>
-
-<script>
-class MonasteryChatbot {
-  constructor() {
-    this.isOpen = false;
-    this.messages = [];
-    this.apiEndpoint = 'http://127.0.0.1:5000/predict'; // Flask chatbot endpoint
-    
-    this.initializeElements();
-    this.attachEventListeners();
-    this.initializeChat();
-  }
-
-  initializeElements() {
-    this.toggle = document.getElementById('chatbotToggle');
-    this.window = document.getElementById('chatbotWindow');
-    this.closeBtn = document.getElementById('closeChatbot');
-    this.messagesContainer = document.getElementById('chatbotMessages');
-    this.input = document.getElementById('chatbotInput');
-    this.sendBtn = document.getElementById('sendMessage');
-    this.typingIndicator = document.getElementById('typingIndicator');
-  }
-
-  attachEventListeners() {
-    this.toggle.addEventListener('click', () => this.toggleChat());
-    this.closeBtn.addEventListener('click', () => this.closeChat());
-    this.sendBtn.addEventListener('click', () => this.handleSend());
-    
-    this.input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        this.handleSend();
-      }
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (this.isOpen && !this.window.contains(e.target) && !this.toggle.contains(e.target)) {
-        this.closeChat();
-      }
-    });
-  }
-
-  toggleChat() {
-    if (this.isOpen) {
-      this.closeChat();
-    } else {
-      this.openChat();
-    }
-  }
-
-  openChat() {
-    this.isOpen = true;
-    this.window.classList.add('active');
-    this.input.focus();
-    
-    // Track analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'chatbot_opened', {
-        event_category: 'engagement',
-        event_label: 'monastery_chatbot'
-      });
-    }
-  }
-
-  closeChat() {
-    this.isOpen = false;
-    this.window.classList.remove('active');
-  }
-
-  async handleSend() {
-    const message = this.input.value.trim();
-    if (!message) return;
-
-    // Add user message
-    this.addMessage(message, 'user');
-    this.input.value = '';
-    this.sendBtn.disabled = true;
-
-    // Show typing indicator
-    this.showTyping();
-
-    try {
-      // Send to Flask chatbot API
-      const response = await this.sendToAPI(message);
-      this.hideTyping();
-      this.addMessage(response, 'bot');
-    } catch (error) {
-      this.hideTyping();
-      this.addMessage('Sorry, I\'m having trouble connecting. Please try again later or visit our monastery pages directly.', 'bot');
-      console.error('Chatbot API Error:', error);
-    }
-
-    this.sendBtn.disabled = false;
-  }
-
-  async sendToAPI(message) {
-    try {
-      const response = await fetch(this.apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Monastery Atlas – Monastery360</title>
+  <meta name="description" content="Browse Sikkim's monasteries with powerful search, imagery, and cultural insights curated by Monastery360." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p5Q3Ydg0N6Y4ZCkxzgv2Fne5+5ZTCDJMmzNw2K6Jqq/RSB+BeIV/pY5Pja/qvpDMAYA9Yg3EjF6lI1xgXkJYtQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+          },
         },
-        body: JSON.stringify({ message: message })
-      });
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+</head>
+<body class="font-sans antialiased text-slate-900">
+  <header class="fixed inset-x-0 top-0 z-50">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="mt-6 flex items-center justify-between rounded-full bg-white/70 px-5 py-3 shadow-lg shadow-brand-soft backdrop-blur-xl">
+        <a href="index.html" class="flex items-center gap-2 text-lg font-semibold text-slate-900">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 via-brand-400 to-brand-300 text-slate-900 shadow-inner">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </span>
+          <span class="font-display text-xl tracking-tight">Monastery360</span>
+        </a>
+        <nav class="hidden items-center gap-8 text-sm font-medium text-slate-800 lg:flex">
+          <a href="index.html#journeys" class="rounded-full bg-orange-100 px-4 py-1.5 text-orange-800 font-bold shadow-md">Journeys</a>
+          <a href="index.html#map" class="rounded-full bg-orange-100 px-4 py-1.5 text-orange-800 font-bold shadow-md">Interactive Map</a>
+          <a href="monasteries.html" class="rounded-full bg-orange-100 px-4 py-1.5 text-orange-800 font-bold shadow-md">Monasteries</a>
+          <a href="audio-guide.html" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Audio Guide</a>
+          <a href="tourism.html" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Travel Services</a>
+        </nav>
+        <div class="hidden items-center gap-3 lg:flex">
+          <a href="audio-guide.html" class="rounded-full border-2 border-orange-300 px-5 py-2 text-sm font-semibold text-orange-800 transition hover:border-orange-500 hover:bg-orange-50 hover:scale-105">Listen to stories</a>
+          <a href="tourism.html" class="rounded-full bg-gradient-to-br from-orange-600 to-orange-500 px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl hover:scale-105">Plan a trip</a>
+        </div>
+        <button type="button" aria-label="Toggle navigation" data-nav-toggle class="flex h-11 w-11 items-center justify-center rounded-full border-2 border-orange-300 bg-white text-orange-700 shadow-lg lg:hidden hover:bg-orange-50 hover:scale-105 transition">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <div class="fixed inset-0 z-40 bg-slate-900/70 backdrop-blur" data-nav-panel data-open="false">
+      <div class="absolute inset-x-6 top-24 rounded-3xl bg-white/95 p-6 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-orange-200 pb-4">
+          <span class="font-display text-lg text-slate-900 font-bold">Explore Monastery360</span>
+          <button type="button" data-nav-close class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 hover:bg-orange-200 transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <nav class="mt-4 grid gap-3 text-base font-medium text-slate-800">
+          <a href="index.html#journeys" class="rounded-2xl bg-orange-50 px-4 py-3 hover:bg-orange-100 transition font-semibold">Journeys & Stories</a>
+          <a href="index.html#map" class="rounded-2xl bg-orange-50 px-4 py-3 hover:bg-orange-100 transition font-semibold">Interactive Map</a>
+          <a href="monasteries.html" class="rounded-2xl bg-orange-100 px-4 py-3 text-orange-800 font-bold shadow-sm">Monastery Directory</a>
+          <a href="audio-guide.html" class="rounded-2xl bg-orange-50 px-4 py-3 hover:bg-orange-100 transition font-semibold">Audio Companion</a>
+          <a href="tourism.html" class="rounded-2xl bg-orange-50 px-4 py-3 hover:bg-orange-100 transition font-semibold">Trusted Travel Partners</a>
+        </nav>
+        <div class="mt-6 rounded-2xl bg-gradient-to-br from-orange-600 via-orange-500 to-orange-400 px-5 py-6 text-white">
+          <h3 class="font-display text-xl">Need a curated route?</h3>
+          <p class="mt-1 text-sm text-white/90">Ask our AI concierge or speak with a local expert to design a personal monastery trail.</p>
+          <div class="mt-4 flex gap-3">
+            <a href="tourism.html" class="flex-1 rounded-full bg-white/15 px-4 py-2 text-center text-sm font-semibold text-white backdrop-blur hover:bg-white/25 transition">Connect with hosts</a>
+            <a href="#chat" class="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg hover:bg-white/30 transition" data-nav-close><i class="fa-solid fa-message"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
 
-      if (!response.ok) {
-        throw new Error('API request failed');
+  <main class="pt-32">
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 hero-overlay" style="background-image: url('images/image.png'); background-size: cover; background-position: center;"></div>
+      <div class="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-6 px-6 py-24 text-center text-white">
+        <div class="rounded-full bg-white/10 px-4 py-2 text-xs uppercase tracking-[0.45em] text-white/80">Monastery Atlas</div>
+        <h1 class="font-display text-4xl leading-tight sm:text-5xl">Navigate Sikkim's constellation of monasteries</h1>
+        <p class="max-w-2xl text-base text-white/85">Filter by name, discover visual archives, and open detailed guides crafted with local voices and cultural context.</p>
+        <div class="hero-stats inline-flex items-center gap-5">
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-white/60">Guides</p>
+            <p class="text-xl font-semibold">60+</p>
+          </div>
+          <div class="h-10 w-px bg-white/30"></div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-white/60">Cultural tags</p>
+            <p class="text-xl font-semibold">30+</p>
+          </div>
+          <div class="h-10 w-px bg-white/30"></div>
+          <div>
+            <p class="text-xs uppercase tracking-[0.4em] text-white/60">Digital assets</p>
+            <p class="text-xl font-semibold">200+</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="mx-auto max-w-6xl px-6 py-20">
+      <div class="glass-panel p-8">
+        <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <h2 class="font-display text-3xl text-slate-900">Find a monastery instantly</h2>
+            <p class="mt-2 max-w-xl text-sm text-slate-600">Search for monasteries by name. Results update as you type and show custom imagery for each location.</p>
+          </div>
+          <div class="rounded-full bg-brand-50 px-4 py-2 text-sm font-medium text-brand-700">
+            <span data-count>0</span> monasteries listed
+          </div>
+        </div>
+        <div class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+          <div class="relative flex-1">
+            <span class="pointer-events-none absolute inset-y-0 left-3 flex items-center text-slate-400"><i class="fa-solid fa-magnifying-glass"></i></span>
+            <input id="searchBox" data-search type="search" placeholder="Search monasteries (e.g. Rumtek, Pemayangtse, Bon Monastery)" class="w-full rounded-full border border-slate-200 bg-white py-3 pl-10 pr-4 text-sm text-slate-700 shadow-sm focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+          </div>
+          <button id="clearSearch" class="rounded-full border border-slate-200 px-4 py-3 text-sm font-medium text-slate-600 transition hover:border-slate-300 hover:text-slate-900">Clear</button>
+        </div>
+      </div>
+
+      <div class="mt-12" aria-live="polite" aria-busy="false">
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3" data-monastery-list></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-950 py-12 text-white">
+    <div class="mx-auto flex max-w-6xl flex-col gap-10 px-6 md:flex-row md:justify-between">
+      <div>
+        <div class="flex items-center gap-3 text-lg font-semibold">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </span>
+          <span class="font-display text-2xl">Monastery360</span>
+        </div>
+        <p class="mt-4 max-w-md text-sm text-white/70">A digital pilgrimage companion preserving Himalayan wisdom while empowering travellers and local custodians.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-8 text-sm">
+        <div>
+          <p class="font-semibold uppercase tracking-[0.3em] text-white/50">Explore</p>
+          <ul class="mt-3 space-y-2 text-white/70">
+            <li><a href="index.html#map" class="hover:text-white">Interactive map</a></li>
+            <li><a href="audio-guide.html" class="hover:text-white">Audio guide</a></li>
+            <li><a href="tourism.html" class="hover:text-white">Travel services</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold uppercase tracking-[0.3em] text-white/50">Connect</p>
+          <ul class="mt-3 space-y-2 text-white/70">
+            <li><a href="#chat" class="hover:text-white">AI concierge</a></li>
+            <li><a href="mailto:hello@monastery360.com" class="hover:text-white">hello@monastery360.com</a></li>
+            <li class="text-white/60">© <span data-year></span> Monastery360</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="chat" data-monastery-chatbot class="monastery-chatbot fixed bottom-6 right-6 z-[60]">
+  
+    <div data-chatbot-window data-open="false" class="mt-4 w-[22rem] overflow-hidden rounded-3xl bg-white/95 shadow-2xl backdrop-blur">
+      <div class="bg-gradient-to-br from-brand-600 to-brand-500 px-5 py-4 text-white">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </div>
+          <div>
+            <h3 class="font-display text-lg leading-tight">Explora</h3>
+            <p class="text-xs uppercase tracking-[0.35em] text-white/70">Monastery guide</p>
+          </div>
+          <button type="button" data-chatbot-close class="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="flex max-h-[28rem] min-h-[24rem] flex-col bg-white/90">
+        <div data-chatbot-messages class="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+          <div class="flex gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900/80 text-white">
+              <i class="fa-solid fa-temple-buddhist"></i>
+            </div>
+            <div class="max-w-[75%] rounded-2xl rounded-bl-sm bg-white/90 px-4 py-3 text-sm text-slate-700 shadow">
+              Namaste! Search the atlas above or ask me for monastery recommendations and cultural context.
+            </div>
+          </div>
+        </div>
+        <div data-chatbot-typing class="hidden items-center gap-2 px-5 text-sm text-slate-400">
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400"></span>
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400" style="animation-delay: 0.1s"></span>
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400" style="animation-delay: 0.2s"></span>
+        </div>
+        <div class="border-t border-slate-200 bg-white/95 px-5 py-3">
+          <div class="flex flex-wrap gap-2 pb-3">
+            <button type="button" data-chatbot-suggestion data-value="Suggest monasteries with scenic views" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">Scenic views</button>
+            <button type="button" data-chatbot-suggestion data-value="Which monasteries host major cham dances?" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">Cham dances</button>
+            <button type="button" data-chatbot-suggestion data-value="Plan a north Sikkim monastery circuit" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">North Sikkim circuit</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <input data-chatbot-input type="text" placeholder="Ask Explora..." class="flex-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+            <button data-chatbot-send type="button" class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-500 text-white shadow-lg">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/universal-chatbot.js"></script>
+  <script>
+    const monasteries = [
+      "Amba Mamring Monastery",
+      "Burtuk Ugen Pemacholing Monastery",
+      "Choten Monastery",
+      "Dichen Choling Monastery",
+      "Enchey Monastery",
+      "Kathog Dorjeden Monastery",
+      "Khatek Pema Choling Monastery",
+      "Lingdok Tsangkhar Monastery",
+      "Lingdum Zurmang Monastery",
+      "Old Rumtek Monastery",
+      "Pabyuik Monastery",
+      "Ralong Monastery",
+      "Rumtek Dharma Chakra Centre",
+      "Samdong Mintokgang Monastery",
+      "Sang Monastery",
+      "Tsulakhang Monastery",
+      "Karthok Monastery",
+      "Rhenock Monastery",
+      "Simik Monastery",
+      "Hee Gyathang Monastery",
+      "Kabi Monastery",
+      "Lachen Thangu Monastery",
+      "Lachung Monastery",
+      "Lingthem Gonpa",
+      "Phensang Monastery",
+      "Phodong Monastery",
+      "Ringyim Monastery",
+      "Shagyong Monastery",
+      "Singchit Ngadag Monastery",
+      "Tholung Monastery",
+      "Tingbung Monastery",
+      "Chawayng Ani Monastery",
+      "Bon Monastery",
+      "Burmiok Norbugang Monastery",
+      "Doling Monastery",
+      "Kewzing Monastery",
+      "Linge Phagyal Monastery",
+      "Malli Tashi Chodarling Monastery",
+      "Namthang Norbu Tsho-Ling Monastery",
+      "Namtse Nga-Dag Monastery",
+      "Rabong Monastery",
+      "Sangmo Sharchog Bephug Monastery",
+      "Serdup Choling Monastery",
+      "Yangang Gonpa",
+      "Namchi Monastery",
+      "Tendong Gumpa",
+      "Chakung Monastery",
+      "Dodak Tamu Monastery",
+      "Dubde Monastery",
+      "Hungri Monastery",
+      "Khachoedpalri Monastery",
+      "Okhery Monastery",
+      "Pemayangtse Monastery",
+      "Rinchen Choling Tamu Monastery",
+      "Rinchenpung Monastery",
+      "Sanga Choeling Monastery",
+      "Silnon Monastery",
+      "Sri Badam Monastery",
+      "Tashi Samboling Tamang Monastery",
+      "Tashiding Monastery",
+      "Bermiok Monastery",
+      "Aden Wolung Monastery",
+      "Bakcham Monastery",
+      "Barphog Monastery",
+      "Ben Monastery",
+      "Bongyong Ani Gonpa",
+      "Bumtar Namdroling Monastery",
+      "Dolepchen Boudha Sanskrit Monastery",
+      "Duchi Gyalton Monastery",
+      "Gagyong Monastery",
+      "Gor Monastery",
+      "Labrang Monastery",
+      "Lhuntse Monastery",
+      "Lingkoed Monastery",
+      "Malam Monastery",
+      "Mangbro Monastery",
+      "Martam Namdzong Monastery",
+      "Martam Tsangkhar Monastery",
+      "Melli Atsing Monastery",
+      "Nage Monastery",
+      "Namthang Nyima Choling Monastery",
+      "Namtse Ahaley Monastery",
+      "Nubling Monastery",
+      "Parbing Monastery",
+      "Pathing Matsang Monastery",
+      "Rabong Kunphenling Tsechu Monastery",
+      "Radong Tensung Monastery",
+      "Ralong Palchen Choling Monastery",
+      "Raloong Monastery",
+      "Ray Mindu Katenling Monastery",
+      "Rinak Monastery",
+      "Sang Ngor Monastery",
+      "Ship Kunzang Choling Monastery",
+      "Silem Phagyal Monastery",
+      "Singtam Monastery",
+      "Sontam Tensung Monastery",
+      "Sorok Tamang Monastery",
+      "Suiram Risung Monastery",
+      "Sumon Thubten Gatsalling Monastery",
+      "Taglung Domsumling Monastery",
+      "Taktse Ani Gonpa",
+      "Tareng Gonpa",
+      "Tsangek Monastery",
+      "Tsawang Choling Monastery",
+      "Tsungthang Monastery",
+      "Wok Pabong Monastery",
+      "Yangang Changchub Tamu Monastery"];
+
+    const listEl = document.querySelector('[data-monastery-list]');
+    const searchBox = document.querySelector('[data-search]');
+    const clearBtn = document.getElementById('clearSearch');
+    const countEl = document.querySelector('[data-count]');
+
+    const slugify = (name) => name.toLowerCase()
+      .normalize('NFKD').replace(/[\u0300-\u036f]/g, '')
+      .replace(/['’‘`"“”··]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '');
+
+    const createCard = (name) => {
+      const slug = slugify(name);
+      const card = document.createElement('a');
+      card.href = `${slug}.html`;
+      card.className = 'monastery-card group relative flex h-64 overflow-hidden rounded-3xl shadow-xl shadow-slate-900/10';
+      card.setAttribute('aria-label', name);
+
+      const imageLayer = document.createElement('div');
+      imageLayer.className = 'monastery-card-image absolute inset-0 transition-transform duration-[600ms] ease-out';
+      imageLayer.style.backgroundImage = `url('images/${name}.jpg')`;
+
+      const content = document.createElement('div');
+      content.className = 'relative z-10 flex h-full w-full flex-col justify-end p-6 text-white';
+      content.innerHTML = `
+        <div class="flex items-center gap-2 text-xs uppercase tracking-[0.3em] text-white/70">
+          <span class="h-1.5 w-1.5 rounded-full bg-white"></span>
+          Sacred Sikkim
+        </div>
+        <h3 class="mt-3 font-display text-2xl">${name}</h3>
+        <p class="mt-2 text-xs text-white/80">Open immersive guide</p>
+      `;
+
+      card.appendChild(imageLayer);
+      card.appendChild(content);
+      return card;
+    };
+
+    const render = (list) => {
+      listEl.innerHTML = '';
+      if (!list.length) {
+        const empty = document.createElement('div');
+        empty.className = 'rounded-3xl bg-white/90 p-10 text-center text-slate-600 shadow-inner';
+        empty.innerHTML = '<p class="text-lg font-semibold text-slate-700">No monasteries found.</p><p class="mt-2 text-sm">Try a different spelling or explore by scrolling through the full collection.</p>';
+        listEl.appendChild(empty);
+        countEl.textContent = '0';
+        return;
       }
 
-      const data = await response.json();
-      return data.answer;
-    } catch (error) {
-      // Fallback responses if API is not available
-      return this.getFallbackResponse(message);
-    }
-  }
+      countEl.textContent = String(list.length);
 
-  getFallbackResponse(message) {
-    const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('rumtek')) {
-      return '🏛️ Rumtek Monastery is one of the most important monasteries in Sikkim! It serves as the seat of the Karmapa and houses precious Buddhist artifacts. Visit our Rumtek page for virtual tours and detailed information.';
-    } else if (lowerMessage.includes('enchey')) {
-      return '🙏 Enchey Monastery is a beautiful 200-year-old monastery above Gangtok, famous for its annual Cham dance festival. Check out our Enchey page for more details!';
-    } else if (lowerMessage.includes('festival') || lowerMessage.includes('cham')) {
-      return '🎭 Sikkim monasteries host amazing festivals like Losar (New Year), Saga Dawa, and spectacular Cham masked dances. Each monastery page has a cultural calendar with festival dates!';
-    } else if (lowerMessage.includes('visit') || lowerMessage.includes('time')) {
-      return '🌸 The best time to visit monasteries is March-May (spring flowers) and October-December (clear mountain views & festivals). Each monastery page has specific visiting information!';
+      list.forEach(name => {
+        listEl.appendChild(createCard(name));
+      });
+    };
+
+    const applyFilter = () => {
+      const query = searchBox.value.trim().toLowerCase();
+      const filtered = query
+        ? monasteries.filter(name => name.toLowerCase().includes(query))
+        : monasteries;
+      render(filtered);
+    };
+
+    clearBtn.addEventListener('click', () => {
+      searchBox.value = '';
+      applyFilter();
+      searchBox.focus();
+    });
+
+    searchBox.addEventListener('input', applyFilter);
+
+    const params = new URLSearchParams(window.location.search);
+    const initialQuery = params.get('q');
+    if (initialQuery) {
+      searchBox.value = initialQuery;
+      applyFilter();
+      window.history.replaceState({}, '', 'monasteries.html');
     } else {
-      return '🙏 I can help you learn about Sikkim\'s monasteries! Try asking about specific monasteries like Rumtek, Enchey, or Pemayangtse, or ask about festivals, visiting times, and locations.';
+      render(monasteries);
     }
-  }
-
-  addMessage(content, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}-message`;
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
-    avatar.innerHTML = type === 'bot' ? '<i class="fas fa-temple-buddhist"></i>' : '<i class="fas fa-user"></i>';
-    
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.innerHTML = `<p>${content}</p>`;
-    
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(messageContent);
-    
-    // Insert before typing indicator or at the end
-    if (this.typingIndicator.style.display === 'none') {
-      this.messagesContainer.appendChild(messageDiv);
-    } else {
-      this.messagesContainer.insertBefore(messageDiv, this.typingIndicator);
-    }
-    
-    this.scrollToBottom();
-  }
-
-  showTyping() {
-    this.typingIndicator.style.display = 'block';
-    this.scrollToBottom();
-  }
-
-  hideTyping() {
-    this.typingIndicator.style.display = 'none';
-  }
-
-  scrollToBottom() {
-    setTimeout(() => {
-      this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-    }, 100);
-  }
-
-  initializeChat() {
-    // Chat is initialized with welcome message in HTML
-    this.scrollToBottom();
-  }
-}
-
-// Quick suggestion function
-function sendSuggestion(text) {
-  const chatbot = window.monasteryChatbot;
-  if (chatbot) {
-    chatbot.input.value = text;
-    chatbot.handleSend();
-  }
-}
-
-// Initialize chatbot when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  window.monasteryChatbot = new MonasteryChatbot();
-});
-</script>
+  </script>
 </body>
 </html>
