@@ -1,854 +1,523 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Monastery360 – Home</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
-<style>
-  body { 
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-    margin: 0; padding: 0; 
-    background: #faf7f2; 
-    text-align: center; 
-    color: #333; 
-  }
-
-  header { 
-    background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1350&q=80') center/cover no-repeat; 
-    height: 100vh; 
-    display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center; 
-    color: white; 
-  }
-
-  header h1 { 
-    font-size: 3rem; 
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.7); 
-  }
-
-  header p { 
-    font-size: 1.3rem; 
-    max-width: 700px; 
-    margin: 10px auto; 
-    text-shadow: 1px 1px 3px rgba(0,0,0,0.6); 
-  }
-
-  .explore-btn { 
-    background: #7c2d12; 
-    color: white; 
-    border: none; 
-    padding: 14px 28px; 
-    font-weight: bold; 
-    border-radius: 30px; 
-    font-size: 1.2rem; 
-    cursor: pointer; 
-    text-decoration: none; 
-    transition: background 0.3s; 
-    display: inline-block; 
-    margin-top: 10px;
-  }
-
-  .explore-btn:hover { background: #b45309; }
-
-  #map { 
-    width: 90%; 
-    height: 600px; 
-    margin: 40px auto; 
-    border: 2px solid #ccc; 
-    border-radius: 12px; 
-    background: white; 
-  }
-
-  .ol-popup {
-    position: absolute;
-    background-color: white;
-    padding: 6px 12px;
-    border: 1px solid #7c2d12;
-    border-radius: 6px;
-    bottom: 12px;
-    left: -50px;
-    min-width: 140px;
-    font-weight: bold;
-    color: #7c2d12;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-
-  /* Sidebar */
-  .sidebar { 
-    height: 100%; 
-    width: 0; 
-    position: fixed; 
-    z-index: 1000; 
-    top: 0; 
-    left: 0; 
-    background-color: #7c2d12; 
-    overflow-x: hidden; 
-    transition: 0.3s; 
-    padding-top: 60px; 
-  }
-
-  .sidebar a { 
-    padding: 12px 24px; 
-    text-decoration: none; 
-    font-size: 1.2rem; 
-    color: white; 
-    display: block; 
-    transition: 0.3s; 
-  }
-
-  .sidebar a:hover { background-color: #b45309; }
-  .sidebar .closebtn { position: absolute; top: 15px; right: 20px; font-size: 2rem; }
-  .hamburger { position: fixed; top: 15px; left: 20px; font-size: 2rem; cursor: pointer; color: white; z-index: 1100; }
-</style>
-</head>
-<body>
-
-<!-- Sidebar -->
-<div id="mySidebar" class="sidebar">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">×</a>
-  <a href="index.html">Home</a>
-  <a href="audio-guide.html">Audio Guide</a>
-  <a href="tourism.html">Tourism Service</a>
-</div>
-
-
-<!-- Hamburger Icon -->
-<div class="hamburger" onclick="openNav()">☰</div>
-
-<header>
-  <h1>Monastery360</h1>
-  <p>Experience the spiritual, cultural, and historical treasures of Sikkim’s monasteries through digital archives, interactive tours, and immersive maps.</p>
-  <a href="monasteries.html" class="explore-btn">Explore Monasteries</a>
-</header>
-
-<div id="map"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
-<script>
- 
-  var map = new ol.Map({
-    target: 'map',
-    layers: [ new ol.layer.Tile({ source: new ol.source.OSM() }) ],
-    view: new ol.View({ center: ol.proj.fromLonLat([88.61, 27.33]), zoom: 9 })
-  });
-
-
-  var monasteries = [
-    
-    {name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861]},
-    {name: "Mamring Monastery", coords: [88.3101201, 27.277364]},
-    {name: "Enchey Monastery", coords: [88.6191659, 27.3359368]},
-    {name: "Burtuk", coords: [88.6158468, 27.3539598]},
-    {name: "Do Drul Chorten", coords: [88.6048366, 27.3128415]},
-    {name: "Decchen Cholling Gumpa-Tamamg Gumpa", coords: [88.608536, 27.338795]},
-    {name: "Bermiok Tokal Monastery", coords: [88.4690827, 27.2287152]},
-    {name: "Tashiding Monastery", coords: [88.2978746, 27.3089308]},
-    {name: "Sinon Monastery", coords: [88.2900301, 27.3423753]},
-    {name: "Kartok Monastery", coords: [88.588005, 27.2407996]},
-    {name: "Sanghak Choeling Monastery", coords: [88.2216867, 27.2977517]},
-    {name: "Pema Choling Monastery", coords: [88.5310593, 27.1757119]},
-    {name: "Pal Karma Zurmang Shedup Chokhor Ling Lingdum Monastery (Ranka Monastery)", coords: [88.5790387, 27.3311957]},
-    {name: "Lingdum Zurmang Kagyu Monastery", coords: [88.5805594, 27.3307583]},
-    {name: "Rinchenpong Monastery", coords: [88.2684733, 27.2354672]},
-    {name: "Rinchen Choling Tamu Monastery/ Gurung Gompha", coords: [88.2708814, 27.2432459]},
-    {name: "Pemayangtse Monastery", coords: [88.2515852, 27.3052201]},
-    {name: "Okhrey Monastery", coords: [88.1019019, 27.149513]},
-    {name: "Khecheopalri Monastery", coords: [88.1882768, 27.349221]},
-    {name: "Hung hri Monastery", coords: [88.2535011, 27.3523006]},
-    {name: "Dubdi Buddhist Monastery - Yuksom", coords: [88.2299922, 27.3665529]},
-    {name: "Dodak Buddhist Monastery", coords: [88.1715435, 27.1718352]},
-    {name: "Tendong Gumpa", coords: [88.4079885, 27.2061039]},
-    {name: "Chang Chu Monastery", coords: [88.4032499, 27.2959417]},
-    {name: "Serdup Choling Monastery", coords: [88.3547474, 27.161498]},
-    {name: "Sharchhog Bayphug", coords: [88.385782, 27.2763652]},
-    {name: "Ralang New Monastery", coords: [88.3352477, 27.3284964]},
-    {name: "Mane Choekhorling Gompa (Ravangla Monastery)", coords: [88.518887, 28.240229]},
-    {name: "Ngadak Thupten Shedup Dhargey Choeling, Monastery", coords: [88.3706278, 27.1732407]},
-    {name: "Norbu Yangdup Choling Monastery", coords: [88.3773796, 27.2345473]},
-    {name: "Phagyal monastery Lingee", coords: [88.4592622, 27.37048]},
-    {name: "Kewzing Monastery", coords: [88.3227697, 27.2842636]},
-    {name: "Doling Monastery", coords: [88.3449117, 27.287967]},
-    {name: "Norbu gang, Coronation throne of Namgyal Dynasty", coords: [88.2173761, 27.3694863]},
-    {name: "Bon Monastery", coords: [88.3343804, 27.278643]},
-    {name: "Chawayng Ani Monastery", coords: [88.5122178, 27.5329718]},
-    {name: "Tholung Monastery", coords: [88.4615734, 27.636972]},
-    {name: "Tingvong Monastery", coords: [88.4767615, 27.5568019]},
-    {name: "Tashi Gyan Palden Monastery", coords: [88.4127344, 27.2866497]},
-    {name: "Ringhem Monastery", coords: [88.5462414, 27.4953153]},
-    {name: "Phodong Monastery", coords: [88.5838205, 27.4128715]},
-    {name: "Phensang Monastery", coords: [88.6101296, 27.420723]},
-    {name: "Lingthem Rikzing Chopel Targelling Monastery", coords: [88.5011052, 27.5230064]},
-    {name: "Lachung Monastery", coords: [88.7487553, 27.6886827]},
-    {name: "Lachen Monastery", coords: [88.5577391, 27.7166667]},
-    {name: "Labrang Monastery", coords: [88.5794589, 27.4180001]},
-    {name: "KABI MONASTERY", coords: [88.6099182, 27.4007368]},
-    {name: "HEE GYATHANG MONASTERY", coords: [88.501073, 27.4758646]},
-    {name: "Simik Monastery", coords: [88.4718882, 27.2873094]},
-    {name: "Rhenock Gumpa, Monastery", coords: [88.6779745, 27.1842602]},
-    {name: "Tsuglakhang Monastery & Temple", coords: [88.6147222, 27.3261111]},
-    {name: "Gonjang Monastery", coords: [88.6132007, 27.3690385]},
-    {name: "Singtam Monastery", coords: [88.5035101, 27.2341097]},
-    {name: "Mintokgang Road", coords: [88.6176397, 27.3332951]},
-    {name: "Pabyuik Monastery", coords: [88.6279545, 27.2993719]},
-    {name: "Old Rumtek Monastery", coords: [88.563264, 27.2846735]}
-  ];
-
-  var features = monasteries.map(function(m) {
-    return new ol.Feature({ geometry: new ol.geom.Point(ol.proj.fromLonLat(m.coords)), name: m.name });
-  });
-
-  var vectorSource = new ol.source.Vector({ features: features });
-
-  var vectorLayer = new ol.layer.Vector({
-    source: vectorSource,
-    style: new ol.style.Style({
-      image: new ol.style.Icon({ src: 'https://cdn-icons-png.flaticon.com/512/684/684908.png', scale: 0.05 })
-    })
-  });
-
-  map.addLayer(vectorLayer);
-
-
-  var overlay = new ol.Overlay({ element: document.createElement('div'), positioning: 'bottom-center', stopEvent: false });
-  overlay.getElement().className = 'ol-popup';
-  map.addOverlay(overlay);
-
-  map.on('singleclick', function(evt) {
-    var feature = map.forEachFeatureAtPixel(evt.pixel, function(f) { return f; });
-    if (feature) {
-      var coordinates = feature.getGeometry().getCoordinates();
-      overlay.getElement().innerHTML = feature.get('name');
-      overlay.setPosition(coordinates);
-      overlay.getElement().style.display = 'block';
-    } else {
-      overlay.getElement().style.display = 'none';
-    }
-  });
-
-
-  function openNav() { document.getElementById("mySidebar").style.width = "250px"; }
-  function closeNav() { document.getElementById("mySidebar").style.width = "0"; }
-</script>
-
-<!-- Integrated Monastery Chatbot Widget -->
-<div id="monasteryBot" class="monastery-chatbot">
-  <!-- Chatbot Toggle Button -->
-  <div class="chatbot-toggle" id="chatbotToggle">
-    <i class="fas fa-temple-buddhist"></i>
-    <div class="toggle-tooltip">Ask about monasteries</div>
-  </div>
-
-  <!-- Chatbot Window -->
-  <div class="chatbot-window" id="chatbotWindow">
-    <!-- Header -->
-    <div class="chatbot-header">
-      <div class="header-content">
-        <div class="bot-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="header-text">
-          <h4>Monastery Guide</h4>
-          <p>Ask me about Sikkim's sacred monasteries</p>
-        </div>
-        <button class="close-btn" id="closeChatbot">
-          <i class="fas fa-times"></i>
-        </button>
-      </div>
-    </div>
-
-    <!-- Messages Area -->
-    <div class="chatbot-messages" id="chatbotMessages">
-      <div class="message bot-message welcome-message">
-        <div class="message-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="message-content">
-          <p>🙏 Namaste! I'm your monastery guide. Ask me about any monastery in Sikkim - their history, location, festivals, or visiting tips!</p>
-          <div class="quick-suggestions">
-            <button class="suggestion-btn" onclick="sendSuggestion('Tell me about Rumtek Monastery')">Rumtek Monastery</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('What are the major festivals?')">Festival Info</button>
-            <button class="suggestion-btn" onclick="sendSuggestion('Best time to visit monasteries')">Best Time</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Typing Indicator -->
-    <div class="typing-indicator" id="typingIndicator" style="display: none;">
-      <div class="message bot-message">
-        <div class="message-avatar">
-          <i class="fas fa-temple-buddhist"></i>
-        </div>
-        <div class="message-content">
-          <div class="typing-dots">
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Input Area -->
-    <div class="chatbot-input">
-      <div class="input-container">
-        <input type="text" id="chatbotInput" placeholder="Ask about monasteries..." maxlength="500">
-        <button id="sendMessage" class="send-btn">
-          <i class="fas fa-paper-plane"></i>
-        </button>
-      </div>
-      <div class="input-footer">
-        <small>Powered by AI • Monastery360</small>
-      </div>
-    </div>
-  </div>
-</div>
-
-<style>
-/* Monastery Chatbot Styles */
-.monastery-chatbot {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  z-index: 10000;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-/* Toggle Button */
-.chatbot-toggle {
-  width: 60px;
-  height: 60px;
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  animation: pulse 2s infinite;
-}
-
-.chatbot-toggle:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(124, 45, 18, 0.4);
-}
-
-.chatbot-toggle i {
-  color: white;
-  font-size: 1.5rem;
-}
-
-.toggle-tooltip {
-  position: absolute;
-  right: 70px;
-  top: 50%;
-  transform: translateY(-50%);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 8px;
-  font-size: 0.875rem;
-  white-space: nowrap;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-}
-
-.chatbot-toggle:hover .toggle-tooltip {
-  opacity: 1;
-  visibility: visible;
-}
-
-@keyframes pulse {
-  0% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3); }
-  50% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.5), 0 0 0 10px rgba(124, 45, 18, 0.1); }
-  100% { box-shadow: 0 8px 25px rgba(124, 45, 18, 0.3); }
-}
-
-/* Chatbot Window */
-.chatbot-window {
-  position: absolute;
-  bottom: 80px;
-  right: 0;
-  width: 380px;
-  height: 600px;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-  transform: translateY(20px) scale(0.95);
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chatbot-window.active {
-  transform: translateY(0) scale(1);
-  opacity: 1;
-  visibility: visible;
-}
-
-/* Header */
-.chatbot-header {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  padding: 1.5rem;
-  color: white;
-}
-
-.header-content {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.bot-avatar {
-  width: 40px;
-  height: 40px;
-  background: rgba(255, 255, 255, 0.2);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.2rem;
-}
-
-.header-text h4 {
-  margin: 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-}
-
-.header-text p {
-  margin: 0;
-  font-size: 0.875rem;
-  opacity: 0.9;
-}
-
-.close-btn {
-  margin-left: auto;
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 0.5rem;
-  border-radius: 50%;
-  transition: background 0.3s ease;
-}
-
-.close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-}
-
-/* Messages */
-.chatbot-messages {
-  flex: 1;
-  overflow-y: auto;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.message {
-  display: flex;
-  gap: 0.75rem;
-  align-items: flex-start;
-}
-
-.message-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.875rem;
-  flex-shrink: 0;
-}
-
-.bot-message .message-avatar {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  color: white;
-}
-
-.user-message {
-  flex-direction: row-reverse;
-}
-
-.user-message .message-avatar {
-  background: #f3f4f6;
-  color: #6b7280;
-}
-
-.message-content {
-  background: #f8fafc;
-  padding: 0.75rem 1rem;
-  border-radius: 18px;
-  max-width: 75%;
-  word-wrap: break-word;
-}
-
-.user-message .message-content {
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  color: white;
-}
-
-.message-content p {
-  margin: 0;
-  line-height: 1.5;
-}
-
-/* Quick Suggestions */
-.quick-suggestions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  margin-top: 0.75rem;
-}
-
-.suggestion-btn {
-  background: rgba(124, 45, 18, 0.1);
-  border: 1px solid rgba(124, 45, 18, 0.2);
-  color: #7c2d12;
-  padding: 0.5rem 0.75rem;
-  border-radius: 16px;
-  font-size: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.suggestion-btn:hover {
-  background: rgba(124, 45, 18, 0.2);
-  transform: translateY(-1px);
-}
-
-/* Typing Indicator */
-.typing-dots {
-  display: flex;
-  gap: 4px;
-  align-items: center;
-}
-
-.typing-dots span {
-  width: 8px;
-  height: 8px;
-  background: #7c2d12;
-  border-radius: 50%;
-  animation: typing 1.4s infinite;
-}
-
-.typing-dots span:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.typing-dots span:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typing {
-  0%, 60%, 100% { opacity: 0.3; }
-  30% { opacity: 1; }
-}
-
-/* Input Area */
-.chatbot-input {
-  border-top: 1px solid #e5e7eb;
-  background: white;
-}
-
-.input-container {
-  display: flex;
-  padding: 1rem;
-  gap: 0.75rem;
-  align-items: center;
-}
-
-.chatbot-input input {
-  flex: 1;
-  border: 2px solid #e5e7eb;
-  border-radius: 25px;
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  outline: none;
-  transition: border-color 0.3s ease;
-}
-
-.chatbot-input input:focus {
-  border-color: #7c2d12;
-  box-shadow: 0 0 0 3px rgba(124, 45, 18, 0.1);
-}
-
-.send-btn {
-  width: 40px;
-  height: 40px;
-  background: linear-gradient(135deg, #7c2d12, #b45309);
-  border: none;
-  border-radius: 50%;
-  color: white;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-}
-
-.send-btn:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(124, 45, 18, 0.3);
-}
-
-.send-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.input-footer {
-  padding: 0.5rem 1rem;
-  text-align: center;
-  border-top: 1px solid #f3f4f6;
-}
-
-.input-footer small {
-  color: #9ca3af;
-  font-size: 0.75rem;
-}
-
-/* Mobile Responsive */
-@media (max-width: 768px) {
-  .monastery-chatbot {
-    bottom: 1rem;
-    right: 1rem;
-  }
-  
-  .chatbot-window {
-    width: calc(100vw - 2rem);
-    height: 70vh;
-    max-width: 350px;
-  }
-  
-  .toggle-tooltip {
-    display: none;
-  }
-}
-
-/* Scrollbar Styling */
-.chatbot-messages::-webkit-scrollbar {
-  width: 4px;
-}
-
-.chatbot-messages::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb {
-  background: #ccc;
-  border-radius: 2px;
-}
-
-.chatbot-messages::-webkit-scrollbar-thumb:hover {
-  background: #999;
-}
-</style>
-
-<script>
-class MonasteryChatbot {
-  constructor() {
-    this.isOpen = false;
-    this.messages = [];
-    this.apiEndpoint = 'http://127.0.0.1:5000/predict'; // Flask chatbot endpoint
-    
-    this.initializeElements();
-    this.attachEventListeners();
-    this.initializeChat();
-  }
-
-  initializeElements() {
-    this.toggle = document.getElementById('chatbotToggle');
-    this.window = document.getElementById('chatbotWindow');
-    this.closeBtn = document.getElementById('closeChatbot');
-    this.messagesContainer = document.getElementById('chatbotMessages');
-    this.input = document.getElementById('chatbotInput');
-    this.sendBtn = document.getElementById('sendMessage');
-    this.typingIndicator = document.getElementById('typingIndicator');
-  }
-
-  attachEventListeners() {
-    this.toggle.addEventListener('click', () => this.toggleChat());
-    this.closeBtn.addEventListener('click', () => this.closeChat());
-    this.sendBtn.addEventListener('click', () => this.handleSend());
-    
-    this.input.addEventListener('keypress', (e) => {
-      if (e.key === 'Enter') {
-        this.handleSend();
-      }
-    });
-
-    // Close on outside click
-    document.addEventListener('click', (e) => {
-      if (this.isOpen && !this.window.contains(e.target) && !this.toggle.contains(e.target)) {
-        this.closeChat();
-      }
-    });
-  }
-
-  toggleChat() {
-    if (this.isOpen) {
-      this.closeChat();
-    } else {
-      this.openChat();
-    }
-  }
-
-  openChat() {
-    this.isOpen = true;
-    this.window.classList.add('active');
-    this.input.focus();
-    
-    // Track analytics
-    if (typeof gtag !== 'undefined') {
-      gtag('event', 'chatbot_opened', {
-        event_category: 'engagement',
-        event_label: 'monastery_chatbot'
-      });
-    }
-  }
-
-  closeChat() {
-    this.isOpen = false;
-    this.window.classList.remove('active');
-  }
-
-  async handleSend() {
-    const message = this.input.value.trim();
-    if (!message) return;
-
-    // Add user message
-    this.addMessage(message, 'user');
-    this.input.value = '';
-    this.sendBtn.disabled = true;
-
-    // Show typing indicator
-    this.showTyping();
-
-    try {
-      // Send to Flask chatbot API
-      const response = await this.sendToAPI(message);
-      this.hideTyping();
-      this.addMessage(response, 'bot');
-    } catch (error) {
-      this.hideTyping();
-      this.addMessage('Sorry, I\'m having trouble connecting. Please try again later or visit our monastery pages directly.', 'bot');
-      console.error('Chatbot API Error:', error);
-    }
-
-    this.sendBtn.disabled = false;
-  }
-
-  async sendToAPI(message) {
-    try {
-      const response = await fetch(this.apiEndpoint, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Monastery360 – Himalayan Monastery Journeys</title>
+  <meta name="description" content="Plan immersive journeys across Sikkim's sacred monasteries with interactive maps, curated trails, audio guides, and an AI travel companion." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-p5Q3Ydg0N6Y4ZCkxzgv2Fne5+5ZTCDJMmzNw2K6Jqq/RSB+BeIV/pY5Pja/qvpDMAYA9Yg3EjF6lI1xgXkJYtQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css" />
+  <link rel="stylesheet" href="assets/css/site.css" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12',
+            },
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            display: ['Playfair Display', 'serif'],
+          },
+          boxShadow: {
+            'brand-soft': '0 20px 45px rgba(15,23,42,0.12)',
+          },
         },
-        body: JSON.stringify({ message: message })
+      },
+    };
+  </script>
+  <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+</head>
+<body class="font-sans antialiased text-slate-900">
+  <header class="fixed inset-x-0 top-0 z-50">
+    <div class="mx-auto max-w-7xl px-6">
+      <div class="mt-6 flex items-center justify-between rounded-full bg-white/70 px-5 py-3 shadow-lg shadow-brand-soft backdrop-blur-xl">
+        <a href="index.html" class="flex items-center gap-2 text-lg font-semibold text-slate-900">
+          <span class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-br from-brand-500 via-brand-400 to-brand-300 text-slate-900 shadow-inner">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </span>
+          <span class="font-display text-xl tracking-tight">Monastery360</span>
+        </a>
+        <nav class="hidden items-center gap-8 text-sm font-medium text-slate-800 lg:flex">
+          <a href="#journeys"class="transition hover:text-orange-700 hover:scale-105 font-semibold">Journeys</a>
+          <a href="#map" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Interactive Map</a>
+          <a href="monasteries.html" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Monasteries</a>
+          <a href="audio-guide.html" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Audio Guide</a>
+          <a href="tourism.html" class="transition hover:text-orange-700 hover:scale-105 font-semibold">Travel Services</a>
+        </nav>
+        <div class="hidden items-center gap-3 lg:flex">
+          <a href="audio-guide.html" class="rounded-full border-2 border-orange-300 px-5 py-2 text-sm font-semibold text-orange-800 transition hover:border-orange-500 hover:bg-orange-50 hover:scale-105">Listen to stories</a>
+          <a href="tourism.html" class="rounded-full bg-gradient-to-br from-orange-600 to-orange-500 px-5 py-2 text-sm font-semibold text-white shadow-lg transition hover:shadow-xl hover:scale-105">Plan a trip</a>
+        </div>
+        <button type="button" aria-label="Toggle navigation" data-nav-toggle class="flex h-11 w-11 items-center justify-center rounded-full border-2 border-orange-300 bg-white text-orange-700 shadow-lg lg:hidden hover:bg-orange-50 hover:scale-105 transition">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+      </div>
+    </div>
+    <div class="fixed inset-0 z-40 bg-slate-900/70 backdrop-blur" data-nav-panel data-open="false">
+      <div class="absolute inset-x-6 top-24 rounded-3xl bg-white/95 p-6 shadow-2xl">
+        <div class="flex items-center justify-between border-b border-orange-200 pb-4">
+          <span class="font-display text-lg text-slate-900 font-bold">Explore Monastery360</span>
+          <button type="button" data-nav-close class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 text-orange-700 hover:bg-orange-200 transition">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+        <nav class="mt-4 grid gap-3 text-base font-medium text-slate-800">
+          <a href="#journeys" class="rounded-2xl bg-orange-100 px-4 py-3 hover:bg-orange-200 transition font-bold text-orange-800 shadow-sm">Journeys & Stories</a>
+          <a href="#map" class="rounded-2xl bg-orange-100 px-4 py-3 hover:bg-orange-200 transition font-bold text-orange-800 shadow-sm">Interactive Map</a>
+          <a href="monasteries.html" class="rounded-2xl bg-orange-50 px-4 py-3 hover:bg-orange-100 transition font-semibold">Monastery Directory</a>
+          <a href="audio-guide.html" class="rounded-2xl bg-orange-50 px-4 py-3 hover:bg-orange-100 transition font-semibold">Audio Companion</a>
+          <a href="tourism.html" class="rounded-2xl bg-orange-50 px-4 py-3 hover:bg-orange-100 transition font-semibold">Trusted Travel Partners</a>
+        </nav>
+        <div class="mt-6 rounded-2xl bg-gradient-to-br from-orange-600 via-orange-500 to-orange-400 px-5 py-6 text-white">
+          <h3 class="font-display text-xl">Need a curated route?</h3>
+          <p class="mt-1 text-sm text-white/90">Ask our AI concierge or speak with a local expert to design a personal monastery trail.</p>
+          <div class="mt-4 flex gap-3">
+            <a href="tourism.html" class="flex-1 rounded-full bg-white/15 px-4 py-2 text-center text-sm font-semibold text-white backdrop-blur hover:bg-white/25 transition">
+              Connect with hosts
+            </a>
+            <a href="#chat" class="flex h-10 w-10 items-center justify-center rounded-full bg-white/20 text-lg hover:bg-white/30 transition" data-nav-close>
+              <i class="fa-solid fa-message"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-32">
+    <section class="relative flex min-h-screen items-center overflow-hidden">
+      <div class="absolute inset-0 hero-overlay" style="background-image: url('images/img1.png'); background-size: cover; background-position: center;">
+      </div>
+      <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-slate-900/20 to-transparent"></div>
+      <div class="relative z-10 mx-auto flex max-w-6xl flex-col gap-10 px-6 py-24 text-white lg:flex-row lg:items-center">
+        <div class="max-w-2xl">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm tracking-wide">
+            <span class="h-2 w-2 rounded-full bg-brand-400"></span>
+            Curated journeys through Sikkim
+          </div>
+          <h1 class="mt-6 font-display text-4xl leading-[1.15] sm:text-5xl lg:text-6xl">
+            Discover, preserve, and feel the living spirit of Sikkim's monasteries.
+          </h1>
+          <p class="mt-6 text-lg text-white/85">
+            Navigate sacred landscapes with immersive archives, interactive maps, tailored cultural itineraries, and a conversational guide designed for modern explorers.
+          </p>
+          <div class="mt-10 flex flex-wrap items-center gap-4">
+            <a href="monasteries.html" class="rounded-full bg-white px-6 py-3 text-sm font-semibold text-slate-900 shadow-lg shadow-slate-900/20 transition hover:-translate-y-0.5 hover:bg-slate-50">
+              Explore monastery atlas
+            </a>
+            <a href="#map" class="rounded-full border border-white/40 px-6 py-3 text-sm font-semibold text-white transition hover:border-white hover:bg-white/10">
+              View immersive map
+            </a>
+          </div>
+          <div class="mt-10 hero-stats inline-flex items-center gap-5">
+            <div class="flex items-center gap-3">
+              <div>
+                <p class="text-sm uppercase tracking-[0.2em] text-white/70">Monasteries</p>
+                <p class="text-2xl font-semibold">60+</p>
+              </div>
+            </div>
+            <div class="h-10 w-px bg-white/30"></div>
+            <div>
+              <p class="text-sm uppercase tracking-[0.2em] text-white/70">Audio narratives</p>
+              <p class="text-2xl font-semibold">40 guides</p>
+            </div>
+            <div class="h-10 w-px bg-white/30"></div>
+            <div>
+              <p class="text-sm uppercase tracking-[0.2em] text-white/70">Local hosts</p>
+              <p class="text-2xl font-semibold">Trusted network</p>
+            </div>
+          </div>
+        </div>
+        <div class="backdrop-blur-card w-full max-w-md rounded-3xl border border-white/20 p-6 text-slate-900">
+          <h2 class="font-display text-2xl text-slate-900">
+            A modern sanctuary for mindful travellers
+          </h2>
+          <ul class="mt-5 space-y-4 text-sm text-slate-600">
+            <li class="flex items-start gap-3">
+              <span class="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-700"><i class="fa-solid fa-map-location-dot"></i></span>
+              <span>Interactive cartography with satellite overlays and route planning support.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-700"><i class="fa-solid fa-headphones"></i></span>
+              <span>Immersive audio storytelling featuring monks, historians, and community elders.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <span class="mt-1 flex h-8 w-8 items-center justify-center rounded-full bg-brand-100 text-brand-700"><i class="fa-solid fa-comments"></i></span>
+              <span>Ask Explora, our AI guide, for visiting tips, etiquette, and cultural insights in real time.</span>
+            </li>
+          </ul>
+          <div class="mt-8 rounded-2xl bg-gradient-to-br from-brand-600 to-brand-500 p-5 text-white">
+            <p class="text-sm uppercase tracking-[0.2em] text-white/70">New</p>
+            <p class="mt-2 font-display text-xl">Weekend immersion itineraries</p>
+            <p class="mt-2 text-sm text-white/85">Tailored for mindful travellers with handpicked homestays, rituals, and hidden monastery trails.</p>
+            <a href="tourism.html" class="mt-4 inline-flex items-center gap-2 rounded-full bg-white/15 px-5 py-2 text-sm font-semibold text-white">
+              Build my journey <i class="fa-solid fa-arrow-right"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="journeys" class="relative z-10 mx-auto max-w-6xl px-6 py-24">
+      <div class="flex flex-wrap items-center justify-between gap-6">
+        <div>
+          <div class="section-heading text-sm font-semibold uppercase tracking-[0.4em] text-brand-700">Curated experiences</div>
+          <h2 class="mt-6 font-display text-3xl text-slate-900 md:text-4xl">Design your monastery trail</h2>
+          <p class="mt-3 max-w-2xl text-slate-600">Blend serenity, culture, and community with tailored itineraries sourced from local custodians and cultural experts.</p>
+        </div>
+        <a href="monasteries.html" class="rounded-full border border-brand-200 px-5 py-2 text-sm font-semibold text-brand-800 transition hover:border-brand-400 hover:bg-brand-50">Browse monastery library</a>
+      </div>
+      <div class="mt-12 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <article class="glass-panel group relative overflow-hidden p-6">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-brand-500/90 to-brand-400/80 text-white">
+            <i class="fa-solid fa-sun"></i>
+          </div>
+          <h3 class="mt-6 font-display text-2xl text-slate-900">Sunrise rituals</h3>
+          <p class="mt-3 text-sm text-slate-600">Begin the day with dawn prayers, butter-lamp offerings, and tranquil meditation steps curated by monks.</p>
+          <div class="mt-6 flex items-center gap-2 text-sm font-semibold text-brand-700">
+            Learn more <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-br from-brand-500/0 to-brand-500/5 opacity-0 transition group-hover:opacity-100"></div>
+        </article>
+        <article class="glass-panel group relative overflow-hidden p-6">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-brand-500/90 to-brand-400/80 text-white">
+            <i class="fa-solid fa-route"></i>
+          </div>
+          <h3 class="mt-6 font-display text-2xl text-slate-900">Heritage circuits</h3>
+          <p class="mt-3 text-sm text-slate-600">Trace routes linking monasteries, villages, and sacred landscapes with field-tested travel logistics.</p>
+          <div class="mt-6 flex items-center gap-2 text-sm font-semibold text-brand-700">
+            Craft itinerary <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-br from-brand-500/0 to-brand-500/5 opacity-0 transition group-hover:opacity-100"></div>
+        </article>
+        <article class="glass-panel group relative overflow-hidden p-6">
+          <div class="flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-brand-500/90 to-brand-400/80 text-white">
+            <i class="fa-solid fa-hand-holding-heart"></i>
+          </div>
+          <h3 class="mt-6 font-display text-2xl text-slate-900">Community stays</h3>
+          <p class="mt-3 text-sm text-slate-600">Live with local families, learn monastery etiquette, and support preservation-led livelihoods.</p>
+          <div class="mt-6 flex items-center gap-2 text-sm font-semibold text-brand-700">
+            Meet hosts <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          </div>
+          <div class="absolute inset-0 bg-gradient-to-br from-brand-500/0 to-brand-500/5 opacity-0 transition group-hover:opacity-100"></div>
+        </article>
+      </div>
+    </section>
+
+    <section id="map" class="relative bg-white/70 py-24">
+      <div class="mx-auto max-w-6xl px-6">
+        <div class="md:flex md:items-center md:justify-between">
+          <div class="max-w-2xl">
+            <div class="section-heading text-sm font-semibold uppercase tracking-[0.4em] text-brand-700">Interactive Atlas</div>
+            <h2 class="mt-6 font-display text-3xl text-slate-900 md:text-4xl">Navigate the monastery constellation</h2>
+            <p class="mt-3 text-slate-600">Discover location insights, accessibility data, and cultural highlights. Select any monastery to jump into its dedicated guide.</p>
+          </div>
+          <a href="monasteries.html" class="mt-6 inline-flex items-center gap-2 rounded-full bg-brand-600 px-6 py-2 text-sm font-semibold text-white shadow-lg shadow-brand-soft transition hover:bg-brand-700 md:mt-0">
+            Open the full atlas <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="map-shell mt-10">
+          <div class="map-overlay hidden md:block">
+            <p class="text-sm font-semibold text-slate-600">Tip</p>
+            <p class="mt-1 text-sm text-slate-500">Click a monastery pin for quick info. Use the scroll wheel or pinch to zoom.</p>
+          </div>
+          <div id="monasteryMap"></div>
+          <div id="mapPopup" class="map-popup" style="display:none;"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="relative mx-auto max-w-6xl px-6 py-24">
+      <div class="grid gap-10 lg:grid-cols-2">
+        <div class="glass-panel p-8">
+          <div class="badge-gradient inline-flex items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-brand-700">Immersive Toolkit</div>
+          <h2 class="mt-6 font-display text-3xl text-slate-900">Everything you need for mindful exploration</h2>
+          <div class="mt-8 space-y-6 text-sm text-slate-600">
+            <div class="flex gap-4 rounded-2xl bg-white/70 p-5 shadow-sm">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-brand-600"><i class="fa-solid fa-vr-cardboard"></i></span>
+              <div>
+                <h3 class="font-semibold text-slate-900">360° monastery walkthroughs</h3>
+                <p class="mt-1 text-slate-600">Step inside sanctums with annotated visuals, art references, and ritual guides.</p>
+              </div>
+            </div>
+            <div class="flex gap-4 rounded-2xl bg-white/70 p-5 shadow-sm">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-brand-600"><i class="fa-solid fa-calendar-day"></i></span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Festival & event calendar</h3>
+                <p class="mt-1 text-slate-600">Track major pujas, cham dances, and seasonal pilgrimages with visiting advice.</p>
+              </div>
+            </div>
+            <div class="flex gap-4 rounded-2xl bg-white/70 p-5 shadow-sm">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-brand-100 text-brand-600"><i class="fa-solid fa-language"></i></span>
+              <div>
+                <h3 class="font-semibold text-slate-900">Language & etiquette notes</h3>
+                <p class="mt-1 text-slate-600">Access contextual greetings, offering traditions, and cultural do's and don'ts.</p>
+              </div>
+            </div>
+          </div>
+          <a href="audio-guide.html" class="mt-8 inline-flex items-center gap-2 text-sm font-semibold text-brand-700">
+            Try the audio companion <i class="fa-solid fa-arrow-right"></i>
+          </a>
+        </div>
+        <div class="glass-panel p-8">
+          <h2 class="font-display text-3xl text-slate-900">Voices from the trail</h2>
+          <div class="mt-6 space-y-6">
+            <blockquote class="rounded-3xl bg-white/90 p-6 text-slate-600 shadow-sm">
+              <p>“Monastery360 helped us uncover quiet hermitages and plan respectful visits. The AI guide translated local legends into stories we carried home.”</p>
+              <footer class="mt-4 text-sm font-semibold text-slate-900">— Priya & Raghav, cultural photographers</footer>
+            </blockquote>
+            <blockquote class="rounded-3xl bg-white/90 p-6 text-slate-600 shadow-sm">
+              <p>“The layered maps and festival planner kept our travel light yet meaningful. Every recommendation came with the warmth of local insight.”</p>
+              <footer class="mt-4 text-sm font-semibold text-slate-900">— Tenzing, mountain guide</footer>
+            </blockquote>
+          </div>
+          <div class="mt-8 rounded-3xl bg-gradient-to-br from-orange-600 via-orange-500 to-orange-400 p-6 text-white shadow-lg">
+            <h3 class="font-display text-2xl">Ready for your awakening journey?</h3>
+            <p class="mt-2 text-sm text-white/85">Receive curated routes, cultural briefings, and seasonal highlights twice a month.</p>
+            <form class="mt-4 flex flex-col gap-3 sm:flex-row">
+              <input type="email" required placeholder="Email address" class="w-full rounded-full border border-white/30 bg-white/15 px-4 py-3 text-sm text-white placeholder-white/70 focus:border-white focus:outline-none focus:ring-2 focus:ring-white/40" />
+                <button class="rounded-full bg-blue-600 px-5 py-3 text-sm font-semibold text-white shadow-md shadow-slate-900/20 hover:bg-blue-700 transition">Subscribe</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-slate-950 py-12 text-white">
+    <div class="mx-auto flex max-w-6xl flex-col gap-10 px-6 md:flex-row md:justify-between">
+      <div>
+        <div class="flex items-center gap-3 text-lg font-semibold">
+          <span class="flex h-12 w-12 items-center justify-center rounded-full bg-white/10 text-white">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </span>
+          <span class="font-display text-2xl">Monastery360</span>
+        </div>
+        <p class="mt-4 max-w-md text-sm text-white/70">A digital pilgrimage companion preserving Himalayan wisdom while empowering travellers and local custodians.</p>
+      </div>
+      <div class="grid grid-cols-2 gap-8 text-sm">
+        <div>
+          <p class="font-semibold uppercase tracking-[0.3em] text-white/50">Explore</p>
+          <ul class="mt-3 space-y-2 text-white/70">
+            <li><a href="monasteries.html" class="hover:text-white">Monastery atlas</a></li>
+            <li><a href="audio-guide.html" class="hover:text-white">Audio guide</a></li>
+            <li><a href="tourism.html" class="hover:text-white">Travel services</a></li>
+          </ul>
+        </div>
+        <div>
+          <p class="font-semibold uppercase tracking-[0.3em] text-white/50">Connect</p>
+          <ul class="mt-3 space-y-2 text-white/70">
+            <li><a href="#chat" class="hover:text-white">AI concierge</a></li>
+            <li><a href="mailto:hello@monastery360.com" class="hover:text-white">hello@monastery360.com</a></li>
+            <li class="text-white/60">© <span data-year></span> Monastery360</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="chat" data-monastery-chatbot class="monastery-chatbot fixed bottom-6 right-6 z-[60]">
+    
+    <div data-chatbot-window data-open="false" class="mt-4 w-[22rem] overflow-hidden rounded-3xl bg-white/95 shadow-2xl backdrop-blur">
+      <div class="bg-gradient-to-br from-brand-600 to-brand-500 px-5 py-4 text-white">
+        <div class="flex items-center gap-3">
+          <div class="flex h-11 w-11 items-center justify-center rounded-full bg-white/15 text-xl">
+            <i class="fa-solid fa-temple-buddhist"></i>
+          </div>
+          <div>
+            <h3 class="font-display text-lg leading-tight">Explora</h3>
+            <p class="text-xs uppercase tracking-[0.35em] text-white/70">Monastery guide</p>
+          </div>
+          <button type="button" data-chatbot-close class="ml-auto flex h-9 w-9 items-center justify-center rounded-full bg-white/10 text-white/80 transition hover:bg-white/20">
+            <i class="fa-solid fa-xmark"></i>
+          </button>
+        </div>
+      </div>
+      <div class="flex max-h-[28rem] min-h-[24rem] flex-col bg-white/90">
+        <div data-chatbot-messages class="flex-1 space-y-4 overflow-y-auto px-5 py-4">
+          <div class="flex gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-slate-900/80 text-white">
+              <i class="fa-solid fa-temple-buddhist"></i>
+            </div>
+            <div class="max-w-[75%] rounded-2xl rounded-bl-sm bg-white/90 px-4 py-3 text-sm text-slate-700 shadow">
+              Namaste! Ask me about routes, etiquette, or festival timings for any Sikkim monastery.
+            </div>
+          </div>
+        </div>
+        <div data-chatbot-typing class="hidden items-center gap-2 px-5 text-sm text-slate-400">
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400"></span>
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400" style="animation-delay: 0.1s"></span>
+          <span class="flex h-2 w-2 animate-bounce rounded-full bg-brand-400" style="animation-delay: 0.2s"></span>
+        </div>
+        <div class="border-t border-slate-200 bg-white/95 px-5 py-3">
+          <div class="flex flex-wrap gap-2 pb-3">
+            <button type="button" data-chatbot-suggestion data-value="Suggest a one-day monastery trail" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">One-day trail</button>
+            <button type="button" data-chatbot-suggestion data-value="What are the major monastery festivals this month?" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">Festival calendar</button>
+            <button type="button" data-chatbot-suggestion data-value="How do I travel respectfully inside a monastery?" class="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-600">Etiquette tips</button>
+          </div>
+          <div class="flex items-center gap-2">
+            <input data-chatbot-input type="text" placeholder="Ask Explora..." class="flex-1 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm text-slate-700 focus:border-brand-500 focus:outline-none focus:ring-2 focus:ring-brand-100" />
+            <button data-chatbot-send type="button" class="flex h-11 w-11 items-center justify-center rounded-full bg-gradient-to-br from-brand-600 to-brand-500 text-white shadow-lg">
+              <i class="fa-solid fa-paper-plane"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
+  <script src="assets/js/site.js"></script>
+  <script src="assets/js/universal-chatbot.js"></script>
+  <script>
+    const MONASTERIES = [
+      { name: "Rumtek Dharma Chakra Centre", coords: [88.5614622, 27.2886861] },
+      { name: "Mamring Monastery", coords: [88.3101201, 27.277364] },
+      { name: "Enchey Monastery", coords: [88.6191659, 27.3359368] },
+      { name: "Burtuk Monastery", coords: [88.6158468, 27.3539598] },
+      { name: "Do Drul Chorten", coords: [88.6048366, 27.3128415] },
+      { name: "Decchen Cholling Gumpa", coords: [88.608536, 27.338795] },
+      { name: "Bermiok Tokal Monastery", coords: [88.4690827, 27.2287152] },
+      { name: "Tashiding Monastery", coords: [88.2978746, 27.3089308] },
+      { name: "Sinon Monastery", coords: [88.2900301, 27.3423753] },
+      { name: "Kartok Monastery", coords: [88.588005, 27.2407996] },
+      { name: "Sanghak Choeling Monastery", coords: [88.2216867, 27.2977517] },
+      { name: "Pema Choling Monastery", coords: [88.5310593, 27.1757119] },
+      { name: "Ranka Monastery", coords: [88.5790387, 27.3311957] },
+      { name: "Lingdum Zurmang Kagyu", coords: [88.5805594, 27.3307583] },
+      { name: "Rinchenpong Monastery", coords: [88.2684733, 27.2354672] },
+      { name: "Rinchen Choling Tamu Monastery", coords: [88.2708814, 27.2432459] },
+      { name: "Pemayangtse Monastery", coords: [88.2515852, 27.3052201] },
+      { name: "Okhrey Monastery", coords: [88.1019019, 27.149513] },
+      { name: "Khecheopalri Monastery", coords: [88.1882768, 27.349221] },
+      { name: "Hung hri Monastery", coords: [88.2535011, 27.3523006] },
+      { name: "Dubdi Buddhist Monastery", coords: [88.2299922, 27.3665529] },
+      { name: "Dodak Buddhist Monastery", coords: [88.1715435, 27.1718352] },
+      { name: "Tendong Gumpa", coords: [88.4079885, 27.2061039] },
+      { name: "Chang Chu Monastery", coords: [88.4032499, 27.2959417] },
+      { name: "Serdup Choling Monastery", coords: [88.3547474, 27.161498] },
+      { name: "Sharchhog Bayphug", coords: [88.385782, 27.2763652] },
+      { name: "Ralang New Monastery", coords: [88.3352477, 27.3284964] },
+      { name: "Ravangla Monastery", coords: [88.518887, 28.240229] },
+      { name: "Ngadak Thupten Shedup", coords: [88.3706278, 27.1732407] },
+      { name: "Norbu Yangdup Choling", coords: [88.3773796, 27.2345473] },
+      { name: "Phagyal Monastery", coords: [88.4592622, 27.37048] },
+      { name: "Kewzing Monastery", coords: [88.3227697, 27.2842636] },
+      { name: "Doling Monastery", coords: [88.3449117, 27.287967] },
+      { name: "Norbugang Throne", coords: [88.2173761, 27.3694863] },
+      { name: "Bon Monastery", coords: [88.3343804, 27.278643] },
+      { name: "Chawayng Ani Monastery", coords: [88.5122178, 27.5329718] },
+      { name: "Tholung Monastery", coords: [88.4615734, 27.636972] },
+      { name: "Tingvong Monastery", coords: [88.4767615, 27.5568019] },
+      { name: "Tashi Gyan Palden", coords: [88.4127344, 27.2866497] },
+      { name: "Ringhem Monastery", coords: [88.5462414, 27.4953153] },
+      { name: "Phodong Monastery", coords: [88.5838205, 27.4128715] },
+      { name: "Phensang Monastery", coords: [88.6101296, 27.420723] },
+      { name: "Lingthem Rikzing Monastery", coords: [88.5011052, 27.5230064] },
+      { name: "Lachung Monastery", coords: [88.7487553, 27.6886827] },
+      { name: "Lachen Monastery", coords: [88.5577391, 27.7166667] },
+      { name: "Labrang Monastery", coords: [88.5794589, 27.4180001] },
+      { name: "Kabi Monastery", coords: [88.6099182, 27.4007368] },
+      { name: "Hee Gyathang Monastery", coords: [88.501073, 27.4758646] },
+      { name: "Simik Monastery", coords: [88.4718882, 27.2873094] },
+      { name: "Rhenock Monastery", coords: [88.6779745, 27.1842602] },
+      { name: "Tsuglakhang Monastery", coords: [88.6147222, 27.3261111] },
+      { name: "Gonjang Monastery", coords: [88.6132007, 27.3690385] },
+      { name: "Singtam Monastery", coords: [88.5035101, 27.2341097] },
+      { name: "Mintokgang Monastery", coords: [88.6176397, 27.3332951] },
+      { name: "Pabyuik Monastery", coords: [88.6279545, 27.2993719] },
+      { name: "Old Rumtek Monastery", coords: [88.563264, 27.2846735] }
+    ];
+
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const mapElement = document.getElementById('monasteryMap');
+      const popupElement = document.getElementById('mapPopup');
+
+      if (!mapElement) return;
+
+      const vectorSource = new ol.source.Vector({
+        features: MONASTERIES.map(monastery => new ol.Feature({
+          geometry: new ol.geom.Point(ol.proj.fromLonLat(monastery.coords)),
+          name: monastery.name
+        }))
       });
 
-      if (!response.ok) {
-        throw new Error('API request failed');
-      }
+      const map = new ol.Map({
+        target: mapElement,
+        layers: [
+          new ol.layer.Tile({
+            source: new ol.source.OSM()
+          }),
+          new ol.layer.Vector({
+            source: vectorSource,
+            style: new ol.style.Style({
+              image: new ol.style.Icon({
+                src: 'https://cdn-icons-png.flaticon.com/512/3820/3820159.png',
+                scale: 0.06
+              })
+            })
+          })
+        ],
+        view: new ol.View({
+          center: ol.proj.fromLonLat([88.5614622, 27.2886861]),
+          zoom: 8.7,
+          minZoom: 7,
+          maxZoom: 13
+        })
+      });
 
-      const data = await response.json();
-      return data.answer;
-    } catch (error) {
-      // Fallback responses if API is not available
-      return this.getFallbackResponse(message);
-    }
-  }
+      const overlay = new ol.Overlay({
+        element: popupElement,
+        offset: [0, -15],
+        positioning: 'bottom-center'
+      });
+      map.addOverlay(overlay);
 
-  getFallbackResponse(message) {
-    const lowerMessage = message.toLowerCase();
-    
-    if (lowerMessage.includes('rumtek')) {
-      return '🏛️ Rumtek Monastery is one of the most important monasteries in Sikkim! It serves as the seat of the Karmapa and houses precious Buddhist artifacts. Visit our Rumtek page for virtual tours and detailed information.';
-    } else if (lowerMessage.includes('enchey')) {
-      return '🙏 Enchey Monastery is a beautiful 200-year-old monastery above Gangtok, famous for its annual Cham dance festival. Check out our Enchey page for more details!';
-    } else if (lowerMessage.includes('festival') || lowerMessage.includes('cham')) {
-      return '🎭 Sikkim monasteries host amazing festivals like Losar (New Year), Saga Dawa, and spectacular Cham masked dances. Each monastery page has a cultural calendar with festival dates!';
-    } else if (lowerMessage.includes('visit') || lowerMessage.includes('time')) {
-      return '🌸 The best time to visit monasteries is March-May (spring flowers) and October-December (clear mountain views & festivals). Each monastery page has specific visiting information!';
-    } else {
-      return '🙏 I can help you learn about Sikkim\'s monasteries! Try asking about specific monasteries like Rumtek, Enchey, or Pemayangtse, or ask about festivals, visiting times, and locations.';
-    }
-  }
+      map.on('pointermove', () => {
+        if (popupElement) {
+          popupElement.style.display = 'none';
+        }
+      });
 
-  addMessage(content, type) {
-    const messageDiv = document.createElement('div');
-    messageDiv.className = `message ${type}-message`;
-    
-    const avatar = document.createElement('div');
-    avatar.className = 'message-avatar';
-    avatar.innerHTML = type === 'bot' ? '<i class="fas fa-temple-buddhist"></i>' : '<i class="fas fa-user"></i>';
-    
-    const messageContent = document.createElement('div');
-    messageContent.className = 'message-content';
-    messageContent.innerHTML = `<p>${content}</p>`;
-    
-    messageDiv.appendChild(avatar);
-    messageDiv.appendChild(messageContent);
-    
-    // Insert before typing indicator or at the end
-    if (this.typingIndicator.style.display === 'none') {
-      this.messagesContainer.appendChild(messageDiv);
-    } else {
-      this.messagesContainer.insertBefore(messageDiv, this.typingIndicator);
-    }
-    
-    this.scrollToBottom();
-  }
+      map.on('singleclick', (event) => {
+        let featureFound = null;
+        map.forEachFeatureAtPixel(event.pixel, (feature) => {
+          if (!featureFound) {
+            featureFound = feature;
+          }
+        });
 
-  showTyping() {
-    this.typingIndicator.style.display = 'block';
-    this.scrollToBottom();
-  }
-
-  hideTyping() {
-    this.typingIndicator.style.display = 'none';
-  }
-
-  scrollToBottom() {
-    setTimeout(() => {
-      this.messagesContainer.scrollTop = this.messagesContainer.scrollHeight;
-    }, 100);
-  }
-
-  initializeChat() {
-    // Chat is initialized with welcome message in HTML
-    this.scrollToBottom();
-  }
-}
-
-// Quick suggestion function
-function sendSuggestion(text) {
-  const chatbot = window.monasteryChatbot;
-  if (chatbot) {
-    chatbot.input.value = text;
-    chatbot.handleSend();
-  }
-}
-
-// Initialize chatbot when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-  window.monasteryChatbot = new MonasteryChatbot();
-});
-</script>
+        if (featureFound) {
+          const coordinates = featureFound.getGeometry().getCoordinates();
+          const name = featureFound.get('name');
+          const link = `monasteries.html?q=${encodeURIComponent(name)}`;
+          if (popupElement) {
+            popupElement.style.display = 'block';
+            popupElement.innerHTML = `<div class="text-sm text-slate-700">${name}</div><a class="mt-2 inline-flex items-center gap-2 text-xs font-semibold text-brand-700" href="${link}">Search in atlas <i class='fa-solid fa-arrow-right'></i></a>`;
+          }
+          overlay.setPosition(coordinates);
+        } else if (popupElement) {
+          popupElement.style.display = 'none';
+        }
+      });
+    });
+  </script>
 </body>
 </html>
