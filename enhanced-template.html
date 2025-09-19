@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{MONASTERY_NAME}} – Monastery360</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/ol@v7.5.0/ol.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+  :root {
+    --primary: linear-gradient(135deg, #7c2d12 0%, #b45309 100%);
+    --primary-solid: #7c2d12;
+    --accent: #f59e0b;
+    --bg-primary: #fefbf3;
+    --bg-secondary: #ffffff;
+    --text-primary: #1f2937;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --border: #e5e7eb;
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+    --glow: 0 0 0 1px rgb(249 115 22 / 0.1), 0 0 20px rgb(249 115 22 / 0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  /* Loading Animation */
+  .loading-overlay {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    background: var(--bg-primary); z-index: 9999; display: flex;
+    align-items: center; justify-content: center; transition: opacity 0.5s;
+  }
+  .loading-spinner {
+    width: 50px; height: 50px; border: 3px solid var(--border);
+    border-top: 3px solid var(--accent); border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+  /* Enhanced Typography */
+  h1, h2, h3 { font-family: 'Playfair Display', serif; font-weight: 600; }
+  h1 { font-size: clamp(2rem, 5vw, 3.5rem); line-height: 1.1; }
+  h2 { font-size: clamp(1.5rem, 3vw, 2.25rem); margin-bottom: 1rem; }
+  h3 { font-size: 1.25rem; }
+
+  /* Hero Section with Parallax */
+  .hero {
+    height: 100vh; position: relative; display: flex; align-items: center;
+    justify-content: center; text-align: center; overflow: hidden;
+    background: linear-gradient(135deg, rgba(124,45,18,0.8), rgba(180,83,9,0.6)),
+                url('{{HERO_IMAGE}}') center/cover fixed;
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, rgba(0,0,0,0.3) 100%);
+  }
+  .hero-content {
+    position: relative; z-index: 2; max-width: 800px; padding: 0 2rem;
+    animation: fadeInUp 1s ease-out;
+  }
+  .hero h1 {
+    color: white; margin-bottom: 1rem; text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    animation: fadeInUp 1s ease-out 0.2s both;
+  }
+  .hero p {
+    font-size: 1.25rem; color: rgba(255,255,255,0.9); margin-bottom: 2rem;
+    animation: fadeInUp 1s ease-out 0.4s both;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem;
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.2); border-radius: 50px;
+    color: white; font-size: 0.875rem; margin-bottom: 2rem;
+    animation: fadeInUp 1s ease-out 0.6s both;
+  }
+
+  /* Floating Navigation */
+  .nav-floating {
+    position: fixed; top: 2rem; right: 2rem; z-index: 1000;
+    display: flex; gap: 1rem; animation: slideInRight 1s ease-out;
+  }
+  .nav-btn {
+    width: 50px; height: 50px; border-radius: 50%; border: none;
+    background: rgba(255,255,255,0.9); backdrop-filter: blur(10px);
+    box-shadow: var(--shadow-lg); cursor: pointer; transition: all 0.3s;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--primary-solid);
+  }
+  .nav-btn:hover {
+    transform: translateY(-2px); box-shadow: var(--shadow-xl);
+    background: var(--bg-secondary);
+  }
+
+  /* Enhanced Sections */
+  .section {
+    padding: 5rem 2rem; position: relative;
+  }
+  .container {
+    max-width: 1200px; margin: 0 auto;
+  }
+  .section-card {
+    background: var(--bg-secondary); border-radius: 24px;
+    box-shadow: var(--shadow-lg); padding: 3rem; margin-bottom: 3rem;
+    border: 1px solid var(--border); position: relative; overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  .section-card:hover {
+    transform: translateY(-4px); box-shadow: var(--shadow-xl);
+  }
+  .section-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: var(--primary);
+  }
+
+  /* Image Gallery with Fallbacks */
+  .image-gallery {
+    position: relative; border-radius: 16px; overflow: hidden;
+    height: 400px; background: linear-gradient(45deg, #f3f4f6, #e5e7eb);
+    margin: 2rem 0;
+  }
+  .monastery-img {
+    width: 100%; height: 100%; object-fit: cover; transition: all 0.5s ease;
+  }
+  .monastery-img:hover { transform: scale(1.02); }
+  
+  .img-fallback {
+    display: flex; align-items: center; justify-content: center; height: 100%;
+    background: linear-gradient(135deg, var(--primary-solid), var(--accent));
+    color: white; font-size: 4rem; opacity: 0.7;
+  }
+  .img-overlay {
+    position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem;
+    background: linear-gradient(transparent, rgba(0,0,0,0.7));
+    color: white;
+  }
+
+  /* Interactive Elements */
+  .feature-grid {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem; margin: 3rem 0;
+  }
+  .feature-card {
+    padding: 2rem; background: var(--bg-secondary); border-radius: 16px;
+    border: 1px solid var(--border); transition: all 0.3s ease;
+    cursor: pointer; position: relative; overflow: hidden;
+  }
+  .feature-card:hover {
+    transform: translateY(-4px); box-shadow: var(--glow);
+  }
+  .feature-icon {
+    width: 60px; height: 60px; background: var(--primary); border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.5rem; margin-bottom: 1rem;
+  }
+
+  /* Enhanced Map */
+  .map-container {
+    position: relative; border-radius: 16px; overflow: hidden;
+    height: 500px; box-shadow: var(--shadow-lg); margin: 2rem 0;
+  }
+  #map { height: 100%; width: 100%; }
+  .map-controls {
+    position: absolute; top: 1rem; left: 1rem; z-index: 100;
+    display: flex; gap: 0.5rem;
+  }
+  .map-btn {
+    padding: 0.5rem 1rem; background: var(--bg-secondary);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-size: 0.875rem; cursor: pointer; transition: all 0.3s;
+  }
+  .map-btn:hover { background: var(--accent); color: white; }
+
+  /* Forms */
+  .form-container {
+    background: linear-gradient(135deg, rgba(255,255,255,0.8), rgba(255,255,255,0.4));
+    backdrop-filter: blur(10px); border-radius: 16px; padding: 2rem;
+    border: 1px solid rgba(255,255,255,0.2);
+  }
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+  .form-label {
+    display: block; margin-bottom: 0.5rem; font-weight: 500;
+    color: var(--text-primary);
+  }
+  .form-input {
+    width: 100%; padding: 0.75rem 1rem; border: 2px solid var(--border);
+    border-radius: 8px; font-size: 1rem; transition: all 0.3s;
+    background: var(--bg-secondary);
+  }
+  .form-input:focus {
+    outline: none; border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(249,115,22,0.1);
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    padding: 0.75rem 1.5rem; border: none; border-radius: 8px;
+    font-weight: 500; text-decoration: none; cursor: pointer;
+    transition: all 0.3s ease; position: relative; overflow: hidden;
+  }
+  .btn-primary {
+    background: var(--primary); color: white;
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px); box-shadow: var(--shadow-lg);
+  }
+  .btn::before {
+    content: ''; position: absolute; inset: 0; background: rgba(255,255,255,0.1);
+    transform: translateX(-100%); transition: transform 0.3s;
+  }
+  .btn:hover::before { transform: translateX(0); }
+
+  /* Animations */
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes slideInRight {
+    from { opacity: 0; transform: translateX(30px); }
+    to { opacity: 1; transform: translateX(0); }
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+
+  /* Enhanced Table */
+  .data-table {
+    width: 100%; border-radius: 12px; overflow: hidden;
+    box-shadow: var(--shadow-md); margin: 2rem 0;
+  }
+  .data-table th {
+    background: var(--primary); color: white; padding: 1rem;
+    font-weight: 600; text-align: left;
+  }
+  .data-table td {
+    padding: 1rem; border-bottom: 1px solid var(--border);
+    background: var(--bg-secondary);
+  }
+  .data-table tr:hover td {
+    background: rgba(249,115,22,0.05);
+  }
+
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero { height: 80vh; }
+    .section { padding: 3rem 1rem; }
+    .section-card { padding: 2rem; }
+    .nav-floating { top: 1rem; right: 1rem; }
+    .feature-grid { grid-template-columns: 1fr; }
+  }
+
+  /* Audio Player Enhancement */
+  .audio-player {
+    background: var(--bg-secondary); border-radius: 12px;
+    padding: 1.5rem; box-shadow: var(--shadow-md);
+    border: 1px solid var(--border);
+  }
+  .audio-player audio {
+    width: 100%; height: 40px;
+  }
+
+  /* Participant List */
+  .participant-list {
+    background: var(--bg-secondary); border-radius: 12px;
+    padding: 1.5rem; margin-top: 2rem;
+  }
+  .participant-item {
+    padding: 0.75rem; background: rgba(249,115,22,0.05);
+    border-radius: 8px; margin-bottom: 0.5rem;
+    border-left: 4px solid var(--accent);
+  }
+
+  /* Scroll Animations */
+  .scroll-reveal {
+    opacity: 0; transform: translateY(30px);
+    transition: all 0.6s ease;
+  }
+  .scroll-reveal.revealed {
+    opacity: 1; transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- Loading Overlay -->
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="loading-spinner"></div>
+</div>
+
+<!-- Floating Navigation -->
+<div class="nav-floating">
+  <button class="nav-btn" onclick="openNav()" title="Menu">
+    <i class="fas fa-bars"></i>
+  </button>
+  <button class="nav-btn" onclick="scrollToTop()" title="Back to top">
+    <i class="fas fa-arrow-up"></i>
+  </button>
+</div>
+
+<!-- Sidebar -->
+<div id="mySidebar" class="sidebar">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="index.html"><i class="fas fa-home"></i> Home</a>
+  <a href="monasteries.html"><i class="fas fa-list"></i> All Monasteries</a>
+  <a href="audio-guide.html"><i class="fas fa-headphones"></i> Audio Guide</a>
+  <a href="tourism.html"><i class="fas fa-map-marked-alt"></i> Tourism</a>
+</div>
+
+<!-- Hero Section -->
+<div class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">
+      <i class="fas fa-temple-buddhist"></i>
+      Sacred Heritage Site
+    </div>
+    <h1>{{MONASTERY_NAME}}</h1>
+    <p>{{MONASTERY_SUBTITLE}}</p>
+  </div>
+</div>
+
+<!-- About Section -->
+<div class="section">
+  <div class="container">
+    <div class="section-card scroll-reveal">
+      <h2><i class="fas fa-info-circle"></i> About {{MONASTERY_NAME}}</h2>
+      <p style="font-size: 1.1rem; line-height: 1.8; color: var(--text-secondary);">{{MONASTERY_DESCRIPTION}}</p>
+      
+      <div class="image-gallery">
+        <img src="images/{{MONASTERY_IMAGE}}" 
+             alt="{{MONASTERY_NAME}}" 
+             class="monastery-img"
+             onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="img-fallback" style="display: none;">
+          <i class="fas fa-temple-buddhist"></i>
+        </div>
+        <div class="img-overlay">
+          <h3>{{MONASTERY_NAME}}</h3>
+          <p>Sacred Buddhist Heritage</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Features Grid -->
+    <div class="feature-grid scroll-reveal">
+      <div class="feature-card" onclick="document.getElementById('virtualTour').scrollIntoView({behavior: 'smooth'})">
+        <div class="feature-icon">
+          <i class="fas fa-vr-cardboard"></i>
+        </div>
+        <h3>Virtual Tour</h3>
+        <p>Immersive 360° exploration of sacred spaces</p>
+      </div>
+      <div class="feature-card" onclick="document.getElementById('audioGuide').scrollIntoView({behavior: 'smooth'})">
+        <div class="feature-icon">
+          <i class="fas fa-headphones"></i>
+        </div>
+        <h3>Audio Guide</h3>
+        <p>Professional narration in multiple languages</p>
+      </div>
+      <div class="feature-card" onclick="document.getElementById('culturalCalendar').scrollIntoView({behavior: 'smooth'})">
+        <div class="feature-icon">
+          <i class="fas fa-calendar-alt"></i>
+        </div>
+        <h3>Cultural Calendar</h3>
+        <p>Sacred festivals and ceremonial events</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Virtual Tour -->
+<div class="section" id="virtualTour">
+  <div class="container">
+    <div class="section-card scroll-reveal">
+      <h2><i class="fas fa-vr-cardboard"></i> Virtual Tour</h2>
+      <p>Experience the monastery through immersive virtual reality technology.</p>
+      <div style="border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-lg);">
+        <iframe 
+          src="{{VIRTUAL_TOUR_URL}}" 
+          height="450" style="border:0; width: 100%;" 
+          allowfullscreen loading="lazy" 
+          title="{{MONASTERY_NAME}} Virtual Tour">
+        </iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Audio Guide -->
+<div class="section" id="audioGuide">
+  <div class="container">
+    <div class="section-card scroll-reveal">
+      <h2><i class="fas fa-headphones"></i> Narrated Walkthrough</h2>
+      <p>Discover the rich history and spiritual significance through expert narration.</p>
+      <div class="audio-player">
+        <audio controls>
+          <source src="audio/{{AUDIO_FILE}}" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        <p style="margin-top: 1rem; color: var(--text-secondary); font-size: 0.875rem;">
+          <i class="fas fa-info-circle"></i> Available in English, Hindi, and Nepali
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Cultural Calendar -->
+<div class="section" id="culturalCalendar">
+  <div class="container">
+    <div class="section-card scroll-reveal">
+      <h2><i class="fas fa-calendar-alt"></i> Cultural Calendar</h2>
+      <p>Sacred festivals and ceremonial observances throughout the year:</p>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th><i class="fas fa-leaf"></i> Season</th>
+            <th><i class="fas fa-star"></i> Festival</th>
+            <th><i class="fas fa-moon"></i> Lunar Date</th>
+            <th><i class="fas fa-scroll"></i> Significance</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Summer</td><td>Vajrakilaya Drupchen</td><td>5th lunar month</td><td>Major ritual with sacred Cham dance</td></tr>
+          <tr><td>Winter</td><td>Kagyed Chams</td><td>10th-11th lunar month</td><td>Black-hat dances, ritual purification</td></tr>
+          <tr><td>Winter</td><td>Losoong / Sonam Losar</td><td>End of Tibetan year</td><td>New Year celebration with harvest thanksgiving</td></tr>
+          <tr><td>Spring</td><td>Saga Dawa Düchen</td><td>4th-5th lunar month</td><td>Buddha's birth, enlightenment & parinirvana</td></tr>
+          <tr><td>Summer</td><td>Drukpa Tseshi</td><td>6th lunar month, 4th day</td><td>First teaching of Buddha</td></tr>
+          <tr><td>Summer</td><td>Guru Rinpoche Tshechu</td><td>6th lunar month, 10th day</td><td>Guru Padmasambhava's birthday</td></tr>
+          <tr><td>Autumn</td><td>Pang Lhabsol</td><td>7th lunar month, 15th day</td><td>Unique to Sikkim; Mount Kangchenjunga reverence</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Interactive Map -->
+<div class="section">
+  <div class="container">
+    <div class="section-card scroll-reveal">
+      <h2><i class="fas fa-map-marked-alt"></i> Location & Nearby Attractions</h2>
+      <div class="map-container">
+        <div class="map-controls">
+          <button class="map-btn" onclick="resetMapView()">
+            <i class="fas fa-home"></i> Reset View
+          </button>
+          <button class="map-btn" onclick="toggleSatellite()">
+            <i class="fas fa-satellite"></i> Satellite
+          </button>
+        </div>
+        <div id="map"></div>
+      </div>
+      
+      <div class="form-container" style="margin-top: 2rem;">
+        <form id="mapForm">
+          <div class="form-group">
+            <label class="form-label" for="destination">
+              <i class="fas fa-route"></i> Find Route To:
+            </label>
+            <div style="display: flex; gap: 1rem;">
+              <input type="text" id="destination" class="form-input" 
+                     placeholder="Enter destination (e.g., Enchey Monastery)" required>
+              <button type="submit" class="btn btn-primary">
+                <i class="fas fa-directions"></i> Get Directions
+              </button>
+            </div>
+          </div>
+        </form>
+        <iframe id="mapFrame" style="display: none; margin-top: 1rem; height: 400px; border-radius: 8px;"></iframe>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Booking Section -->
+<div class="section">
+  <div class="container">
+    <div class="section-card scroll-reveal">
+      <h2><i class="fas fa-calendar-check"></i> Plan Your Visit</h2>
+      <p>Join fellow travelers in exploring this sacred heritage site.</p>
+      
+      <div class="form-container">
+        <form id="bookingForm">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+            <div class="form-group">
+              <label class="form-label" for="touristName">
+                <i class="fas fa-user"></i> Full Name
+              </label>
+              <input type="text" id="touristName" class="form-input" placeholder="Enter your name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="touristEmail">
+                <i class="fas fa-envelope"></i> Email Address
+              </label>
+              <input type="email" id="touristEmail" class="form-input" placeholder="your@email.com" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="visitDate">
+                <i class="fas fa-calendar"></i> Visit Date
+              </label>
+              <input type="date" id="visitDate" class="form-input" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; margin-top: 1rem;">
+            <i class="fas fa-check"></i> Book Your Visit
+          </button>
+        </form>
+      </div>
+
+      <div class="participant-list">
+        <h3><i class="fas fa-users"></i> Recent Visitors</h3>
+        <div id="participantList"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Back to List -->
+<div class="section">
+  <div class="container" style="text-align: center;">
+    <a href="monasteries.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 1rem 2rem;">
+      <i class="fas fa-arrow-left"></i> Explore More Monasteries
+    </a>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/ol@v7.5.0/dist/ol.js"></script>
+<script>
+// Hide loading overlay
+setTimeout(() => {
+  document.getElementById('loadingOverlay').style.opacity = '0';
+  setTimeout(() => document.getElementById('loadingOverlay').style.display = 'none', 500);
+}, 1000);
+
+// Scroll reveal animation
+const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('revealed');
+    }
+  });
+}, observerOptions);
+
+document.querySelectorAll('.scroll-reveal').forEach(el => observer.observe(el));
+
+// Enhanced Map with proper coordinates
+var map = new ol.Map({
+  target: 'map',
+  layers: [
+    new ol.layer.Tile({
+      source: new ol.source.OSM()
+    })
+  ],
+  view: new ol.View({
+    center: ol.proj.fromLonLat([88.613, 27.338]),
+    zoom: 13
+  })
+});
+
+var satelliteLayer = new ol.layer.Tile({
+  source: new ol.source.XYZ({
+    url: 'https://mt1.google.com/vt/lyrs=s&x={x}&y={y}&z={z}',
+  }),
+  visible: false
+});
+map.addLayer(satelliteLayer);
+
+var isSatellite = false;
+function toggleSatellite() {
+  isSatellite = !isSatellite;
+  map.getLayers().getArray()[0].setVisible(!isSatellite);
+  satelliteLayer.setVisible(isSatellite);
+}
+
+function resetMapView() {
+  map.getView().animate({
+    center: ol.proj.fromLonLat([87.12345, 27.12345]),
+    zoom: 13,
+    duration: 1000
+  });
+}
+
+// Example: Replace with valid JSON or string values if not using a template engine
+var nearbyPlaces = [
+  // {name: "Enchey Monastery", coords: [88.613, 27.338]},
+  // {name: "Rumtek Monastery", coords: [88.629, 27.317]}
+  // Add more places as needed
+];
+var currentMonastery = {name: "Sample Monastery", coords: [88.613, 27.338]};
+// If using a template engine, ensure it outputs valid JS/JSON here
+
+
+var placeStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 8,
+    fill: new ol.style.Fill({color: '#f59e0b'}),
+    stroke: new ol.style.Stroke({color: '#ffffff', width: 2})
+  })
+});
+
+var monasteryStyle = new ol.style.Style({
+  image: new ol.style.Circle({
+    radius: 12,
+    fill: new ol.style.Fill({color: '#7c2d12'}),
+    stroke: new ol.style.Stroke({color: '#ffffff', width: 3})
+  })
+});
+
+// Add features
+var features = nearbyPlaces.map(place => {
+  var feature = new ol.Feature({
+    geometry: new ol.geom.Point(ol.proj.fromLonLat(place.coords)),
+    name: place.name,
+    type: 'place'
+  });
+  feature.setStyle(placeStyle);
+  return feature;
+});
+
+var monasteryFeature = new ol.Feature({
+  geometry: new ol.geom.Point(ol.proj.fromLonLat(currentMonastery.coords)),
+  name: currentMonastery.name,
+  type: 'monastery'
+});
+monasteryFeature.setStyle(monasteryStyle);
+
+var vectorSource = new ol.source.Vector({
+  features: features.concat([monasteryFeature])
+});
+
+map.addLayer(new ol.layer.Vector({
+  source: vectorSource
+}));
+
+// Enhanced popup
+var popup = new ol.Overlay({
+  element: document.createElement('div'),
+  positioning: 'bottom-center',
+  stopEvent: false,
+  offset: [0, -10]
+});
+popup.getElement().className = 'ol-popup';
+popup.getElement().style.cssText = `
+  background: white; padding: 8px 12px; border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-weight: 500;
+  color: #1f2937; border: 2px solid #f59e0b; min-width: 120px;
+  text-align: center; font-size: 0.875rem;
+`;
+map.addOverlay(popup);
+
+map.on('singleclick', function(evt) {
+  var feature = map.forEachFeatureAtPixel(evt.pixel, f => f);
+  if (feature) {
+    var coords = feature.getGeometry().getCoordinates();
+    var name = feature.get('name');
+    var type = feature.get('type');
+    var icon = type === 'monastery' ? '🏛️' : '📍';
+    popup.getElement().innerHTML = `${icon} ${name}`;
+    popup.setPosition(coords);
+    popup.getElement().style.display = 'block';
+  } else {
+    popup.getElement().style.display = 'none';
+  }
+});
+
+// Route finding
+document.getElementById('mapForm').addEventListener('submit', function(e) {
+  e.preventDefault();
+  const destination = document.getElementById('destination').value;
+  const origin = "{{MONASTERY_NAME}}, Sikkim";
+  const frame = document.getElementById('mapFrame');
+  frame.src = `https://www.google.com/maps?q=from+${encodeURIComponent(origin)}+to+${encodeURIComponent(destination)}&output=embed`;
+  frame.style.display = 'block';
+  frame.scrollIntoView({behavior: 'smooth'});
+});
+
+// Enhanced booking system
+const bookingForm = document.getElementById('bookingForm');
+const participantList = document.getElementById('participantList');
+const storageKey = 'participants_{{MONASTERY_SLUG}}';
+let participants = JSON.parse(localStorage.getItem(storageKey)) || [];
+
+function renderParticipants() {
+  participantList.innerHTML = participants.length ? 
+    participants.slice(-5).map(p => 
+      '<div class="participant-item">' +
+        '<i class="fas fa-user"></i> ' + p.name + ' - ' + new Date(p.date).toLocaleDateString() +
+      '</div>'
+    ).join('') : 
+    '<p style="color: var(--text-muted); text-align: center; padding: 2rem;">No recent visitors yet. Be the first!</p>';
+}
+
+renderParticipants();
+
+bookingForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const name = document.getElementById('touristName').value.trim();
+  const email = document.getElementById('touristEmail').value.trim();
+  const date = document.getElementById('visitDate').value;
+  
+  if (name && email && date) {
+    const participant = {name, email, date, timestamp: Date.now()};
+    participants.push(participant);
+    localStorage.setItem(storageKey, JSON.stringify(participants));
+    renderParticipants();
+    bookingForm.reset();
+    
+    // Success animation
+    const btn = bookingForm.querySelector('button');
+    const originalText = btn.innerHTML;
+    btn.innerHTML = '<i class="fas fa-check"></i> Booking Confirmed!';
+    btn.style.background = '#10b981';
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.style.background = '';
+    }, 3000);
+  }
+});
+
+// Navigation functions
+function openNav() {
+  document.getElementById("mySidebar").style.width = "280px";
+}
+
+function closeNav() {
+  document.getElementById("mySidebar").style.width = "0";
+}
+
+function scrollToTop() {
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+
+// Enhanced sidebar
+const sidebar = document.getElementById('mySidebar');
+sidebar.style.cssText = `
+  height: 100%; width: 0; position: fixed; z-index: 1000; top: 0; left: 0;
+  background: linear-gradient(135deg, #7c2d12, #b45309); overflow-x: hidden;
+  transition: 0.3s; padding-top: 60px; box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+`;
+
+sidebar.innerHTML = '' +
+  '<a href="javascript:void(0)" onclick="closeNav()" style="position: absolute; top: 20px; right: 25px; font-size: 2rem; color: white; text-decoration: none;">&times;</a>' +
+  '<a href="index.html" style="padding: 15px 25px; font-size: 1.2rem; color: white; display: block; text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;"><i class="fas fa-home" style="margin-right: 10px;"></i> Home</a>' +
+  '<a href="monasteries.html" style="padding: 15px 25px; font-size: 1.2rem; color: white; display: block; text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;"><i class="fas fa-list" style="margin-right: 10px;"></i> All Monasteries</a>' +
+  '<a href="audio-guide.html" style="padding: 15px 25px; font-size: 1.2rem; color: white; display: block; text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;"><i class="fas fa-headphones" style="margin-right: 10px;"></i> Audio Guide</a>' +
+  '<a href="tourism.html" style="padding: 15px 25px; font-size: 1.2rem; color: white; display: block; text-decoration: none; transition: 0.3s; border-left: 4px solid transparent;"><i class="fas fa-map-marked-alt" style="margin-right: 10px;"></i> Tourism</a>';
+
+// Add hover effects to sidebar links
+sidebar.querySelectorAll('a:not(.closebtn)').forEach(link => {
+  link.addEventListener('mouseenter', () => {
+    link.style.background = 'rgba(255,255,255,0.1)';
+    link.style.borderLeftColor = '#f59e0b';
+  });
+  link.addEventListener('mouseleave', () => {
+    link.style.background = '';
+    link.style.borderLeftColor = 'transparent';
+  });
+});
+</script>
+</body>
+</html>
